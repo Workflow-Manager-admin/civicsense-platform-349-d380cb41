@@ -2,26 +2,57 @@ import { useEffect, useState } from "react";
 import { supabase } from "../supabase/supabaseClient";
 import { Link } from "react-router-dom";
 
+// PUBLIC_INTERFACE
+/** Delete an issue from Supabase issues table. */
 export default function AuthorityDashboardPage() {
   const [issues, setIssues] = useState([]);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [deleting, setDeleting] = useState(""); // id of deleting issue (to show spinner if wanted)
+
+  const fetchIssues = async () => {
+    const { data, error } = await supabase
+      .from("issues")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      setError("Failed to load issues.");
+    } else {
+      setIssues(data);
+    }
+  };
 
   useEffect(() => {
-    const fetchIssues = async () => {
-      const { data, error } = await supabase
-        .from("issues")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        setError("Failed to load issues.");
-      } else {
-        setIssues(data);
-      }
-    };
-
     fetchIssues();
+    // eslint-disable-next-line
   }, []);
+
+  // PUBLIC_INTERFACE
+  /** Handle deleting an issue */
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this issue? This action cannot be undone."
+    );
+    if (!confirmDelete) return;
+
+    setDeleting(id);
+    setError("");
+    setSuccess("");
+
+    const { error } = await supabase
+      .from("issues")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      setError("Failed to delete the issue.");
+    } else {
+      setSuccess("Issue deleted successfully.");
+      await fetchIssues();
+    }
+    setDeleting("");
+  };
 
   return (
     <div
@@ -46,6 +77,11 @@ export default function AuthorityDashboardPage() {
             {error}
           </p>
         )}
+        {success && (
+          <p className="text-green-600 success-message" role="status">
+            {success}
+          </p>
+        )}
         {issues.length === 0 ? (
           <p>No issues found.</p>
         ) : (
@@ -61,6 +97,7 @@ export default function AuthorityDashboardPage() {
                 <th scope="col">Address</th>
                 <th scope="col">Category</th>
                 <th scope="col">Action</th>
+                <th scope="col">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -92,6 +129,29 @@ export default function AuthorityDashboardPage() {
                     >
                       View Details
                     </Link>
+                  </td>
+                  <td>
+                    <button
+                      className="btn"
+                      style={{
+                        background: "var(--error)",
+                        color: "var(--background)",
+                        fontWeight: 700,
+                        outline: "2px solid transparent",
+                        outlineOffset: "2px",
+                        border: "2px solid var(--border-color)",
+                        padding: "7px 16px",
+                        borderRadius: "12px",
+                        marginLeft: "4px",
+                        opacity: deleting === issue.id ? 0.65 : 1,
+                        cursor: deleting === issue.id ? "not-allowed" : "pointer"
+                      }}
+                      aria-label={`Delete issue titled ${issue.title}`}
+                      onClick={() => handleDelete(issue.id)}
+                      disabled={deleting === issue.id}
+                    >
+                      {deleting === issue.id ? "Deleting..." : "Delete"}
+                    </button>
                   </td>
                 </tr>
               ))}
