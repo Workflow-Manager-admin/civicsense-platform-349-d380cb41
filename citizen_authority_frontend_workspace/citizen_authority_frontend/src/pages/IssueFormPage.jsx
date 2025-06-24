@@ -106,6 +106,9 @@ export default function IssueFormPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Spacing sizes
+  const FIELD_SPACING = 18; // px
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -250,290 +253,222 @@ export default function IssueFormPage() {
     }
   };
 
-  /* --- Responsive, professional modern grid/card styling --- */
+  // --- Modern, strict vertical stacked IssueForm with card layout and green/white palette ---
   return (
     <div
-      className="container"
       style={{
-        maxWidth: "600px",
-        margin: "50px auto",
-        paddingTop: "24px",
+        background: "#E6F4EA",
         minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "var(--background)",
+        width: "100vw",
+        padding: 0,
+        margin: 0,
+        boxSizing: "border-box",
       }}
     >
       <div
-        className="card"
         style={{
-          borderRadius: "var(--radius)",
+          maxWidth: 700,
+          margin: "48px auto 0 auto",
+          padding: 30,
+          background: "#fff",
+          borderRadius: 12,
+          border: "1px solid #CDE6D3",
           boxShadow: "var(--shadow)",
-          background: "var(--card-bg)",
-          border: "1.5px solid var(--border-color)",
-          padding: "38px 30px",
-          maxWidth: 560,
-          width: "100%",
-          margin: "auto",
+          fontFamily: "Inter, Segoe UI, Arial, sans-serif",
         }}
         role="form"
         aria-label="Issue Report Form"
         tabIndex={0}
       >
         <h2
-          className="text-xl font-bold mb-4"
           style={{
-            color: "var(--primary-hover)",
+            color: "#000",
             fontWeight: 900,
             fontSize: "2rem",
-            marginBottom: "1.6rem",
+            marginBottom: "1.2rem",
             letterSpacing: "0.01em",
             textAlign: "center",
           }}
         >
           Submit an Issue
         </h2>
-
         {error && (
           <p
-            className="text-red-600 error-message"
             style={{
-              marginBottom: "1rem",
+              marginBottom: FIELD_SPACING,
               fontWeight: 600,
-              background: "var(--accent-red)",
+              background: "#E57373",
               color: "#fff",
-              borderRadius: "11px",
-              padding: "10px 13px",
-              border: "1.2px solid var(--accent-red)",
-              fontSize: "1.07rem"
+              borderRadius: 8,
+              padding: "11px 13px",
+              border: "1.2px solid #E57373",
+              fontSize: "1.07rem",
+              textAlign: "center",
             }}
+            role="alert"
           >
             {error}
           </p>
         )}
         {success && (
           <p
-            className="text-green-600 success-message"
             style={{
-              marginBottom: "1rem",
+              marginBottom: FIELD_SPACING,
               fontWeight: 600,
-              background: "var(--success)",
-              color: "var(--text-primary)",
-              borderRadius: "11px",
-              padding: "10px 13px",
-              border: "1.2px solid var(--accent-green)",
-              fontSize: "1.07rem"
+              background: "#D6F5E3",
+              color: "#000",
+              borderRadius: 8,
+              padding: "11px 13px",
+              border: "1.2px solid #D6F5E3",
+              fontSize: "1.07rem",
+              textAlign: "center",
             }}
           >
             {success}
           </p>
         )}
-
         <form
           onSubmit={handleSubmit}
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: "22px",
+            display: "flex",
+            flexDirection: "column",
+            gap: `${FIELD_SPACING}px`,
             width: "100%",
           }}
         >
-          <div
-            className="form-row"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "16px",
-            }}
-          >
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label
-                htmlFor="name"
-                style={{
-                  fontWeight: 700,
-                  color: "var(--text-secondary)",
-                  marginBottom: "5px",
-                  letterSpacing: "0.011em",
-                  fontSize: "1.08rem",
-                }}
-              >
-                Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                style={{
-                  border: "1.5px solid var(--border-color)",
-                  background: "var(--neutral-light)",
-                  color: "var(--text-primary)",
-                  borderRadius: "11px",
-                  outline: "none",
-                  boxShadow: "none",
-                  fontWeight: 500
-                }}
-                autoComplete="name"
-              />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label
-                htmlFor="phone"
-                style={{
-                  fontWeight: 700,
-                  color: "var(--text-secondary)",
-                  marginBottom: "5px",
-                  letterSpacing: "0.011em",
-                  fontSize: "1.08rem",
-                }}
-              >
-                Phone
-              </label>
-              <input
-                id="phone"
-                type="text"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                style={{
-                  border: "1.5px solid var(--border-color)",
-                  background: "var(--neutral-light)",
-                  color: "var(--text-primary)",
-                  borderRadius: "11px",
-                  outline: "none",
-                  boxShadow: "none",
-                  fontWeight: 500
-                }}
-                autoComplete="tel"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label
-              htmlFor="address"
+          {/* Name */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <label htmlFor="name" style={{ color: "#000", fontWeight: 600, marginBottom: 6 }}>
+              Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autoComplete="name"
+              required
+              value={formData.name}
+              onChange={handleChange}
               style={{
-                fontWeight: 700,
-                color: "var(--text-secondary)",
-                marginBottom: "5px",
-                letterSpacing: "0.011em",
-                fontSize: "1.08rem",
+                border: "1px solid #CDE6D3",
+                borderRadius: 8,
+                padding: "12px 10px",
+                background: "#F9FCFA",
+                color: "#000",
+                fontSize: "1rem",
+                fontWeight: 500,
+                outline: "none",
               }}
-            >
+            />
+          </div>
+          {/* Phone */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <label htmlFor="phone" style={{ color: "#000", fontWeight: 600, marginBottom: 6 }}>
+              Phone
+            </label>
+            <input
+              id="phone"
+              name="phone"
+              type="text"
+              autoComplete="tel"
+              required
+              value={formData.phone}
+              onChange={handleChange}
+              style={{
+                border: "1px solid #CDE6D3",
+                borderRadius: 8,
+                padding: "12px 10px",
+                background: "#F9FCFA",
+                color: "#000",
+                fontSize: "1rem",
+                fontWeight: 500,
+                outline: "none",
+              }}
+            />
+          </div>
+          {/* Address */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <label htmlFor="address" style={{ color: "#000", fontWeight: 600, marginBottom: 6 }}>
               Address
             </label>
             <input
               id="address"
-              type="text"
               name="address"
+              type="text"
+              autoComplete="street-address"
+              required
               value={formData.address}
               onChange={handleChange}
-              required
               style={{
-                border: "1.5px solid var(--border-color)",
-                background: "var(--neutral-light)",
-                color: "var(--text-primary)",
-                borderRadius: "11px",
+                border: "1px solid #CDE6D3",
+                borderRadius: 8,
+                padding: "12px 10px",
+                background: "#F9FCFA",
+                color: "#000",
+                fontSize: "1rem",
+                fontWeight: 500,
                 outline: "none",
-                boxShadow: "none",
-                fontWeight: 500
               }}
-              autoComplete="street-address"
             />
           </div>
-
-          <div
-            className="form-row"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "16px",
-            }}
-          >
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label
-                htmlFor="title"
-                style={{
-                  fontWeight: 700,
-                  color: "var(--text-secondary)",
-                  marginBottom: "5px",
-                  letterSpacing: "0.011em",
-                  fontSize: "1.08rem",
-                }}
-              >
-                Title
-              </label>
-              <input
-                id="title"
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-                style={{
-                  border: "1.5px solid var(--border-color)",
-                  background: "var(--neutral-light)",
-                  color: "var(--text-primary)",
-                  borderRadius: "11px",
-                  outline: "none",
-                  boxShadow: "none",
-                  fontWeight: 500
-                }}
-              />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label
-                htmlFor="category"
-                style={{
-                  fontWeight: 700,
-                  color: "var(--text-secondary)",
-                  marginBottom: "5px",
-                  letterSpacing: "0.011em",
-                  fontSize: "1.08rem",
-                }}
-              >
-                Category
-              </label>
-              <select
-                id="category"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                required
-                style={{
-                  background: "var(--neutral-light)",
-                  border: "1.5px solid var(--border-color)",
-                  color: "var(--text-primary)",
-                  borderRadius: "11px",
-                  fontWeight: 500
-                }}
-              >
-                <option value="">Select Category</option>
-                <option value="pothole">Pothole</option>
-                <option value="water">Water Issue</option>
-                <option value="garbage">Garbage</option>
-                <option value="light">Light Outage</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
+          {/* Title */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <label htmlFor="title" style={{ color: "#000", fontWeight: 600, marginBottom: 6 }}>
+              Title
+            </label>
+            <input
+              id="title"
+              name="title"
+              type="text"
+              required
+              value={formData.title}
+              onChange={handleChange}
+              style={{
+                border: "1px solid #CDE6D3",
+                borderRadius: 8,
+                padding: "12px 10px",
+                background: "#F9FCFA",
+                color: "#000",
+                fontSize: "1rem",
+                fontWeight: 500,
+                outline: "none",
+              }}
+            />
           </div>
-
+          {/* Category */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <label htmlFor="category" style={{ color: "#000", fontWeight: 600, marginBottom: 6 }}>
+              Category
+            </label>
+            <select
+              id="category"
+              name="category"
+              required
+              value={formData.category}
+              onChange={handleChange}
+              style={{
+                border: "1px solid #CDE6D3",
+                borderRadius: 8,
+                padding: "12px 10px",
+                background: "#F9FCFA",
+                color: "#000",
+                fontSize: "1rem",
+                fontWeight: 500,
+                outline: "none",
+              }}
+            >
+              <option value="">Select Category</option>
+              <option value="pothole">Pothole</option>
+              <option value="water">Water Issue</option>
+              <option value="garbage">Garbage</option>
+              <option value="light">Light Outage</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          {/* Custom category (if "other") */}
           {formData.category === "other" && (
-            <div>
-              <label
-                htmlFor="customCategory"
-                style={{
-                  fontWeight: 700,
-                  color: "var(--text-secondary)",
-                  marginBottom: "5px",
-                  letterSpacing: "0.011em",
-                  fontSize: "1.08rem"
-                }}
-              >
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <label htmlFor="customCategory" style={{ color: "#000", fontWeight: 600, marginBottom: 6 }}>
                 Specify Category
               </label>
               <input
@@ -543,152 +478,106 @@ export default function IssueFormPage() {
                 onChange={(e) => setCustomCategory(e.target.value)}
                 required
                 style={{
-                  border: "1.5px solid var(--border-color)",
-                  background: "var(--neutral-light)",
-                  color: "var(--text-primary)",
-                  borderRadius: "11px",
+                  border: "1px solid #CDE6D3",
+                  borderRadius: 8,
+                  padding: "12px 10px",
+                  background: "#F9FCFA",
+                  color: "#000",
+                  fontSize: "1rem",
+                  fontWeight: 500,
                   outline: "none",
-                  boxShadow: "none",
-                  fontWeight: 500
                 }}
               />
             </div>
           )}
-
-          <div>
-            <label
-              htmlFor="description"
-              style={{
-                fontWeight: 700,
-                color: "var(--text-secondary)",
-                marginBottom: "5px",
-                letterSpacing: "0.011em",
-                fontSize: "1.08rem"
-              }}
-            >
+          {/* Description */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <label htmlFor="description" style={{ color: "#000", fontWeight: 600, marginBottom: 6 }}>
               Description
-              <span
-                style={{
-                  color: "var(--primary)",
-                  fontWeight: 500,
-                  fontSize: "0.97rem",
-                  marginLeft: 6,
-                }}
-              >
-                {" "}
+              <span style={{ fontWeight: 400, fontSize: "0.97rem", marginLeft: 8, color: "#A8D5BA" }}>
                 (min 250 chars for best AI summary)
               </span>
             </label>
             <textarea
               id="description"
               name="description"
+              required
               value={formData.description}
               onChange={handleChange}
-              required
               style={{
-                minHeight: 84,
-                resize: "vertical",
-                border: "1.5px solid var(--border-color)",
-                background: "var(--neutral-light)",
-                color: "var(--text-primary)",
-                borderRadius: "11px",
+                minHeight: 88,
+                border: "1px solid #CDE6D3",
+                borderRadius: 8,
+                padding: "12px 10px",
+                background: "#F9FCFA",
+                color: "#000",
+                fontSize: "1rem",
+                fontWeight: 500,
                 outline: "none",
-                boxShadow: "none",
-                fontWeight: 500
+                resize: "vertical",
               }}
             />
           </div>
-
-          <div
-            className="form-row"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 2fr",
-              gap: "16px",
-            }}
-          >
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label
-                htmlFor="priority"
-                style={{
-                  fontWeight: 700,
-                  color: "var(--text-secondary)",
-                  marginBottom: "5px",
-                  letterSpacing: "0.011em",
-                  fontSize: "1.08rem"
-                }}
-              >
-                Priority
-              </label>
-              <select
-                id="priority"
-                name="priority"
-                value={formData.priority}
-                onChange={handleChange}
-                required
-                style={{
-                  background: "var(--neutral-light)",
-                  border: "1.5px solid var(--border-color)",
-                  color: "var(--text-primary)",
-                  borderRadius: "11px",
-                  fontWeight: 500
-                }}
-              >
-                <option value="">Select Priority</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-              </select>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label
-                htmlFor="location_url"
-                style={{
-                  fontWeight: 700,
-                  color: "var(--text-secondary)",
-                  marginBottom: "5px",
-                  letterSpacing: "0.011em",
-                  fontSize: "1.08rem"
-                }}
-              >
-                Maps Link
-                <span style={{ color: "var(--primary)", fontWeight: 500, marginLeft: 6, fontSize: "0.98rem" }}>
-                  (optional)
-                </span>
-              </label>
-              <input
-                id="location_url"
-                type="url"
-                name="location_url"
-                placeholder="https://www.google.com/maps?q=12.9716,77.5946"
-                value={formData.location_url}
-                onChange={handleChange}
-                style={{
-                  border: "1.5px solid var(--border-color)",
-                  background: "var(--neutral-light)",
-                  color: "var(--text-primary)",
-                  borderRadius: "11px",
-                  outline: "none",
-                  boxShadow: "none",
-                  fontWeight: 500
-                }}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label
-              htmlFor="images"
+          {/* Priority */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <label htmlFor="priority" style={{ color: "#000", fontWeight: 600, marginBottom: 6 }}>
+              Priority
+            </label>
+            <select
+              id="priority"
+              name="priority"
+              required
+              value={formData.priority}
+              onChange={handleChange}
               style={{
-                fontWeight: 700,
-                color: "var(--text-secondary)",
-                marginBottom: "5px",
-                letterSpacing: "0.011em",
-                fontSize: "1.08rem",
+                border: "1px solid #CDE6D3",
+                borderRadius: 8,
+                padding: "12px 10px",
+                background: "#F9FCFA",
+                color: "#000",
+                fontSize: "1rem",
+                fontWeight: 500,
+                outline: "none",
               }}
             >
+              <option value="">Select Priority</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          {/* Maps Link */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <label htmlFor="location_url" style={{ color: "#000", fontWeight: 600, marginBottom: 6 }}>
+              Maps Link{" "}
+              <span style={{ fontWeight: 400, color: "#A8D5BA", marginLeft: 6, fontSize: "0.97rem" }}>
+                (optional)
+              </span>
+            </label>
+            <input
+              id="location_url"
+              name="location_url"
+              type="url"
+              placeholder="https://www.google.com/maps?q=12.9716,77.5946"
+              value={formData.location_url}
+              onChange={handleChange}
+              style={{
+                border: "1px solid #CDE6D3",
+                borderRadius: 8,
+                padding: "12px 10px",
+                background: "#F9FCFA",
+                color: "#000",
+                fontSize: "1rem",
+                fontWeight: 500,
+                outline: "none",
+              }}
+            />
+          </div>
+          {/* Images */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <label htmlFor="images" style={{ color: "#000", fontWeight: 600, marginBottom: 6 }}>
               Upload Images
-              <span style={{ color: "var(--primary)", fontWeight: 500, marginLeft: 6, fontSize: "0.98rem" }}>
+              <span style={{ color: "#A8D5BA", fontWeight: 400, fontSize: "0.97rem", marginLeft: 7 }}>
                 (up to 3)
               </span>
             </label>
@@ -700,68 +589,61 @@ export default function IssueFormPage() {
               onChange={(e) => setImages(Array.from(e.target.files).slice(0, 3))}
               style={{
                 minHeight: "unset",
-                padding: "8px 0",
+                padding: "0",
                 border: "none",
                 background: "transparent",
-                color: "var(--text-secondary)",
+                color: "#000",
+                fontSize: "1rem",
+                margin: 0,
+                fontFamily: "inherit",
               }}
             />
           </div>
-
+          {/* Submit Button */}
           <button
             type="submit"
-            className="btn btn-large"
             style={{
               width: "100%",
-              background: "var(--primary)",
-              color: "var(--text-primary)",
-              fontWeight: 900,
-              fontSize: "1.18rem",
-              marginTop: "8px",
-              boxShadow: "var(--shadow)",
-              letterSpacing: "0.03em",
-              border: "2px solid var(--primary-hover)",
-              borderRadius: "14px",
-              transition: "background 0.13s, color 0.13s, box-shadow 0.13s",
+              background: "#A8D5BA",
+              color: "#000",
+              fontWeight: 700,
+              fontSize: "1.16rem",
+              marginTop: 2,
+              border: "none",
+              borderRadius: 10,
+              padding: "14px 0",
+              cursor: "pointer",
+              transition: "background 0.15s",
+              boxShadow: "0 2px 12px #A8D5BA17",
             }}
-            onMouseOver={e => {
-              e.target.style.background = "var(--primary-hover)";
-              e.target.style.color = "var(--text-primary)";
-            }}
-            onMouseOut={e => {
-              e.target.style.background = "var(--primary)";
-              e.target.style.color = "var(--text-primary)";
-            }}
+            onMouseOver={e => { e.target.style.background = "#93C6A0"; }}
+            onMouseOut={e => { e.target.style.background = "#A8D5BA"; }}
           >
             Submit
           </button>
         </form>
+        <style>{`
+          @media (max-width: 900px) {
+            div[role="form"] {
+              max-width: 98vw;
+              padding: 22px 2vw !important;
+            }
+          }
+          @media (max-width: 600px) {
+            div[role="form"] {
+              padding: 11vw 3vw !important;
+              min-width: 0 !important;
+            }
+            form > div {
+              margin-bottom: 13px !important;
+            }
+            button[type="submit"] {
+              font-size: 1.04rem;
+              padding: 13px 0;
+            }
+          }
+        `}</style>
       </div>
-
-      <style>{`
-        @media (max-width: 780px) {
-          .card {
-            padding: 24px 8vw !important;
-          }
-        }
-        @media (max-width: 620px) {
-          .card {
-            padding: 10vw 4vw !important;
-          }
-          .form-row {
-            grid-template-columns: 1fr !important;
-            gap: 5px !important;
-          }
-        }
-        @media (max-width: 440px) {
-          .card {
-            padding: 2vw !important;
-          }
-        }
-        form input, form select, form textarea {
-          font-size: 1.05rem;
-        }
-      `}</style>
     </div>
   );
 }
