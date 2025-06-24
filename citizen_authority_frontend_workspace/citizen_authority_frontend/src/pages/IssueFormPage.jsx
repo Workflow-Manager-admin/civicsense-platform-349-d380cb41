@@ -261,7 +261,8 @@ export default function IssueFormPage() {
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        background: "var(--background)",
       }}
     >
       <div
@@ -274,7 +275,7 @@ export default function IssueFormPage() {
           padding: "38px 30px",
           maxWidth: 560,
           width: "100%",
-          margin: "auto"
+          margin: "auto",
         }}
         role="form"
         aria-label="Issue Report Form"
@@ -283,17 +284,51 @@ export default function IssueFormPage() {
         <h2
           className="text-xl font-bold mb-4"
           style={{
-            color: "var(--primary)",
-            fontWeight: 800,
+            color: "var(--primary-hover)",
+            fontWeight: 900,
             fontSize: "2rem",
-            marginBottom: "1.6rem"
+            marginBottom: "1.6rem",
+            letterSpacing: "0.01em",
+            textAlign: "center",
           }}
         >
           Submit an Issue
         </h2>
 
-        {error && <p className="text-red-600 error-message" style={{ marginBottom: "1rem", fontWeight: 600 }}>{error}</p>}
-        {success && <p className="text-green-600 success-message" style={{ marginBottom: "1rem", fontWeight: 600 }}>{success}</p>}
+        {error && (
+          <p
+            className="text-red-600 error-message"
+            style={{
+              marginBottom: "1rem",
+              fontWeight: 600,
+              background: "var(--accent-red)",
+              color: "#fff",
+              borderRadius: "11px",
+              padding: "10px 13px",
+              border: "1.2px solid var(--accent-red)",
+              fontSize: "1.07rem"
+            }}
+          >
+            {error}
+          </p>
+        )}
+        {success && (
+          <p
+            className="text-green-600 success-message"
+            style={{
+              marginBottom: "1rem",
+              fontWeight: 600,
+              background: "var(--success)",
+              color: "var(--text-primary)",
+              borderRadius: "11px",
+              padding: "10px 13px",
+              border: "1.2px solid var(--accent-green)",
+              fontSize: "1.07rem"
+            }}
+          >
+            {success}
+          </p>
+        )}
 
         <form
           onSubmit={handleSubmit}
@@ -301,7 +336,7 @@ export default function IssueFormPage() {
             display: "grid",
             gridTemplateColumns: "1fr",
             gap: "22px",
-            width: "100%"
+            width: "100%",
           }}
         >
           <div
@@ -309,17 +344,20 @@ export default function IssueFormPage() {
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
-              gap: "16px"
+              gap: "16px",
             }}
           >
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="name" style={{
-                fontWeight: 800,
-                color: "var(--primary-hover)",
-                marginBottom: "5px",
-                letterSpacing: "0.011em",
-                fontSize: "1.07rem"
-              }}>
+              <label
+                htmlFor="name"
+                style={{
+                  fontWeight: 700,
+                  color: "var(--text-secondary)",
+                  marginBottom: "5px",
+                  letterSpacing: "0.011em",
+                  fontSize: "1.08rem",
+                }}
+              >
                 Name
               </label>
               <input
@@ -330,19 +368,28 @@ export default function IssueFormPage() {
                 onChange={handleChange}
                 required
                 style={{
-                  border: "1.5px solid var(--border-color)"
+                  border: "1.5px solid var(--border-color)",
+                  background: "var(--neutral-light)",
+                  color: "var(--text-primary)",
+                  borderRadius: "11px",
+                  outline: "none",
+                  boxShadow: "none",
+                  fontWeight: 500
                 }}
                 autoComplete="name"
               />
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="phone" style={{
-                fontWeight: 800,
-                color: "var(--primary-hover)",
-                marginBottom: "5px",
-                letterSpacing: "0.011em",
-                fontSize: "1.07rem"
-              }}>
+              <label
+                htmlFor="phone"
+                style={{
+                  fontWeight: 700,
+                  color: "var(--text-secondary)",
+                  marginBottom: "5px",
+                  letterSpacing: "0.011em",
+                  fontSize: "1.08rem",
+                }}
+              >
                 Phone
               </label>
               <input
@@ -353,7 +400,13 @@ export default function IssueFormPage() {
                 onChange={handleChange}
                 required
                 style={{
-                  border: "1.5px solid var(--border-color)"
+                  border: "1.5px solid var(--border-color)",
+                  background: "var(--neutral-light)",
+                  color: "var(--text-primary)",
+                  borderRadius: "11px",
+                  outline: "none",
+                  boxShadow: "none",
+                  fontWeight: 500
                 }}
                 autoComplete="tel"
               />
@@ -361,13 +414,16 @@ export default function IssueFormPage() {
           </div>
 
           <div>
-            <label htmlFor="address" style={{
-              fontWeight: 800,
-              color: "var(--primary-hover)",
-              marginBottom: "5px",
-              letterSpacing: "0.011em",
-              fontSize: "1.07rem"
-            }}>
+            <label
+              htmlFor="address"
+              style={{
+                fontWeight: 700,
+                color: "var(--text-secondary)",
+                marginBottom: "5px",
+                letterSpacing: "0.011em",
+                fontSize: "1.08rem",
+              }}
+            >
               Address
             </label>
             <input
@@ -377,6 +433,15 @@ export default function IssueFormPage() {
               value={formData.address}
               onChange={handleChange}
               required
+              style={{
+                border: "1.5px solid var(--border-color)",
+                background: "var(--neutral-light)",
+                color: "var(--text-primary)",
+                borderRadius: "11px",
+                outline: "none",
+                boxShadow: "none",
+                fontWeight: 500
+              }}
               autoComplete="street-address"
             />
           </div>
@@ -386,17 +451,20 @@ export default function IssueFormPage() {
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
-              gap: "16px"
+              gap: "16px",
             }}
           >
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="title" style={{
-                fontWeight: 800,
-                color: "var(--primary-hover)",
-                marginBottom: "5px",
-                letterSpacing: "0.011em",
-                fontSize: "1.07rem"
-              }}>
+              <label
+                htmlFor="title"
+                style={{
+                  fontWeight: 700,
+                  color: "var(--text-secondary)",
+                  marginBottom: "5px",
+                  letterSpacing: "0.011em",
+                  fontSize: "1.08rem",
+                }}
+              >
                 Title
               </label>
               <input
@@ -406,16 +474,28 @@ export default function IssueFormPage() {
                 value={formData.title}
                 onChange={handleChange}
                 required
+                style={{
+                  border: "1.5px solid var(--border-color)",
+                  background: "var(--neutral-light)",
+                  color: "var(--text-primary)",
+                  borderRadius: "11px",
+                  outline: "none",
+                  boxShadow: "none",
+                  fontWeight: 500
+                }}
               />
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="category" style={{
-                fontWeight: 800,
-                color: "var(--primary-hover)",
-                marginBottom: "5px",
-                letterSpacing: "0.011em",
-                fontSize: "1.07rem"
-              }}>
+              <label
+                htmlFor="category"
+                style={{
+                  fontWeight: 700,
+                  color: "var(--text-secondary)",
+                  marginBottom: "5px",
+                  letterSpacing: "0.011em",
+                  fontSize: "1.08rem",
+                }}
+              >
                 Category
               </label>
               <select
@@ -426,7 +506,10 @@ export default function IssueFormPage() {
                 required
                 style={{
                   background: "var(--neutral-light)",
-                  border: "1.5px solid var(--border-color)"
+                  border: "1.5px solid var(--border-color)",
+                  color: "var(--text-primary)",
+                  borderRadius: "11px",
+                  fontWeight: 500
                 }}
               >
                 <option value="">Select Category</option>
@@ -441,13 +524,16 @@ export default function IssueFormPage() {
 
           {formData.category === "other" && (
             <div>
-              <label htmlFor="customCategory" style={{
-                fontWeight: 800,
-                color: "var(--primary-hover)",
-                marginBottom: "5px",
-                letterSpacing: "0.011em",
-                fontSize: "1.07rem"
-              }}>
+              <label
+                htmlFor="customCategory"
+                style={{
+                  fontWeight: 700,
+                  color: "var(--text-secondary)",
+                  marginBottom: "5px",
+                  letterSpacing: "0.011em",
+                  fontSize: "1.08rem"
+                }}
+              >
                 Specify Category
               </label>
               <input
@@ -456,25 +542,42 @@ export default function IssueFormPage() {
                 value={customCategory}
                 onChange={(e) => setCustomCategory(e.target.value)}
                 required
+                style={{
+                  border: "1.5px solid var(--border-color)",
+                  background: "var(--neutral-light)",
+                  color: "var(--text-primary)",
+                  borderRadius: "11px",
+                  outline: "none",
+                  boxShadow: "none",
+                  fontWeight: 500
+                }}
               />
             </div>
           )}
 
           <div>
-            <label htmlFor="description" style={{
-              fontWeight: 800,
-              color: "var(--primary-hover)",
-              marginBottom: "5px",
-              letterSpacing: "0.011em",
-              fontSize: "1.07rem"
-            }}>
-              Description
-              <span style={{
+            <label
+              htmlFor="description"
+              style={{
+                fontWeight: 700,
                 color: "var(--text-secondary)",
-                fontWeight: 500,
-                fontSize: "0.97rem",
-                marginLeft: 6
-              }}> (min 250 chars for best AI summary)</span>
+                marginBottom: "5px",
+                letterSpacing: "0.011em",
+                fontSize: "1.08rem"
+              }}
+            >
+              Description
+              <span
+                style={{
+                  color: "var(--primary)",
+                  fontWeight: 500,
+                  fontSize: "0.97rem",
+                  marginLeft: 6,
+                }}
+              >
+                {" "}
+                (min 250 chars for best AI summary)
+              </span>
             </label>
             <textarea
               id="description"
@@ -484,7 +587,14 @@ export default function IssueFormPage() {
               required
               style={{
                 minHeight: 84,
-                resize: "vertical"
+                resize: "vertical",
+                border: "1.5px solid var(--border-color)",
+                background: "var(--neutral-light)",
+                color: "var(--text-primary)",
+                borderRadius: "11px",
+                outline: "none",
+                boxShadow: "none",
+                fontWeight: 500
               }}
             />
           </div>
@@ -494,17 +604,20 @@ export default function IssueFormPage() {
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 2fr",
-              gap: "16px"
+              gap: "16px",
             }}
           >
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="priority" style={{
-                fontWeight: 800,
-                color: "var(--primary-hover)",
-                marginBottom: "5px",
-                letterSpacing: "0.011em",
-                fontSize: "1.07rem"
-              }}>
+              <label
+                htmlFor="priority"
+                style={{
+                  fontWeight: 700,
+                  color: "var(--text-secondary)",
+                  marginBottom: "5px",
+                  letterSpacing: "0.011em",
+                  fontSize: "1.08rem"
+                }}
+              >
                 Priority
               </label>
               <select
@@ -515,7 +628,10 @@ export default function IssueFormPage() {
                 required
                 style={{
                   background: "var(--neutral-light)",
-                  border: "1.5px solid var(--border-color)"
+                  border: "1.5px solid var(--border-color)",
+                  color: "var(--text-primary)",
+                  borderRadius: "11px",
+                  fontWeight: 500
                 }}
               >
                 <option value="">Select Priority</option>
@@ -525,15 +641,20 @@ export default function IssueFormPage() {
               </select>
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="location_url" style={{
-                fontWeight: 800,
-                color: "var(--primary-hover)",
-                marginBottom: "5px",
-                letterSpacing: "0.011em",
-                fontSize: "1.07rem"
-              }}>
+              <label
+                htmlFor="location_url"
+                style={{
+                  fontWeight: 700,
+                  color: "var(--text-secondary)",
+                  marginBottom: "5px",
+                  letterSpacing: "0.011em",
+                  fontSize: "1.08rem"
+                }}
+              >
                 Maps Link
-                <span style={{ color: "var(--text-secondary)", fontWeight: 500, marginLeft: 6, fontSize: "0.98rem" }}>(optional)</span>
+                <span style={{ color: "var(--primary)", fontWeight: 500, marginLeft: 6, fontSize: "0.98rem" }}>
+                  (optional)
+                </span>
               </label>
               <input
                 id="location_url"
@@ -542,20 +663,34 @@ export default function IssueFormPage() {
                 placeholder="https://www.google.com/maps?q=12.9716,77.5946"
                 value={formData.location_url}
                 onChange={handleChange}
+                style={{
+                  border: "1.5px solid var(--border-color)",
+                  background: "var(--neutral-light)",
+                  color: "var(--text-primary)",
+                  borderRadius: "11px",
+                  outline: "none",
+                  boxShadow: "none",
+                  fontWeight: 500
+                }}
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="images" style={{
-              fontWeight: 800,
-              color: "var(--primary-hover)",
-              marginBottom: "5px",
-              letterSpacing: "0.011em",
-              fontSize: "1.07rem"
-            }}>
+            <label
+              htmlFor="images"
+              style={{
+                fontWeight: 700,
+                color: "var(--text-secondary)",
+                marginBottom: "5px",
+                letterSpacing: "0.011em",
+                fontSize: "1.08rem",
+              }}
+            >
               Upload Images
-              <span style={{ color: "var(--text-secondary)", fontWeight: 500, marginLeft: 6, fontSize: "0.98rem" }}>(up to 3)</span>
+              <span style={{ color: "var(--primary)", fontWeight: 500, marginLeft: 6, fontSize: "0.98rem" }}>
+                (up to 3)
+              </span>
             </label>
             <input
               id="images"
@@ -565,7 +700,10 @@ export default function IssueFormPage() {
               onChange={(e) => setImages(Array.from(e.target.files).slice(0, 3))}
               style={{
                 minHeight: "unset",
-                padding: "8px 0"
+                padding: "8px 0",
+                border: "none",
+                background: "transparent",
+                color: "var(--text-secondary)",
               }}
             />
           </div>
@@ -576,12 +714,23 @@ export default function IssueFormPage() {
             style={{
               width: "100%",
               background: "var(--primary)",
-              color: "#fff",
+              color: "var(--text-primary)",
               fontWeight: 900,
               fontSize: "1.18rem",
               marginTop: "8px",
               boxShadow: "var(--shadow)",
-              letterSpacing: "0.03em"
+              letterSpacing: "0.03em",
+              border: "2px solid var(--primary-hover)",
+              borderRadius: "14px",
+              transition: "background 0.13s, color 0.13s, box-shadow 0.13s",
+            }}
+            onMouseOver={e => {
+              e.target.style.background = "var(--primary-hover)";
+              e.target.style.color = "var(--text-primary)";
+            }}
+            onMouseOut={e => {
+              e.target.style.background = "var(--primary)";
+              e.target.style.color = "var(--text-primary)";
             }}
           >
             Submit

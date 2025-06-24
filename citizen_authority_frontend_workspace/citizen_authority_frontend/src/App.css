@@ -1,75 +1,74 @@
 :root {
-  /* ==== PURPLE + WHITE THEME COLOR PALETTE (ALL THEME COLORS ARE DEFINED HERE) ==== */
+  /* ==== GREEN + WHITE THEME COLOR PALETTE (ALL THEME COLORS ARE DEFINED HERE) ==== */
 
   /* Page Background */
-  --background: #F9FAFB;                /* Bright White: Main app background (ultra-light, clean) */
+  --background: #E6F4EA;                     /* Green-tinted white: App main background */
 
   /* Card, Form, Section Backgrounds */
-  --card-bg: #FFFFFF;                   /* White: Cards, containers, modals, forms */
+  --card-bg: #FFFFFF;                        /* Pure white for cards, containers, forms */
 
   /* Primary Button/Action */
-  --primary: #6D28D9;                   /* Royal Purple: Primary/CTA buttons, main UI highlights */
+  --primary: #A8D5BA;                        /* Soft Green: Primary/CTA buttons, highlights */
 
   /* Primary Button Hover/Active */
-  --primary-hover: #5B21B6;             /* Deep Purple: Button hover/active/focus states */
+  --primary-hover: #93C6A0;                  /* Slightly deeper green: Button hover/focus */
 
   /* Border and Input Outline */
-  --border-color: #DDD6FE;              /* Soft Lavender: Borders, input boxes, section lines */
+  --border-color: #CDE6D3;                   /* Muted Green: Borders, outlines, section lines */
 
-  /* Success Indicator */
-  --success: #A78BFA;                   /* Soft Violet: Success status, toasts, confirmation highlights */
+  /* Success/Info Indicator */
+  --success: #D6F5E3;                        /* Light Mint Green: Success, toast/info highlight */
 
   /* Error/Negative Indicator */
-  --error: #C026D3;                     /* Red-Purple: Error/alert/destructive states */
+  --error: #E57373;                          /* Calm Red: Error/destructive state (unchanged, as not in new palette) */
 
   /* Primary Text */
-  --text-primary: #2E1065;              /* Dark Purple Text: Headings, main text, strong labels */
+  --text-primary: #000000;                   /* Black: Headings, main readable text */
 
   /* Secondary Text */
-  --text-secondary: #4C1D95;            /* Dimmed Purple: Helper text, labels, descriptions */
+  --text-secondary: #2F4F4F;                 /* Deep green-gray: Helper, label, descriptions */
 
   /* Drop Shadow & Border Radius */
-  --shadow: 0 4px 18px rgba(109, 40, 217, 0.10); /* Soft purple shadow for cards/buttons */
+  --shadow: 0 4px 18px rgba(80, 200, 120, 0.12); /* Soft green shadow for cards/buttons */
   --radius: 16px;
 
   /* ==== COMMON ALIASES for compatibility and future UI ==== */
-  --accent: var(--primary);               /* Accent for call-to-actions (usually Royal Purple) */
-  --accent-hover: var(--primary-hover);   /* Accent hover state */
-  --accent-green: var(--success);         /* Alias for success/confirmation (Soft Violet) */
-  --accent-red: var(--error);             /* Alias for error/destructive actions (Red-Purple) */
-  --highlight: var(--primary-hover);      /* Highlight/focus ring (Deep Purple) */
-  --primary-dark: var(--primary-hover);   /* Extra shade of purple for contrast cases */
-  --primary-light: #F3E8FF;               /* Extra subtle purple background for forms/tables (very pale) */
-  --neutral-light: #F3E8FF;               /* Alternate subtle background (inputs/cards) */
+  --accent: var(--primary);                   /* Accent for call-to-actions (Green) */
+  --accent-hover: var(--primary-hover);       /* Accent hover state */
+  --accent-green: var(--success);             /* Alias for success/info (Light Mint Green) */
+  --accent-red: var(--error);                 /* Alias for error/destructive actions (Calm Red) */
+  --highlight: var(--primary-hover);          /* Highlight/focus ring */
+  --primary-dark: var(--primary-hover);       /* Extra shade of green for contrast */
+  --primary-light: #F3FDF6;                   /* Subtle green background for forms/tables */
+  --neutral-light: #F9FCFA;                   /* Alternate subtle bg for inputs/cards */
   --neutral-bg: var(--card-bg);
 
   /* Default text colors */
-  --text-color: var(--text-primary);       /* Default text for body */
-  --text-alt: var(--text-secondary);       /* Alternate text */
+  --text-color: var(--text-primary);          /* Main body text */
+  --text-alt: var(--text-secondary);          /* Alternate text */
 }
 
 /* 
-  ==== PURPLE + WHITE COLOR PALETTE FOR REFERENCE ====
-   |-----------------------------------------------------------|
-   | Role                | Color Name         | Hex      | Usage            |
-   |---------------------|-------------------|----------|------------------|
-   | Page Background     | Bright White      | #F9FAFB  | --background     |
-   | Card/Form BG        | White             | #FFFFFF  | --card-bg        |
-   | Primary Purple      | Royal Purple      | #6D28D9  | --primary        |
-   | Hover Purple        | Deep Purple       | #5B21B6  | --primary-hover  |
-   | Text Primary        | Dark Purple Text  | #2E1065  | --text-primary   |
-   | Text Secondary      | Dimmed Purple     | #4C1D95  | --text-secondary |
-   | Border/Line         | Soft Lavender     | #DDD6FE  | --border-color   |
-   | Success (optional)  | Soft Violet       | #A78BFA  | --success        |
-   | Error (optional)    | Red-Purple        | #C026D3  | --error          |
-   |-----------------------------------------------------------|
+  ==== GREEN + WHITE COLOR PALETTE ====
+   |------------------------------------------------------------|
+   | Role                | Color Name         | Hex      | Usage |
+   |---------------------|-------------------|----------|-------|
+   | Page Background     | Green-Tinted White| #E6F4EA  | --background       |
+   | Card/Form BG        | Pure White        | #FFFFFF  | --card-bg          |
+   | Primary Button      | Soft Green        | #A8D5BA  | --primary          |
+   | Button Hover        | Deep Green        | #93C6A0  | --primary-hover    |
+   | Text Primary        | Black             | #000000  | --text-primary     |
+   | Text Secondary      | Deep Green-Gray   | #2F4F4F  | --text-secondary   |
+   | Border              | Muted Green       | #CDE6D3  | --border-color     |
+   | Success/Info        | Light Mint Green  | #D6F5E3  | --success          |
+   |------------------------------------------------------------|
    Usage Guidance:
-     - Always use --background for page/viewport backgrounds (Bright White)
-     - Use --card-bg for containers, cards, modals, forms (White)
-     - Use --primary and --primary-hover for main buttons, links, highlights (Royal/Deep Purple)
-     - Use --border-color for card edges, input outlines, dividers (Soft Lavender)
-     - --success/--error for toasts, status, error highlights (optional: Soft Violet/Red-Purple)
-     - --text-primary and --text-secondary for headings/descriptions (Dark/Dimmed Purple)
+     - Always use --background for the page/viewport backgrounds (Green-Tinted White)
+     - Use --card-bg for containers, cards, modals, forms (Pure White)
+     - Use --primary and --primary-hover for buttons, links, highlights (Soft/Deeper Green)
+     - Use --border-color for outlines and divider lines (Muted Green)
+     - --success for toasts, status, completed highlights (Light Mint Green)
+     - --text-primary and --text-secondary for headings and descriptions (Black/Deep Green-Gray)
      - --shadow and --radius for consistent elevation/border styling
      - All UI must reference these variables; do not hardcode hex colors!
 */
