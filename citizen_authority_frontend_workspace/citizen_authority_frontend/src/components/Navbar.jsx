@@ -2,10 +2,19 @@
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabase/supabaseClient'; // CORRECT
 
+import { useNavigate } from 'react-router-dom';
+
 export default function Navbar() {
+  const navigate = useNavigate();
+
+  // PUBLIC_INTERFACE
+  /**
+   * Logs the user out using Supabase and redirects to the home page.
+   */
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.reload();
+    // Redirect to home page after logout
+    navigate("/");
   };
 
   return (

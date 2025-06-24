@@ -30,7 +30,8 @@ function AppContent() {
         <Route path="/issue-form" element={<ProtectedRoute role="citizen"><IssueFormPage /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute role="authority"><AuthorityDashboardPage /></ProtectedRoute>} />
         <Route path="/issue/:id" element={<ProtectedRoute role="authority"><IssueDetailPage /></ProtectedRoute>} />
-
+        {/* Catch-all for client-side 404: renders HomePage or a NotFound component */}
+        <Route path="*" element={<HomePage />} />
       </Routes>
     </Fragment>
   );
