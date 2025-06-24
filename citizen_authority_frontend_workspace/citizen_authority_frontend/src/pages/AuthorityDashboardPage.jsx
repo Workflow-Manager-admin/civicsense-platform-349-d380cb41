@@ -78,15 +78,16 @@ export default function AuthorityDashboardPage() {
                         padding: "7px 20px",
                         fontSize: "1.08rem",
                         borderRadius: "12px",
-                        background: "var(--accent-green)",
-                        color: "#130823",
+                        background: "var(--success)",
+                        color: "var(--background)",
                         fontWeight: 700,
                         textDecoration: "none",
-                        boxShadow: "0 2px 10px 0px #3dee9a45",
+                        boxShadow: "0 2px 10px 0px #A3B18A55",
                         outline: "2px solid transparent",
-                        outlineOffset: "2px"
+                        outlineOffset: "2px",
+                        border: "2px solid var(--border-color)"
                       }}
-                      onFocus={e => (e.target.style.outline = "2.5px solid var(--accent-green)")}
+                      onFocus={e => (e.target.style.outline = "2.5px solid var(--success)")}
                       onBlur={e => (e.target.style.outline = "2px solid transparent")}
                     >
                       View Details

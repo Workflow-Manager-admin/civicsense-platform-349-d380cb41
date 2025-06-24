@@ -57,9 +57,12 @@ export default function Navbar() {
           aria-label="Go to Home"
           style={{
             outline: "2px solid transparent",
-            outlineOffset: "2px"
+            outlineOffset: "2px",
+            color: "var(--background)",
+            background: "var(--primary)",
+            borderColor: "var(--border-color)"
           }}
-          onFocus={e => e.target.style.outline = "2px solid var(--primary)"}
+          onFocus={e => e.target.style.outline = "2px solid var(--primary-hover)"}
           onBlur={e => e.target.style.outline = "2px solid transparent"}
         >
           Home
@@ -70,7 +73,10 @@ export default function Navbar() {
           aria-label="Logout"
           style={{
             outline: "2px solid transparent",
-            outlineOffset: "2px"
+            outlineOffset: "2px",
+            color: "var(--background)",
+            background: "var(--error)",
+            borderColor: "var(--border-color)"
           }}
           onFocus={e => e.target.style.outline = "2px solid var(--error)"}
           onBlur={e => e.target.style.outline = "2px solid transparent"}

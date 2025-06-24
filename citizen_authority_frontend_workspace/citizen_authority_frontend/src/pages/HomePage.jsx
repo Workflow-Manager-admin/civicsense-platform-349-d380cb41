@@ -14,7 +14,7 @@ const HomePage = () => {
         tabIndex={0}
         style={{
           outline: "none",
-          background: "linear-gradient(110deg, var(--primary-light), var(--card-bg))",
+          background: "linear-gradient(110deg, var(--primary-hover), var(--card-bg))",
           borderRadius: "var(--radius)"
         }}
         aria-labelledby="main-hero-heading"
@@ -80,9 +80,13 @@ const HomePage = () => {
               aria-label="Sign Up as Citizen"
               style={{
                 outline: "2px solid transparent",
-                outlineOffset: "2px"
+                outlineOffset: "2px",
+                background: "var(--success)",
+                color: "var(--background)",
+                fontWeight: 700,
+                border: "2px solid var(--success)"
               }}
-              onFocus={e => e.target.style.outline = "2.5px solid var(--accent-green)"}
+              onFocus={e => e.target.style.outline = "2.5px solid var(--success)"}
               onBlur={e => e.target.style.outline = "2px solid transparent"}
             >
               Sign Up as Citizen
@@ -96,9 +100,10 @@ const HomePage = () => {
                 color: "var(--background)",
                 fontWeight: 700,
                 outline: "2px solid transparent",
-                outlineOffset: "2px"
+                outlineOffset: "2px",
+                border: "2px solid var(--primary)"
               }}
-              onFocus={e => e.target.style.outline = "2.5px solid var(--primary)"}
+              onFocus={e => e.target.style.outline = "2.5px solid var(--primary-hover)"}
               onBlur={e => e.target.style.outline = "2px solid transparent"}
             >
               Login as Citizen
@@ -138,9 +143,13 @@ const HomePage = () => {
               aria-label="Sign Up as Authority"
               style={{
                 outline: "2px solid transparent",
-                outlineOffset: "2px"
+                outlineOffset: "2px",
+                background: "var(--success)",
+                color: "var(--background)",
+                fontWeight: 700,
+                border: "2px solid var(--success)"
               }}
-              onFocus={e => e.target.style.outline = "2.5px solid var(--accent-green)"}
+              onFocus={e => e.target.style.outline = "2.5px solid var(--success)"}
               onBlur={e => e.target.style.outline = "2px solid transparent"}
             >
               Sign Up as Authority
@@ -154,9 +163,10 @@ const HomePage = () => {
                 color: "var(--background)",
                 fontWeight: 700,
                 outline: "2px solid transparent",
-                outlineOffset: "2px"
+                outlineOffset: "2px",
+                border: "2px solid var(--primary)"
               }}
-              onFocus={e => e.target.style.outline = "2.5px solid var(--primary)"}
+              onFocus={e => e.target.style.outline = "2.5px solid var(--primary-hover)"}
               onBlur={e => e.target.style.outline = "2px solid transparent"}
             >
               Login as Authority

@@ -9,7 +9,7 @@ export default function IssueCard({ issue }) {
   };
   const getStatusColor = (status) => {
     if (status === "resolved") return "var(--background)";
-    if (status === "in progress") return "var(--text-color)";
+    if (status === "in progress") return "var(--text-primary)";
     return "var(--background)";
   };
 

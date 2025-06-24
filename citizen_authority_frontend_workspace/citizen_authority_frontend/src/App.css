@@ -1,27 +1,27 @@
 :root {
-  /* Brown-Orange Civic Palette */
-  --primary: #EA580C;               /* Primary Brownish Orange */
-  --primary-hover: #C2410C;         /* Primary Hover Darker Orange */
-  --background: #1C1917;            /* Deep Brown (App BG) */
-  --card-bg: #3F2E23;               /* Card/Modal Background */
-  --text-color: #FCD34D;            /* Text Primary (Light Gold) */
-  --text-secondary: #FBBF24;        /* Text Secondary (Bright Amber) */
-  --border-color: #7C2D12;          /* Borders (Deep Orange Brown) */
-  --success: #65A30D;               /* Olive Green (Success) */
-  --error: #DC2626;                 /* Rose Red (Error) */
-  --shadow: 0 4px 18px rgba(122, 66, 12, 0.15);
+  /* Warm Earthy Civic Palette */
+  --primary: #D97706;            /* Primary Burnt Orange */
+  --primary-hover: #B45309;      /* Primary Hover Clay Brown */
+  --background: #2F1B12;         /* Rich Mocha (App BG) */
+  --card-bg: #4B2E2B;            /* Card/Modal Warm Nude Taupe */
+  --text-color: #E5B98F;         /* Sand Beige - Text Primary */
+  --text-secondary: #D6A470;     /* Light Tan - Text Secondary */
+  --border-color: #7C3E18;       /* Dark Rust (Borders/Dividers) */
+  --success: #A3B18A;            /* Olive Earth (Success/Confirmation) */
+  --error: #B91C1C;              /* Terracotta Red (Error States) */
+  --shadow: 0 4px 18px rgba(125, 79, 30, 0.18);
   --radius: 16px;
 
-  /* Aliases for migration/compatibility */
+  /* Compatibility aliases */
   --accent: var(--primary);
   --accent-green: var(--success);
   --accent-yellow: var(--primary-hover);
-  --highlight: var(--primary-hover); /* for highlight/active states */
-  --primary-dark: #3F2E23;
-  --primary-light: #FBBF24;
-  --neutral-light: #FBBF24;
-  --neutral-bg: #3F2E23;
-  --text-alt: #FCD34D;
+  --highlight: var(--primary-hover);
+  --primary-dark: var(--card-bg);
+  --primary-light: var(--text-secondary); /* for subtle backgrounds */
+  --neutral-light: var(--text-secondary);
+  --neutral-bg: var(--card-bg);
+  --text-alt: var(--text-color);
 }
 
 
