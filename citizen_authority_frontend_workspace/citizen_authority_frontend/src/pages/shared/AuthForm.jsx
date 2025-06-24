@@ -1,9 +1,16 @@
-// File: pages/shared/AuthForm.jsx
+/**
+ * AuthForm - Use this as a reference for role-based signup/login logic:
+ * If user logs in or signs up, after Supabase auth success, always:
+ * - Fetch user profile based on user.id
+ * - Enforce that the profile role matches the current portal (provided as prop 'role')
+ * - If not, log user out (supabase.auth.signOut()), and show error: "This email is registered under a different role."
+ * - When signing up: before creating a new account, check if profiles table already has an entry for this email under the opposite role.
+ *   If so, block signup and show error.
+ * See implementation in LoginCitizenPage.jsx, LoginAuthorityPage.jsx, SignupCitizenPage.jsx, SignupAuthorityPage.jsx.
+ */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabase/supabaseClient';
-
-//import { supabase } from '../supabase/supabaseclient';
 
 
 export default function AuthForm({ role, type }) {

@@ -8,10 +8,17 @@ export default function LoginAuthorityPage() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // PUBLIC_INTERFACE
+  /**
+   * Handles login for the 'authority' portal.
+   * If user's profile role is not 'authority', logs out and shows error.
+   * Checks for cross-role uniqueness.
+   */
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
 
+    // Sign in with Supabase Auth
     const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -28,31 +35,33 @@ export default function LoginAuthorityPage() {
       return;
     }
 
-    // ✅ Always fetch the profile role
-    const { data: profileData, error: profileError } = await supabase
+    // Check for role conflict: only authorities can login here
+    let { data: profileData, error: profileError } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single();
 
-    if (profileError || !profileData) {
-      setError('Could not fetch user role from profiles table.');
+    // If no profile (should not happen), block login
+    if (!profileData || profileError) {
+      await supabase.auth.signOut();
+      setError('This email is registered under a different role.');
       return;
     }
 
-    // ✅ Optional: log login
+    // Explicit enforcement of authority role for this portal
+    if (profileData.role !== 'authority') {
+      await supabase.auth.signOut();
+      setError('This email is registered under a different role.');
+      return;
+    }
+
+    // (Optional) Log login event
     await supabase.from('logins').insert([
       { user_id: user.id, role: profileData.role }
     ]);
 
-    // ✅ Redirect based on role
-    if (profileData.role === 'authority') {
-      navigate('/dashboard');
-    } else if (profileData.role === 'citizen') {
-      navigate('/issue-form');
-    } else {
-      setError('Unknown role in profile.');
-    }
+    navigate('/dashboard');
   };
 
   return (

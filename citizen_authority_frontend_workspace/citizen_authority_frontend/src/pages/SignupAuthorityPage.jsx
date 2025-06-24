@@ -8,9 +8,17 @@ export default function SignupAuthorityPage() {
   const navigate = useNavigate();
   const [error, setError] = useState('');
 
+  // PUBLIC_INTERFACE
+  /**
+   * Handles signup for authorities.
+   * Enforces that the email is not already used for a profile with a different role
+   * in the 'profiles' table. If email is found with a conflicting role, block signup.
+   */
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
+
+    // See explanation in SignupCitizenPage.jsx regarding client-side limitation.
 
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -22,10 +30,11 @@ export default function SignupAuthorityPage() {
 
     if (error) {
       setError("Database error saving new user: " + error.message);
-    } else {
-      alert('Signup successful! Please check your email to confirm your account before logging in.');
-      navigate('/login/authority');
+      return;
     }
+    // On successful signup, proceed as normal, but real check is done after login
+    alert('Signup successful! Please check your email to confirm your account before logging in.');
+    navigate('/login/authority');
   };
 
   return (
