@@ -1,37 +1,60 @@
 :root {
-  /* Warm Earthy Civic Palette */
-  --primary: #D97706;            /* Primary Burnt Orange */
-  --primary-hover: #B45309;      /* Primary Hover Clay Brown */
-  --background: #2F1B12;         /* Rich Mocha (App BG) */
-  --card-bg: #4B2E2B;            /* Card/Modal Warm Nude Taupe */
-  --text-color: #E5B98F;         /* Sand Beige - Text Primary */
-  --text-secondary: #D6A470;     /* Light Tan - Text Secondary */
-  --border-color: #7C3E18;       /* Dark Rust (Borders/Dividers) */
-  --success: #A3B18A;            /* Olive Earth (Success/Confirmation) */
-  --error: #B91C1C;              /* Terracotta Red (Error States) */
-  --shadow: 0 4px 18px rgba(125, 79, 30, 0.18);
+  /* CIVICFLOW EARTHY PALETTE (ALL THEME COLORS ARE DEFINED HERE) */
+
+  /* Background: Page/app background */
+  --background: #3B2F2F;              /* Deep Taupe: Page/app background */
+
+  /* Card/Section Backgrounds: Forms, containers, cards */
+  --card-bg: #5A4A42;                 /* Warm Cocoa: Section/Card BG */
+
+  /* Primary Accent: Buttons, active states */
+  --primary: #C08457;                 /* Dusty Terracotta: Primary accent, main CTA */
+
+  /* Button Hover/Focus */
+  --primary-hover: #A2603B;           /* Sienna: Button hover/focus */
+
+  /* Text Primary: Headings, key text */
+  --text-primary: #E3C9A5;            /* Cream Beige: Main headings, prominent text */
+
+  /* Text Secondary: Paragraphs, labels, helper */
+  --text-secondary: #D1B48C;          /* Muted Tan: Body, secondary info, labels */
+
+  /* Border/Outline: Input borders, dividers */
+  --border-color: #7B4F2A;            /* Burnt Umber: Borders, outlines, dividers */
+
+  /* Success State: Toasts, success/focus */
+  --success: #A3B18A;                 /* Olive Sage: Success, toasts, focus positive */
+
+  /* Error State: Validation, error messages */
+  --error: #B85C38;                   /* Dusty Red Clay: Errors, danger, destructive */
+
+  /* Drop Shadow & Border Radius (retained for consistency) */
+  --shadow: 0 4px 18px rgba(59, 47, 47, 0.15);
   --radius: 16px;
 
-  /* Compatibility aliases */
-  --accent: var(--primary);
+  /* ==== COMMON ALIASES for compatibility across app ==== */
+  --accent: var(--primary);           /* General accent, call-to-actions */
+  --accent-hover: var(--primary-hover);/* Alias for hoverable accent */
   --accent-green: var(--success);
-  --accent-yellow: var(--primary-hover);
-  --highlight: var(--primary-hover);
+  --accent-red: var(--error);
+
+  --highlight: var(--primary-hover);  /* Highlight, focus ring, etc */
   --primary-dark: var(--card-bg);
-  --primary-light: var(--text-secondary); /* for subtle backgrounds */
+  --primary-light: var(--text-secondary); /* Subtle backgrounds */
   --neutral-light: var(--text-secondary);
   --neutral-bg: var(--card-bg);
-  --text-alt: var(--text-color);
-}
 
+  /* TEXT COLOR default (body text) */
+  --text-color: var(--text-primary);  /* default 'text-color' points to main text */
+  --text-alt: var(--text-secondary);
+}
 
 body {
   margin: 0;
   background: var(--background);
-  color: var(--text-color);
+  color: var(--text-primary);
   font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
   min-height: 100vh;
-  background: var(--background);
   transition: background 0.18s, color 0.18s;
 }
 
@@ -44,7 +67,7 @@ body {
 
 .navbar {
   background: var(--card-bg);
-  color: var(--text-color);
+  color: var(--text-primary);
   padding: 18px 32px;
   border-bottom: 2.5px solid var(--border-color);
   box-shadow: var(--shadow);
@@ -140,7 +163,6 @@ body {
 }
 
 /* BUTTONS */
-/* Main action buttons: brand brown-orange */
 .btn, .btn:visited {
   background: var(--primary);
   color: var(--background);
@@ -157,7 +179,7 @@ body {
   text-shadow: 0 1px 2px #0002;
 }
 
-/* CTA/Submit buttons, uses olive for success/confirmation */
+/* CTA/Submit buttons: Success color */
 .btn-cta,
 button.btn.btn-large,
 input[type="submit"].btn,
@@ -172,14 +194,14 @@ button[type="submit"], .btn-primary {
 .btn:hover, .btn:focus,
 .btn-cta:hover, .btn-cta:focus {
   background: var(--primary-hover) !important;
-  color: var(--text-color);
-  box-shadow: 0 8px 30px 0 #ea580c33, 0 2px 16px 0 #c2410c26;
+  color: var(--text-primary);
+  box-shadow: 0 8px 30px 0 #b85c3844, 0 2px 16px 0 #a2603b26;
   transform: translateY(-1.5px) scale(1.025);
   outline: 2.5px solid var(--primary-hover);
   outline-offset: 2px;
 }
 
-/* Accessibility -- contrast on focus for all actionable btns */
+/* Accessibility: high-contrast focus indicators for buttons */
 .btn:focus-visible, .btn-cta:focus-visible,
 button:focus-visible, input[type="submit"]:focus-visible {
   outline: 2.5px solid var(--highlight);
@@ -196,12 +218,11 @@ button:focus-visible, input[type="submit"]:focus-visible {
   opacity: 0.45;
   cursor: not-allowed;
   background: var(--card-bg); 
-  color: #bfc6d1;
+  color: #c7b9a2;
   box-shadow: none;
-  border: 2px solid #7C2D1244;
+  border: 2px solid #7B4F2A44;
 }
 
-/* Links styled as buttons */
 a.btn, a.btn:visited {
   display: inline-block;
   text-decoration: none;
@@ -216,11 +237,11 @@ a.btn:hover, a.btn:focus {
   outline-offset: 2px;
 }
 
-
+/* Cards & Containers */
 .card,
 .card-bg {
   background: var(--card-bg);
-  color: var(--text-color);
+  color: var(--text-primary);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 26px 20px;
@@ -228,7 +249,6 @@ a.btn:hover, a.btn:focus {
   border: 1.5px solid var(--border-color);
   transition: box-shadow 0.15s, border 0.12s, background 0.13s;
 }
-
 .card-bg {
   background: var(--card-bg);
 }
@@ -239,26 +259,18 @@ a.btn:hover, a.btn:focus {
     margin: 0.88rem 0;
   }
 }
-
 .card:hover {
-  box-shadow: 0 7px 32px 0 var(--primary-light), 0 1.5px 12px 0 var(--accent-light);
-}
-@media (max-width: 600px) {
-  .card, .card-bg {
-    padding: 13px 4vw;
-    margin: 0.88rem 0;
-  }
+  box-shadow: 0 7px 32px 0 var(--primary-light), 0 1.5px 12px 0 var(--accent-green);
 }
 
-/* Table stylings (for dashboards) */
+/* Tables (Dashboard, Issue Lists) */
 .table-modern {
   border-radius: var(--radius);
   overflow: hidden;
-  background: var(--secondary);
+  background: var(--card-bg);
   box-shadow: var(--shadow);
   border-collapse: separate;
 }
-
 .table-modern th,
 .table-modern td {
   padding: 13px;
@@ -266,17 +278,16 @@ a.btn:hover, a.btn:focus {
   text-align: left;
 }
 .table-modern th {
-  background: var(--accent-green);
-  color: #110c23;
+  background: var(--success);
+  color: #322B27;
   font-weight: 900;
   letter-spacing: 0.02em;
   font-size: 1.07rem;
-  text-shadow: 0 1px 2px #fff2, 0 0.5px 0px #13867643;
+  text-shadow: 0 1px 2px #fff2, 0 0.5px 0px #a3b18a33;
 }
 .table-modern tr:last-child td {
   border-bottom: none;
 }
-
 .table-modern tr:hover {
   background: var(--primary-dark);
   color: var(--highlight);
@@ -289,24 +300,24 @@ input, select, textarea {
   font-size: 1rem;
   padding: 10px;
   border-radius: 10px;
-  border: 1.7px solid var(--accent);
+  border: 1.7px solid var(--border-color);
   margin-top: 6px;
   margin-bottom: 6px;
   outline: none;
   background: var(--neutral-bg);
-  color: var(--text-color);
+  color: var(--text-primary);
   box-shadow: none;
   transition: border-color 0.14s, box-shadow 0.14s, background 0.12s;
 }
 input:focus, select:focus, textarea:focus {
-  border-color: var(--accent-green);
-  box-shadow: 0 0 0 2.5px var(--accent);
+  border-color: var(--success);
+  box-shadow: 0 0 0 2.5px var(--primary);
   background: var(--neutral-light);
-  color: var(--text-color);
+  color: var(--text-primary);
 }
 label {
   font-weight: 500;
-  color: var(--highlight);
+  color: var(--primary-hover);
   margin-bottom: 4px;
   display: block;
   font-size: 1rem;
@@ -324,7 +335,7 @@ textarea {
   max-height: 320px;
 }
 form {
-  background: var(--secondary);
+  background: var(--neutral-bg);
   padding: 30px 22px;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -391,3 +402,18 @@ input[type="submit"], button[type="submit"], button:not(.btn).primary {
 .rounded { border-radius: var(--radius); }
 .shadow { box-shadow: var(--shadow); }
 
+/* ==== END CIVICFLOW CUSTOM COLOR THEME ==== */
+
+/*
+Color palette referenced for variable definitions (for dev reference):
+
+- Deep Taupe         #3B2F2F  (background)
+- Warm Cocoa         #5A4A42  (card-bg)
+- Dusty Terracotta   #C08457  (primary/accent)
+- Sienna             #A2603B  (primary-hover/highlight)
+- Cream Beige        #E3C9A5  (text-primary)
+- Muted Tan          #D1B48C  (text-secondary)
+- Burnt Umber        #7B4F2A  (border-color)
+- Olive Sage         #A3B18A  (success)
+- Dusty Red Clay     #B85C38  (error/danger)
+*/
