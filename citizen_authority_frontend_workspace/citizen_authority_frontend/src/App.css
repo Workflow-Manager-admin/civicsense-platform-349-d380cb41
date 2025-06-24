@@ -1,78 +1,80 @@
 :root {
-  /* ==== MISTY SAND / SOFT ALMOND PALETTE (ALL THEME COLORS ARE DEFINED HERE) ==== */
+  /* ==== PURPLE + WHITE THEME COLOR PALETTE (ALL THEME COLORS ARE DEFINED HERE) ==== */
 
   /* Page Background */
-  --background: #E9E3D8;                 /* Misty Sand: Main app background (soft, nude) */
+  --background: #F9FAFB;                /* Bright White: Main app background (ultra-light, clean) */
 
   /* Card, Form, Section Backgrounds */
-  --card-bg: #D6C7B0;                    /* Soft Almond: Cards, containers, modals */
+  --card-bg: #FFFFFF;                   /* White: Cards, containers, modals, forms */
 
   /* Primary Button/Action */
-  --primary: #BFA07A;                    /* Warm Clay: Primary/CTA buttons, active UI highlights */
+  --primary: #6D28D9;                   /* Royal Purple: Primary/CTA buttons, main UI highlights */
 
   /* Primary Button Hover/Active */
-  --primary-hover: #A68464;              /* Toasted Beige: Button hover/active/focus */
+  --primary-hover: #5B21B6;             /* Deep Purple: Button hover/active/focus states */
 
   /* Border and Input Outline */
-  --border-color: #C4AA88;               /* Pale Bronze: Borders, outlines, input boxes */
+  --border-color: #DDD6FE;              /* Soft Lavender: Borders, input boxes, section lines */
 
   /* Success Indicator */
-  --success: #B7C3A3;                    /* Sage Green: Success status, toasts, completed steps */
+  --success: #A78BFA;                   /* Soft Violet: Success status, toasts, confirmation highlights */
 
   /* Error/Negative Indicator */
-  --error: #C27D74;                      /* Muted Coral: Error, alert, destructive states */
+  --error: #C026D3;                     /* Red-Purple: Error/alert/destructive states */
 
   /* Primary Text */
-  --text-primary: #000000;               /* Jet Black: Headings, major form input, labels */
+  --text-primary: #2E1065;              /* Dark Purple Text: Headings, main text, strong labels */
 
   /* Secondary Text */
-  --text-secondary: #111111;             /* Deep Charcoal: Helper text, descriptions, lower emphasis */
+  --text-secondary: #4C1D95;            /* Dimmed Purple: Helper text, labels, descriptions */
 
   /* Drop Shadow & Border Radius */
-  --shadow: 0 4px 18px rgba(176, 154, 120, 0.13); /* Soft brown shadow for cards/buttons */
+  --shadow: 0 4px 18px rgba(109, 40, 217, 0.10); /* Soft purple shadow for cards/buttons */
   --radius: 16px;
 
   /* ==== COMMON ALIASES for compatibility and future UI ==== */
-  --accent: var(--primary);                /* Accent for call-to-actions */
-  --accent-hover: var(--primary-hover);    /* Alias for hover state of accent */
-  --accent-green: var(--success);          /* Alias for success/confirmation */
-  --accent-red: var(--error);              /* Alias for error/destructive actions */
-  --highlight: var(--primary-hover);       /* Highlight/focus ring */
-  --primary-dark: var(--card-bg);          /* Slightly deeper backgrounds for contrast */
-  --primary-light: #EFE7DE;                /* Extra subtle backgrounds for forms/tables */
-  --neutral-light: #EFE7DE;                /* Alternate subtle background for inputs/cards */
+  --accent: var(--primary);               /* Accent for call-to-actions (usually Royal Purple) */
+  --accent-hover: var(--primary-hover);   /* Accent hover state */
+  --accent-green: var(--success);         /* Alias for success/confirmation (Soft Violet) */
+  --accent-red: var(--error);             /* Alias for error/destructive actions (Red-Purple) */
+  --highlight: var(--primary-hover);      /* Highlight/focus ring (Deep Purple) */
+  --primary-dark: var(--primary-hover);   /* Extra shade of purple for contrast cases */
+  --primary-light: #F3E8FF;               /* Extra subtle purple background for forms/tables (very pale) */
+  --neutral-light: #F3E8FF;               /* Alternate subtle background (inputs/cards) */
   --neutral-bg: var(--card-bg);
 
   /* Default text colors */
-  --text-color: var(--text-primary);        /* Default text for body */
-  --text-alt: var(--text-secondary);        /* Alternate text */
+  --text-color: var(--text-primary);       /* Default text for body */
+  --text-alt: var(--text-secondary);       /* Alternate text */
 }
+
 /* 
-  ==== MISTY SAND / SOFT ALMOND COLOR PALETTE FOR REFERENCE ====
+  ==== PURPLE + WHITE COLOR PALETTE FOR REFERENCE ====
    |-----------------------------------------------------------|
-   | Role                | Color Name     | Hex      | Usage   |
-   |---------------------|---------------|----------|---------|
-   | Page Background     | Misty Sand    | #E9E3D8  | --background        |
-   | Card/Form BG        | Soft Almond   | #D6C7B0  | --card-bg           |
-   | Primary Button      | Warm Clay     | #BFA07A  | --primary           |
-   | Primary Hover       | Toasted Beige | #A68464  | --primary-hover     |
-   | Borders/Inputs      | Pale Bronze   | #C4AA88  | --border-color      |
-   | Success Indicator   | Sage Green    | #B7C3A3  | --success           |
-   | Error Indicator     | Muted Coral   | #C27D74  | --error             |
-   | Text Primary        | Jet Black     | #000000  | --text-primary      |
-   | Text Secondary      | Deep Charcoal | #111111  | --text-secondary    |
+   | Role                | Color Name         | Hex      | Usage            |
+   |---------------------|-------------------|----------|------------------|
+   | Page Background     | Bright White      | #F9FAFB  | --background     |
+   | Card/Form BG        | White             | #FFFFFF  | --card-bg        |
+   | Primary Purple      | Royal Purple      | #6D28D9  | --primary        |
+   | Hover Purple        | Deep Purple       | #5B21B6  | --primary-hover  |
+   | Text Primary        | Dark Purple Text  | #2E1065  | --text-primary   |
+   | Text Secondary      | Dimmed Purple     | #4C1D95  | --text-secondary |
+   | Border/Line         | Soft Lavender     | #DDD6FE  | --border-color   |
+   | Success (optional)  | Soft Violet       | #A78BFA  | --success        |
+   | Error (optional)    | Red-Purple        | #C026D3  | --error          |
    |-----------------------------------------------------------|
    Usage Guidance:
-     - Always use --background for page/viewport backgrounds
-     - Use --card-bg for containers, cards, form backgrounds, and navbars
-     - --primary and --primary-hover drive primary/actionable elements (main buttons, links, CTAs)
-     - --border-color should appear on card edges, input outlines, dividers
-     - --success/--error for status toasts, messages, form validation
-     - --text-primary and --text-secondary differentiate major from minor/description text
-     - --shadow and --radius supply consistent elevation/border
+     - Always use --background for page/viewport backgrounds (Bright White)
+     - Use --card-bg for containers, cards, modals, forms (White)
+     - Use --primary and --primary-hover for main buttons, links, highlights (Royal/Deep Purple)
+     - Use --border-color for card edges, input outlines, dividers (Soft Lavender)
+     - --success/--error for toasts, status, error highlights (optional: Soft Violet/Red-Purple)
+     - --text-primary and --text-secondary for headings/descriptions (Dark/Dimmed Purple)
+     - --shadow and --radius for consistent elevation/border styling
      - All UI must reference these variables; do not hardcode hex colors!
 */
 
+/* ==== GLOBAL BASE STYLES ==== */
 body {
   margin: 0;
   background: var(--background);
@@ -121,7 +123,7 @@ body {
 }
 
 .logo-symbol {
-  color: var(--accent);
+  color: var(--primary);
   font-size: 2rem;
 }
 
@@ -200,7 +202,7 @@ body {
   box-shadow: var(--shadow);
   outline: none;
   outline-offset: 2px;
-  text-shadow: 0 1px 2px #0002;
+  text-shadow: 0 1px 2px #4c1d9520;
 }
 
 /* CTA/Submit buttons: Success color */
@@ -215,11 +217,12 @@ button[type="submit"], .btn-primary {
   border: 2px solid var(--success);
 }
 
+/* Button hover/focus styles */
 .btn:hover, .btn:focus,
 .btn-cta:hover, .btn-cta:focus {
   background: var(--primary-hover) !important;
-  color: var(--text-primary);
-  box-shadow: 0 8px 30px 0 #b85c3844, 0 2px 16px 0 #a2603b26;
+  color: var(--background);
+  box-shadow: 0 8px 30px 0 #6d28d93a, 0 2px 16px 0 #5b21b626;
   transform: translateY(-1.5px) scale(1.025);
   outline: 2.5px solid var(--primary-hover);
   outline-offset: 2px;
@@ -241,10 +244,10 @@ button:focus-visible, input[type="submit"]:focus-visible {
 .btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
-  background: var(--card-bg); 
+  background: var(--card-bg);
   color: #c7b9a2;
   box-shadow: none;
-  border: 2px solid #7B4F2A44;
+  border: 2px solid #a892e944;
 }
 
 a.btn, a.btn:visited {
@@ -303,17 +306,17 @@ a.btn:hover, a.btn:focus {
 }
 .table-modern th {
   background: var(--success);
-  color: #322B27;
+  color: #341065;
   font-weight: 900;
   letter-spacing: 0.02em;
   font-size: 1.07rem;
-  text-shadow: 0 1px 2px #fff2, 0 0.5px 0px #a3b18a33;
+  text-shadow: 0 1px 2px #ddd6fe90, 0 0.5px 0px #a78bfa33;
 }
 .table-modern tr:last-child td {
   border-bottom: none;
 }
 .table-modern tr:hover {
-  background: var(--primary-dark);
+  background: var(--primary-light);
   color: var(--highlight);
   transition: background 0.13s;
 }
@@ -350,7 +353,7 @@ label {
 input[type="file"] {
   border: none;
   background: transparent;
-  color: var(--accent);
+  color: var(--primary);
   font-size: 1rem;
 }
 textarea {
@@ -383,7 +386,7 @@ input[type="submit"], button[type="submit"], button:not(.btn).primary {
   padding: 13px 24px;
   font-size: 1rem;
   margin-top: 12px;
-  box-shadow: 0 2px 8px rgba(108, 60, 210, 0.10);
+  box-shadow: 0 2px 8px rgba(109, 40, 217, 0.10);
 }
 
 /* Error/success states */
@@ -426,18 +429,4 @@ input[type="submit"], button[type="submit"], button:not(.btn).primary {
 .rounded { border-radius: var(--radius); }
 .shadow { box-shadow: var(--shadow); }
 
-/* ==== END CIVICFLOW CUSTOM COLOR THEME ==== */
-
-/*
-LIGHTER CIVICFLOW COLOR PALETTE (for dev reference):
-
-- Light Mushroom     #E6DACE  (background)
-- Clay Blush         #D8C3B3  (card-bg)
-- Pale Terracotta    #CBA38F  (primary/accent)
-- Muted Sienna       #B88C73  (primary-hover/highlight)
-- Warm Charcoal      #3E3E3E  (text-primary)
-- Soft Taupe         #6D5F55  (text-secondary)
-- Rustic Brown       #A27C67  (border-color)
-- Olive Mist         #9BA17B  (success)
-- Dusty Brick        #A84E4E  (error/danger)
-*/
+/* ==== END PURPLE + WHITE COLOR THEME ==== */
