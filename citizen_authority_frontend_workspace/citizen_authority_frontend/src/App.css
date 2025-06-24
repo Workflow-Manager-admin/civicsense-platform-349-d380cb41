@@ -1,51 +1,51 @@
 :root {
-  /* CIVICFLOW EARTHY PALETTE (ALL THEME COLORS ARE DEFINED HERE) */
+  /* CIVICFLOW LIGHTER PALETTE (ALL THEME COLORS ARE DEFINED HERE) */
 
   /* Background: Page/app background */
-  --background: #3B2F2F;              /* Deep Taupe: Page/app background */
+  --background: #E6DACE;              /* Light Mushroom: Page background */
 
   /* Card/Section Backgrounds: Forms, containers, cards */
-  --card-bg: #5A4A42;                 /* Warm Cocoa: Section/Card BG */
+  --card-bg: #D8C3B3;                 /* Clay Blush: Card/Form/Modal background */
 
   /* Primary Accent: Buttons, active states */
-  --primary: #C08457;                 /* Dusty Terracotta: Primary accent, main CTA */
+  --primary: #CBA38F;                 /* Pale Terracotta: Primary accent, main CTA/buttons */
 
   /* Button Hover/Focus */
-  --primary-hover: #A2603B;           /* Sienna: Button hover/focus */
+  --primary-hover: #B88C73;           /* Muted Sienna: Button hover/focus */
 
   /* Text Primary: Headings, key text */
-  --text-primary: #E3C9A5;            /* Cream Beige: Main headings, prominent text */
+  --text-primary: #3E3E3E;            /* Warm Charcoal: Headings, main readable text */
 
   /* Text Secondary: Paragraphs, labels, helper */
-  --text-secondary: #D1B48C;          /* Muted Tan: Body, secondary info, labels */
+  --text-secondary: #6D5F55;          /* Soft Taupe: Labels, descriptions, secondary text */
 
   /* Border/Outline: Input borders, dividers */
-  --border-color: #7B4F2A;            /* Burnt Umber: Borders, outlines, dividers */
+  --border-color: #A27C67;            /* Rustic Brown: Borders, outlines, dividers */
 
   /* Success State: Toasts, success/focus */
-  --success: #A3B18A;                 /* Olive Sage: Success, toasts, focus positive */
+  --success: #9BA17B;                 /* Olive Mist: Positive feedback/success alerts */
 
   /* Error State: Validation, error messages */
-  --error: #B85C38;                   /* Dusty Red Clay: Errors, danger, destructive */
+  --error: #A84E4E;                   /* Dusty Brick: Warnings/validation errors */
 
   /* Drop Shadow & Border Radius (retained for consistency) */
-  --shadow: 0 4px 18px rgba(59, 47, 47, 0.15);
+  --shadow: 0 4px 18px rgba(217, 192, 179, 0.13);
   --radius: 16px;
 
   /* ==== COMMON ALIASES for compatibility across app ==== */
-  --accent: var(--primary);           /* General accent, call-to-actions */
-  --accent-hover: var(--primary-hover);/* Alias for hoverable accent */
-  --accent-green: var(--success);
-  --accent-red: var(--error);
+  --accent: var(--primary);             /* General accent, call-to-actions */
+  --accent-hover: var(--primary-hover); /* Alias for hoverable accent */
+  --accent-green: var(--success);       /* Success/confirmation */
+  --accent-red: var(--error);           /* Error/destructive */
 
-  --highlight: var(--primary-hover);  /* Highlight, focus ring, etc */
-  --primary-dark: var(--card-bg);
-  --primary-light: var(--text-secondary); /* Subtle backgrounds */
-  --neutral-light: var(--text-secondary);
+  --highlight: var(--primary-hover);    /* Highlight, focus ring, etc */
+  --primary-dark: var(--card-bg);       /* Slightly deeper backgrounds */
+  --primary-light: #EFE7DE;             /* Very subtle backgrounds (manual for light theme) */
+  --neutral-light: #EFE7DE;             /* Alternate subtle background for cards/inputs */
   --neutral-bg: var(--card-bg);
 
   /* TEXT COLOR default (body text) */
-  --text-color: var(--text-primary);  /* default 'text-color' points to main text */
+  --text-color: var(--text-primary);    /* default 'text-color' points to main text */
   --text-alt: var(--text-secondary);
 }
 
@@ -405,15 +405,15 @@ input[type="submit"], button[type="submit"], button:not(.btn).primary {
 /* ==== END CIVICFLOW CUSTOM COLOR THEME ==== */
 
 /*
-Color palette referenced for variable definitions (for dev reference):
+LIGHTER CIVICFLOW COLOR PALETTE (for dev reference):
 
-- Deep Taupe         #3B2F2F  (background)
-- Warm Cocoa         #5A4A42  (card-bg)
-- Dusty Terracotta   #C08457  (primary/accent)
-- Sienna             #A2603B  (primary-hover/highlight)
-- Cream Beige        #E3C9A5  (text-primary)
-- Muted Tan          #D1B48C  (text-secondary)
-- Burnt Umber        #7B4F2A  (border-color)
-- Olive Sage         #A3B18A  (success)
-- Dusty Red Clay     #B85C38  (error/danger)
+- Light Mushroom     #E6DACE  (background)
+- Clay Blush         #D8C3B3  (card-bg)
+- Pale Terracotta    #CBA38F  (primary/accent)
+- Muted Sienna       #B88C73  (primary-hover/highlight)
+- Warm Charcoal      #3E3E3E  (text-primary)
+- Soft Taupe         #6D5F55  (text-secondary)
+- Rustic Brown       #A27C67  (border-color)
+- Olive Mist         #9BA17B  (success)
+- Dusty Brick        #A84E4E  (error/danger)
 */
