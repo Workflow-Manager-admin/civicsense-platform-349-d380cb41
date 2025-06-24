@@ -19,8 +19,8 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="logo">
-        <span className="logo-symbol" aria-label="CivicFlow Brand">⚡</span>
-        CivicFlow
+        <span className="logo-symbol" aria-label="CivicFlow Brand" style={{ color: "var(--highlight)" }}>⚡</span>
+        <span style={{ color: "var(--accent)", fontWeight: 900 }}>CivicFlow</span>
       </div>
       <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
         <Link className="btn" to="/">Home</Link>

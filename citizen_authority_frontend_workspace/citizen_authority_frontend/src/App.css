@@ -1,25 +1,29 @@
 :root {
-  /* Modern purple palette */
-  --primary: #6c3cd4;
-  --primary-dark: #472395;
-  --primary-light: #ac91e9;
-  --accent: #bc5bcb;
-  --accent-light: #edc8ec;
-  --neutral-light: #f5f5fa;
-  --neutral-bg: #fffefc;
-  --shadow: 0 4px 18px rgba(60, 30, 90, 0.10);
+  /* CivicFlow Dark Purple Theme */
+  --primary: #4B2269;
+  --primary-dark: #2c143c;
+  --primary-light: #874CCC;
+  --accent: #B491F6;
+  --accent-light: #6C3483;
+  --secondary: #272041;
+  --background: #21112D;
+  --button: #6C3483;
+  --highlight: #B491F6;
+  --text-color: #F5F3F7;
+  --text-secondary: #C1B4DC;
+  --border-color: #3d2448;
+  --neutral-light: #33294e;
+  --neutral-bg: #21112D;
+  --shadow: 0 4px 18px rgba(69, 34, 105, 0.17);
   --radius: 16px;
-  --text-color: #251745;
-  --text-secondary: #664c91;
-  --border-color: #ecdbfa;
-  --danger: #f85a63;
-  --success: #3dc97f;
+  --danger: #D14361;
+  --success: #21D687;
 }
 
 
 body {
   margin: 0;
-  background: var(--neutral-bg);
+  background: var(--background);
   color: var(--text-color);
   font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
   min-height: 100vh;
@@ -29,14 +33,14 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--neutral-bg);
+  background: var(--background);
 }
 
 .navbar {
-  background: var(--primary);
-  color: #fff;
+  background: linear-gradient(100deg, var(--primary-dark) 60%, var(--primary));
+  color: var(--text-color);
   padding: 18px 32px;
-  border-bottom: 1.5px solid var(--primary-light);
+  border-bottom: 2.5px solid var(--accent);
   box-shadow: var(--shadow);
   display: flex;
   align-items: center;
@@ -101,17 +105,18 @@ body {
 }
 
 .subtitle {
-  color: var(--primary);
-  font-weight: 500;
+  color: var(--highlight);
+  font-weight: 600;
   font-size: 1.20rem;
   margin-bottom: 0.2rem;
+  letter-spacing: 0.04em;
 }
 .title {
   font-size: 2.6rem;
   font-weight: 700;
   line-height: 1.18;
   margin-bottom: 1.2rem;
-  color: var(--text-color);
+  color: var(--highlight);
 }
 @media (max-width: 600px) {
   .title {
@@ -130,22 +135,24 @@ body {
 
 /* BUTTONS */
 .btn {
-  background: linear-gradient(100deg, var(--primary) 60%, var(--accent));
-  color: #fff;
+  background: linear-gradient(92deg, var(--primary) 60%, var(--accent));
+  color: var(--text-color);
   border: none;
   border-radius: var(--radius);
   padding: 13px 32px;
   font-size: 1.08rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.18s, box-shadow 0.15s, transform 0.09s;
-  box-shadow: 0 2px 8px rgba(108, 60, 210, 0.10);
+  transition: background 0.16s, box-shadow 0.15s, transform 0.09s;
+  box-shadow: 0 6px 18px rgba(100, 50, 145, 0.18);
+  outline: none;
 }
 .btn:hover,
 .btn:focus {
-  background: linear-gradient(86deg, var(--accent) 45%, var(--primary-dark) 90%);
-  box-shadow: 0 4px 16px rgba(108, 60, 210, 0.18);
-  transform: translateY(-2px) scale(1.013);
+  background: linear-gradient(104deg, var(--button) 60%, var(--highlight));
+  color: var(--text-color);
+  box-shadow: 0 7px 20px rgba(130, 80, 210, 0.25);
+  transform: translateY(-2px) scale(1.018);
 }
 
 .btn-large {
@@ -155,19 +162,21 @@ body {
 
 .btn[disabled],
 .btn:disabled {
-  opacity: 0.55;
+  opacity: 0.45;
   cursor: not-allowed;
+  background: var(--primary-dark);
+  color: #9993be;
 }
 
 .card,
 .card-bg {
-  background: #fff;
+  background: var(--secondary);
   color: var(--text-color);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 26px 20px;
   margin: 1.1rem 0;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--accent);
   transition: box-shadow 0.15s;
 }
 .card-bg {
@@ -175,7 +184,7 @@ body {
 }
 
 .card:hover {
-  box-shadow: 0 7px 22px rgba(90, 60, 150, 0.16);
+  box-shadow: 0 7px 32px 0 var(--primary-light), 0 1.5px 12px 0 var(--accent-light);
 }
 @media (max-width: 600px) {
   .card, .card-bg {
@@ -188,7 +197,7 @@ body {
 .table-modern {
   border-radius: var(--radius);
   overflow: hidden;
-  background: #fff;
+  background: var(--secondary);
   box-shadow: var(--shadow);
   border-collapse: separate;
 }
@@ -196,12 +205,12 @@ body {
 .table-modern th,
 .table-modern td {
   padding: 13px;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--accent);
   text-align: left;
 }
 .table-modern th {
-  background: var(--primary-light);
-  color: var(--text-color);
+  background: var(--button);
+  color: var(--highlight);
   font-weight: 700;
 }
 .table-modern tr:last-child td {
@@ -209,7 +218,8 @@ body {
 }
 
 .table-modern tr:hover {
-  background: var(--accent-light);
+  background: var(--primary-dark);
+  color: var(--highlight);
   transition: background 0.13s;
 }
 
@@ -219,22 +229,24 @@ input, select, textarea {
   font-size: 1rem;
   padding: 10px;
   border-radius: 10px;
-  border: 1.4px solid var(--border-color);
+  border: 1.4px solid var(--accent);
   margin-top: 6px;
   margin-bottom: 6px;
   outline: none;
-  background: var(--neutral-light);
+  background: var(--secondary);
   color: var(--text-color);
   box-shadow: none;
-  transition: border-color 0.14s, box-shadow 0.14s;
+  transition: border-color 0.14s, box-shadow 0.14s, background 0.12s;
 }
 input:focus, select:focus, textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px var(--primary-light);
+  border-color: var(--highlight);
+  box-shadow: 0 0 0 2.7px var(--accent);
+  background: var(--neutral-light);
+  color: var(--text-color);
 }
 label {
   font-weight: 500;
-  color: var(--primary-dark);
+  color: var(--highlight);
   margin-bottom: 4px;
   display: block;
   font-size: 1rem;
@@ -243,7 +255,7 @@ label {
 input[type="file"] {
   border: none;
   background: transparent;
-  color: var(--primary-dark);
+  color: var(--accent);
   font-size: 1rem;
 }
 textarea {
@@ -252,12 +264,13 @@ textarea {
   max-height: 320px;
 }
 form {
-  background: #fff;
+  background: var(--secondary);
   padding: 30px 22px;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   margin: 1.5rem auto 0 auto;
   max-width: 540px;
+  border: 1.2px solid var(--accent);
 }
 @media (max-width: 550px) {
   form {
