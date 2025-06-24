@@ -72,21 +72,21 @@ export default function AuthorityDashboardPage() {
                   <td>
                     <Link
                       to={`/issue/${issue.id}`}
-                      className="btn"
+                      className="btn btn-cta"
                       aria-label={`View Details for issue titled ${issue.title}`}
                       style={{
-                        padding: "7px 16px",
-                        fontSize: "1.01rem",
+                        padding: "7px 20px",
+                        fontSize: "1.08rem",
                         borderRadius: "12px",
-                        background: "var(--primary)",
-                        color: "#fff",
-                        fontWeight: 600,
+                        background: "var(--accent-green)",
+                        color: "#130823",
+                        fontWeight: 700,
                         textDecoration: "none",
-                        boxShadow: "0 2px 10px 0px #ac91e99b",
+                        boxShadow: "0 2px 10px 0px #3dee9a45",
                         outline: "2px solid transparent",
                         outlineOffset: "2px"
                       }}
-                      onFocus={e => (e.target.style.outline = "2px solid var(--accent)")}
+                      onFocus={e => (e.target.style.outline = "2.5px solid var(--accent-green)")}
                       onBlur={e => (e.target.style.outline = "2px solid transparent")}
                     >
                       View Details

@@ -25,16 +25,21 @@ export default function IssueCard({ issue }) {
         className="badge"
         aria-label={`Status: ${issue.status}`}
         style={{
-          background: "var(--button)",
-          color: "#fff",
+          background:
+            issue.status === "resolved"
+              ? "var(--accent-green)"
+              : issue.status === "in progress"
+              ? "var(--accent-yellow)"
+              : "var(--accent)",
+          color: "#1b1932",
           padding: "0.45em 1.05em",
           borderRadius: "1em",
-          fontWeight: 700,
+          fontWeight: 900,
           marginTop: "9px",
           display: "inline-block",
           fontSize: "1rem",
           letterSpacing: "0.03em",
-          boxShadow: "0 2px 8px 0 #7c36b51e"
+          boxShadow: "0 2px 8px 0 #06d6a022"
         }}
       >
         Status: <span style={{ textTransform: "capitalize" }}>{issue.status}</span>

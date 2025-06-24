@@ -68,14 +68,14 @@ const HomePage = () => {
           </p>
           <div style={{ marginTop: "14px", display: "flex", gap: "12px", flexWrap: "wrap" }}>
             <Link
-              className="btn"
+              className="btn btn-cta"
               to="/signup/citizen"
               aria-label="Sign Up as Citizen"
               style={{
                 outline: "2px solid transparent",
                 outlineOffset: "2px"
               }}
-              onFocus={e => e.target.style.outline = "2px solid var(--primary)"}
+              onFocus={e => e.target.style.outline = "2.5px solid var(--accent-green)"}
               onBlur={e => e.target.style.outline = "2px solid transparent"}
             >
               Sign Up as Citizen
@@ -86,11 +86,12 @@ const HomePage = () => {
               aria-label="Login as Citizen"
               style={{
                 background: "var(--accent)",
-                color: "#fff",
+                color: "#171631",
+                fontWeight: 700,
                 outline: "2px solid transparent",
                 outlineOffset: "2px"
               }}
-              onFocus={e => e.target.style.outline = "2px solid var(--accent)"}
+              onFocus={e => e.target.style.outline = "2.5px solid var(--accent)"}
               onBlur={e => e.target.style.outline = "2px solid transparent"}
             >
               Login as Citizen
@@ -124,14 +125,14 @@ const HomePage = () => {
           </p>
           <div style={{ marginTop: "14px", display: "flex", gap: "12px", flexWrap: "wrap" }}>
             <Link
-              className="btn"
+              className="btn btn-cta"
               to="/signup/authority"
               aria-label="Sign Up as Authority"
               style={{
                 outline: "2px solid transparent",
                 outlineOffset: "2px"
               }}
-              onFocus={e => e.target.style.outline = "2px solid var(--accent)"}
+              onFocus={e => e.target.style.outline = "2.5px solid var(--accent-green)"}
               onBlur={e => e.target.style.outline = "2px solid transparent"}
             >
               Sign Up as Authority
@@ -142,11 +143,12 @@ const HomePage = () => {
               aria-label="Login as Authority"
               style={{
                 background: "var(--accent)",
-                color: "#fff",
+                color: "#1a1a27",
+                fontWeight: 700,
                 outline: "2px solid transparent",
                 outlineOffset: "2px"
               }}
-              onFocus={e => e.target.style.outline = "2px solid var(--accent)"}
+              onFocus={e => e.target.style.outline = "2.5px solid var(--accent)"}
               onBlur={e => e.target.style.outline = "2px solid transparent"}
             >
               Login as Authority
