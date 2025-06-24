@@ -1,4 +1,3 @@
-// File: App.jsx
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import SignupCitizenPage from './pages/SignupCitizenPage';
@@ -11,6 +10,10 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import IssueDetailPage from './pages/IssueDetailPage';
 import { Fragment } from 'react';
+
+// Import global styles so that CSS variables and classes are available everywhere
+import './App.css';
+import './index.css';
 
 function AppContent() {
   const location = useLocation();

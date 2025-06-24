@@ -21,24 +21,17 @@ modules by path ./.ve/ 15.1 KiB
   modules by path ./.ve/*.js 10.6 KiB 2 modules
   modules by path ./.ve/*.css 2.93 KiB 2 modules
   ./.ve/EditorOverlay.jsx 1.58 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 1692 ms
+webpack 5.99.9 compiled successfully in 1893 ms
 assets by status 1.98 KiB [cached] 1 asset
-assets by path *.js 2.38 MiB
-  asset bundle.js 2.38 MiB [emitted] (name: main)
-  asset main.e29157b88519ebcddc82.hot-update.js 3.77 KiB [emitted] [immutable] [hmr] (name: main)
-asset main.e29157b88519ebcddc82.hot-update.json 28 bytes [emitted] [immutable] [hmr]
-Entrypoint main 2.38 MiB = bundle.js 2.38 MiB main.e29157b88519ebcddc82.hot-update.js 3.77 KiB
+assets by path *.js 2.42 MiB
+  asset bundle.js 2.4 MiB [emitted] (name: main)
+  asset main.6bac3b572bbd5c89699f.hot-update.js 28.7 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.6bac3b572bbd5c89699f.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.42 MiB = bundle.js 2.4 MiB main.6bac3b572bbd5c89699f.hot-update.js 28.7 KiB
 cached modules 2.03 MiB [cached] 170 modules
 runtime modules 28.7 KiB 15 modules
-./node_modules/css-loader/dist/cjs.js!./src/index.css 1.35 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 140 ms
-assets by status 1.98 KiB [cached] 1 asset
-assets by path *.js 2.38 MiB
-  asset bundle.js 2.38 MiB [emitted] (name: main)
-  asset main.bf1ea9d15e8f7c090f98.hot-update.js 5.19 KiB [emitted] [immutable] [hmr] (name: main)
-asset main.bf1ea9d15e8f7c090f98.hot-update.json 28 bytes [emitted] [immutable] [hmr]
-Entrypoint main 2.38 MiB = bundle.js 2.38 MiB main.bf1ea9d15e8f7c090f98.hot-update.js 5.19 KiB
-cached modules 2.03 MiB [cached] 170 modules
-runtime modules 28.7 KiB 15 modules
-./src/components/Navbar.jsx 2.7 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 118 ms
+javascript modules 15.7 KiB
+  ./src/App.jsx 3.98 KiB [built] [code generated]
+  ./src/App.css 2.22 KiB [built] [code generated]
+  ./node_modules/css-loader/dist/cjs.js!./src/App.css 9.53 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 134 ms
