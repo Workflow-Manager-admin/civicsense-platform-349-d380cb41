@@ -28,7 +28,7 @@ a {
 }
 a:hover,
 a:focus {
-  color: var(--accent);
+  color: var(--primary-hover);
   text-decoration: underline;
 }
 code {

@@ -1,26 +1,27 @@
 :root {
-  /* CivicFlow Enhanced Dark Purple + Vibrant Accent Theme */
-  --primary: #412466;            /* Rich, readable purple */
-  --primary-dark: #221033;       /* Deep purple-black */
-  --primary-light: #874CCC;
-  --accent: #06d6a0;             /* Vibrant teal (action) */
-  --accent-yellow: #ffc300;      /* Alt accent for highlight/yellow */
-  --accent-green: #34C759;       /* iOS-style accent for heavy CTA */
-  --accent-light: #53efc7;       /* Lighter teal highlight */
-  --secondary: #332259;          /* Card background dark purple */
-  --background: #1a1530;         /* Root background—deep purple */
-  --button: linear-gradient(85deg, #06d6a0 80%, #ffc300 100%);
-  --button-cta: linear-gradient(94deg, #34C759 60%, #06d6a0 100%);
-  --highlight: #ffc300;          /* High-contrast accent yellow */
-  --text-color: #f8f7fc;
-  --text-secondary: #c1b4dc;
-  --border-color: #2c1245;
-  --neutral-light: #392759;
-  --neutral-bg: #25153b;
-  --shadow: 0 4px 18px rgba(38, 18, 52, 0.21);
+  /* Civic App Accessible Purple Palette */
+  --primary: #6D28D9;               /* Deep Purple (Main Brand) */
+  --primary-hover: #7C3AED;         /* Royal Purple (Button Hover/Main Hover) */
+  --background: #1E1B2E;            /* Dark Slate Purple (Main Layout BG) */
+  --card-bg: #2A223E;               /* Soft Indigo (Card/bg/Modal) */
+  --text-color: #E0E7FF;            /* Lavender Gray (Headings/Main) */
+  --text-secondary: #C4B5FD;        /* Light Purple Gray (Labels/Desc) */
+  --border-color: #4C1D95;          /* Muted Purple (Outlines/Borders) */
+  --success: #10B981;               /* Teal Green (Success) */
+  --error: #F87171;                 /* Soft Red (Error) */
+  --shadow: 0 4px 18px rgba(38, 18, 52, 0.16);
   --radius: 16px;
-  --danger: #D14361;
-  --success: #21D687;
+
+  /* Legacy aliases for migration/cross-ref, replaced in theme */
+  --accent: var(--primary);                  /* Use --primary for accent/action */
+  --accent-green: var(--success);
+  --accent-yellow: var(--primary-hover);     /* Use hover purple for secondary/highlight accent */
+  --highlight: var(--primary-hover);         /* Use for highlight, also matches hover */
+  --primary-dark: #46337d;                   /* Not used, but fallback for dark card, kept for clarity */
+  --primary-light: #7C3AED;                  /* Used as hover */
+  --neutral-light: #34265d;                  /* Slightly lighter indigo for some card hover backgrounds */
+  --neutral-bg: #231B3B;                     /* For dark element fill backgrounds */
+  --text-alt: #fff2fe;
 }
 
 
@@ -30,7 +31,7 @@ body {
   color: var(--text-color);
   font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
   min-height: 100vh;
-  background: linear-gradient(180deg, #1a1530 0, #25153b 100%);
+  background: var(--background);
 }
 
 .app {
@@ -41,10 +42,10 @@ body {
 }
 
 .navbar {
-  background: linear-gradient(100deg, var(--primary-dark) 60%, var(--primary));
+  background: var(--card-bg);
   color: var(--text-color);
   padding: 18px 32px;
-  border-bottom: 2.5px solid var(--accent);
+  border-bottom: 2.5px solid var(--border-color);
   box-shadow: var(--shadow);
   display: flex;
   align-items: center;
@@ -138,10 +139,10 @@ body {
 }
 
 /* BUTTONS */
-/* Main action buttons: vibrant accent gradient */
+/* Main action buttons: deep purple */
 .btn, .btn:visited {
-  background: var(--button);
-  color: #1a1530;
+  background: var(--primary);
+  color: var(--background);
   border: none;
   border-radius: var(--radius);
   padding: 13px 32px;
@@ -149,32 +150,32 @@ body {
   font-weight: 700;
   cursor: pointer;
   transition: background 0.14s, box-shadow 0.15s, transform 0.09s, color 0.13s;
-  box-shadow: 0 6px 18px rgba(6, 214, 160, 0.11), 0 2px 8px #1a2f41;
+  box-shadow: var(--shadow);
   outline: none;
   outline-offset: 2px;
-  text-shadow: 0 1px 2px #fff2, 0 0.5px 0px #0a0a0835;
+  text-shadow: 0 1px 2px #0002;
   border: 2px solid transparent;
 }
 
-/* CTA/Submit buttons, uses stronger green accent (see class below for button-cta) */
+/* CTA/Submit buttons, uses teal for success/confirmation */
 .btn-cta,
 button.btn.btn-large,
 input[type="submit"].btn,
 button[type="submit"].btn,
 button[type="submit"], .btn-primary {
-  background: var(--button-cta);
-  color: #151f19;
+  background: var(--success);
+  color: var(--background);
   font-weight: 800;
-  border: 2px solid var(--accent-green);
+  border: 2px solid var(--success);
 }
 
 .btn:hover, .btn:focus,
 .btn-cta:hover, .btn-cta:focus {
-  background: linear-gradient(90deg, var(--accent) 60%, var(--highlight) 100%) !important;
-  color: #1d0c23;
-  box-shadow: 0 8px 30px 0 #40eeef33, 0 2px 16px 0 #ffe0664d;
+  background: var(--primary-hover) !important;
+  color: var(--text-color);
+  box-shadow: 0 8px 30px 0 #7C3AED44, 0 2px 16px 0 #6D28D933;
   transform: translateY(-1.5px) scale(1.025);
-  outline: 2.5px solid var(--accent);
+  outline: 2.5px solid var(--primary-hover);
   outline-offset: 2px;
 }
 
@@ -218,18 +219,18 @@ a.btn:hover, a.btn:focus {
 
 .card,
 .card-bg {
-  background: var(--secondary);
+  background: var(--card-bg);
   color: var(--text-color);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 26px 20px;
   margin: 1.1rem 0;
-  border: 1.5px solid var(--accent);
+  border: 1.5px solid var(--border-color);
   transition: box-shadow 0.15s, border 0.12s, background 0.13s;
 }
 
 .card-bg {
-  background: var(--neutral-light); /* slightly lighter purple for card-bg, but not gray */
+  background: var(--card-bg);
 }
 
 @media (max-width: 600px) {
@@ -353,7 +354,7 @@ input[type="submit"], button[type="submit"], button:not(.btn).primary {
 /* Error/success states */
 .text-red-600,
 .error-message {
-  color: var(--danger) !important;
+  color: var(--error) !important;
   padding-bottom: 3px;
 }
 .text-green-600,

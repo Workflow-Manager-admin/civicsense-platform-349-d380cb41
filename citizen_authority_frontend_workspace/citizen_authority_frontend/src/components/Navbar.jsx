@@ -28,9 +28,15 @@ export default function Navbar() {
         <span
           className="logo-symbol"
           aria-label="CivicFlow Brand"
-          style={{ color: "var(--highlight)", fontSize: "2rem" }}
+          style={{ color: "var(--primary)", fontSize: "2rem" }}
         >⚡</span>
-        <span style={{ color: "var(--accent)", fontWeight: 900, fontFamily: 'Inter, Segoe UI, Arial, sans-serif', letterSpacing: "0.01em", fontSize: "1.28rem" }}>
+        <span style={{
+          color: "var(--primary)",
+          fontWeight: 900,
+          fontFamily: 'Inter, Segoe UI, Arial, sans-serif',
+          letterSpacing: "0.01em",
+          fontSize: "1.28rem"
+        }}>
           CivicFlow
         </span>
       </div>
