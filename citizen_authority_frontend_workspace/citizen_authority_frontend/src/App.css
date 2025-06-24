@@ -1,53 +1,77 @@
 :root {
-  /* CIVICFLOW LIGHTER PALETTE (ALL THEME COLORS ARE DEFINED HERE) */
+  /* ==== MISTY SAND / SOFT ALMOND PALETTE (ALL THEME COLORS ARE DEFINED HERE) ==== */
 
-  /* Background: Page/app background */
-  --background: #E6DACE;              /* Light Mushroom: Page background */
+  /* Page Background */
+  --background: #E9E3D8;                 /* Misty Sand: Main app background (soft, nude) */
 
-  /* Card/Section Backgrounds: Forms, containers, cards */
-  --card-bg: #D8C3B3;                 /* Clay Blush: Card/Form/Modal background */
+  /* Card, Form, Section Backgrounds */
+  --card-bg: #D6C7B0;                    /* Soft Almond: Cards, containers, modals */
 
-  /* Primary Accent: Buttons, active states */
-  --primary: #CBA38F;                 /* Pale Terracotta: Primary accent, main CTA/buttons */
+  /* Primary Button/Action */
+  --primary: #BFA07A;                    /* Warm Clay: Primary/CTA buttons, active UI highlights */
 
-  /* Button Hover/Focus */
-  --primary-hover: #B88C73;           /* Muted Sienna: Button hover/focus */
+  /* Primary Button Hover/Active */
+  --primary-hover: #A68464;              /* Toasted Beige: Button hover/active/focus */
 
-  /* Text Primary: Headings, key text */
-  --text-primary: #3E3E3E;            /* Warm Charcoal: Headings, main readable text */
+  /* Border and Input Outline */
+  --border-color: #C4AA88;               /* Pale Bronze: Borders, outlines, input boxes */
 
-  /* Text Secondary: Paragraphs, labels, helper */
-  --text-secondary: #6D5F55;          /* Soft Taupe: Labels, descriptions, secondary text */
+  /* Success Indicator */
+  --success: #B7C3A3;                    /* Sage Green: Success status, toasts, completed steps */
 
-  /* Border/Outline: Input borders, dividers */
-  --border-color: #A27C67;            /* Rustic Brown: Borders, outlines, dividers */
+  /* Error/Negative Indicator */
+  --error: #C27D74;                      /* Muted Coral: Error, alert, destructive states */
 
-  /* Success State: Toasts, success/focus */
-  --success: #9BA17B;                 /* Olive Mist: Positive feedback/success alerts */
+  /* Primary Text */
+  --text-primary: #000000;               /* Jet Black: Headings, major form input, labels */
 
-  /* Error State: Validation, error messages */
-  --error: #A84E4E;                   /* Dusty Brick: Warnings/validation errors */
+  /* Secondary Text */
+  --text-secondary: #111111;             /* Deep Charcoal: Helper text, descriptions, lower emphasis */
 
-  /* Drop Shadow & Border Radius (retained for consistency) */
-  --shadow: 0 4px 18px rgba(217, 192, 179, 0.13);
+  /* Drop Shadow & Border Radius */
+  --shadow: 0 4px 18px rgba(176, 154, 120, 0.13); /* Soft brown shadow for cards/buttons */
   --radius: 16px;
 
-  /* ==== COMMON ALIASES for compatibility across app ==== */
-  --accent: var(--primary);             /* General accent, call-to-actions */
-  --accent-hover: var(--primary-hover); /* Alias for hoverable accent */
-  --accent-green: var(--success);       /* Success/confirmation */
-  --accent-red: var(--error);           /* Error/destructive */
-
-  --highlight: var(--primary-hover);    /* Highlight, focus ring, etc */
-  --primary-dark: var(--card-bg);       /* Slightly deeper backgrounds */
-  --primary-light: #EFE7DE;             /* Very subtle backgrounds (manual for light theme) */
-  --neutral-light: #EFE7DE;             /* Alternate subtle background for cards/inputs */
+  /* ==== COMMON ALIASES for compatibility and future UI ==== */
+  --accent: var(--primary);                /* Accent for call-to-actions */
+  --accent-hover: var(--primary-hover);    /* Alias for hover state of accent */
+  --accent-green: var(--success);          /* Alias for success/confirmation */
+  --accent-red: var(--error);              /* Alias for error/destructive actions */
+  --highlight: var(--primary-hover);       /* Highlight/focus ring */
+  --primary-dark: var(--card-bg);          /* Slightly deeper backgrounds for contrast */
+  --primary-light: #EFE7DE;                /* Extra subtle backgrounds for forms/tables */
+  --neutral-light: #EFE7DE;                /* Alternate subtle background for inputs/cards */
   --neutral-bg: var(--card-bg);
 
-  /* TEXT COLOR default (body text) */
-  --text-color: var(--text-primary);    /* default 'text-color' points to main text */
-  --text-alt: var(--text-secondary);
+  /* Default text colors */
+  --text-color: var(--text-primary);        /* Default text for body */
+  --text-alt: var(--text-secondary);        /* Alternate text */
 }
+/* 
+  ==== MISTY SAND / SOFT ALMOND COLOR PALETTE FOR REFERENCE ====
+   |-----------------------------------------------------------|
+   | Role                | Color Name     | Hex      | Usage   |
+   |---------------------|---------------|----------|---------|
+   | Page Background     | Misty Sand    | #E9E3D8  | --background        |
+   | Card/Form BG        | Soft Almond   | #D6C7B0  | --card-bg           |
+   | Primary Button      | Warm Clay     | #BFA07A  | --primary           |
+   | Primary Hover       | Toasted Beige | #A68464  | --primary-hover     |
+   | Borders/Inputs      | Pale Bronze   | #C4AA88  | --border-color      |
+   | Success Indicator   | Sage Green    | #B7C3A3  | --success           |
+   | Error Indicator     | Muted Coral   | #C27D74  | --error             |
+   | Text Primary        | Jet Black     | #000000  | --text-primary      |
+   | Text Secondary      | Deep Charcoal | #111111  | --text-secondary    |
+   |-----------------------------------------------------------|
+   Usage Guidance:
+     - Always use --background for page/viewport backgrounds
+     - Use --card-bg for containers, cards, form backgrounds, and navbars
+     - --primary and --primary-hover drive primary/actionable elements (main buttons, links, CTAs)
+     - --border-color should appear on card edges, input outlines, dividers
+     - --success/--error for status toasts, messages, form validation
+     - --text-primary and --text-secondary differentiate major from minor/description text
+     - --shadow and --radius supply consistent elevation/border
+     - All UI must reference these variables; do not hardcode hex colors!
+*/
 
 body {
   margin: 0;
