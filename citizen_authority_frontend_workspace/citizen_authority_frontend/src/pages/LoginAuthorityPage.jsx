@@ -56,24 +56,28 @@ export default function LoginAuthorityPage() {
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <h2>Login as Authority</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className="container" style={{ maxWidth: "440px", margin: "50px auto", paddingTop: "64px" }}>
+      <form className="card-bg" onSubmit={handleLogin}>
+        <h2 className="text-xl font-bold mb-2" style={{ color: "var(--primary)" }}>Login as Authority</h2>
+        {error && <p className="text-red-600 error-message">{error}</p>}
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button className="btn btn-large mt-2" type="submit">
+          Login
+        </button>
+      </form>
+    </div>
   );
 }

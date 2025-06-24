@@ -252,92 +252,98 @@ export default function IssueFormPage() {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '50px auto', padding: '20px', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
-      <h2>Submit an Issue</h2>
+    <div className="container" style={{ maxWidth: "600px", margin: "44px auto", paddingTop: "38px" }}>
+      <div className="card-bg">
+        <h2 className="text-xl font-bold mb-4" style={{ color: "var(--primary)" }}>Submit an Issue</h2>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>{success}</p>}
+        {error && <p className="text-red-600 error-message">{error}</p>}
+        {success && <p className="text-green-600 success-message">{success}</p>}
 
-      <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '16px' }}>
-  <div style={{ display: 'flex', gap: '16px' }}>
-    <label style={{ flex: 1 }}>
-      Name:
-      <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-    </label>
-    <label style={{ flex: 1 }}>
-      Phone:
-      <input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
-    </label>
-  </div>
+        <form onSubmit={handleSubmit} style={{ display: "grid", gap: "18px" }}>
+          <div style={{ display: "flex", gap: "18px" }}>
+            <label style={{ flex: 1 }}>
+              Name:
+              <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+            </label>
+            <label style={{ flex: 1 }}>
+              Phone:
+              <input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
+            </label>
+          </div>
 
-  <label>
-    Address:
-    <input type="text" name="address" value={formData.address} onChange={handleChange} required />
-  </label>
+          <label>
+            Address:
+            <input type="text" name="address" value={formData.address} onChange={handleChange} required />
+          </label>
 
-  <div style={{ display: 'flex', gap: '16px' }}>
-    <label style={{ flex: 1 }}>
-      Title:
-      <input type="text" name="title" value={formData.title} onChange={handleChange} required />
-    </label>
-    <label style={{ flex: 1 }}>
-      Category:
-      <select name="category" value={formData.category} onChange={handleChange} required>
-        <option value="">Select Category</option>
-        <option value="pothole">Pothole</option>
-        <option value="water">Water Issue</option>
-        <option value="garbage">Garbage</option>
-        <option value="light">Light Outage</option>
-        <option value="other">Other</option>
-      </select>
-    </label>
-  </div>
+          <div style={{ display: "flex", gap: "18px" }}>
+            <label style={{ flex: 1 }}>
+              Title:
+              <input type="text" name="title" value={formData.title} onChange={handleChange} required />
+            </label>
+            <label style={{ flex: 1 }}>
+              Category:
+              <select name="category" value={formData.category} onChange={handleChange} required>
+                <option value="">Select Category</option>
+                <option value="pothole">Pothole</option>
+                <option value="water">Water Issue</option>
+                <option value="garbage">Garbage</option>
+                <option value="light">Light Outage</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+          </div>
 
-  {formData.category === 'other' && (
-    <label>
-      Specify Category:
-      <input type="text" value={customCategory} onChange={(e) => setCustomCategory(e.target.value)} required />
-    </label>
-  )}
+          {formData.category === "other" && (
+            <label>
+              Specify Category:
+              <input type="text" value={customCategory} onChange={(e) => setCustomCategory(e.target.value)} required />
+            </label>
+          )}
 
-  <label>
-    Description:
-    <textarea name="description" value={formData.description} onChange={handleChange} required />
-  </label>
+          <label>
+            Description:
+            <textarea name="description" value={formData.description} onChange={handleChange} required />
+          </label>
 
-  <div style={{ display: 'flex', gap: '16px' }}>
-    <label style={{ flex: 1 }}>
-      Priority:
-      <select name="priority" value={formData.priority} onChange={handleChange} required>
-        <option value="">Select Priority</option>
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
-    </label>
+          <div style={{ display: "flex", gap: "18px" }}>
+            <label style={{ flex: 1 }}>
+              Priority:
+              <select name="priority" value={formData.priority} onChange={handleChange} required>
+                <option value="">Select Priority</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </label>
 
-    <label style={{ flex: 2 }}>
-      Maps Link:
-      <input
-        type="url"
-        name="location_url"
-        placeholder="https://www.google.com/maps?q=12.9716,77.5946"
-        value={formData.location_url}
-        onChange={handleChange}
-      />
-    </label>
-  </div>
+            <label style={{ flex: 2 }}>
+              Maps Link:
+              <input
+                type="url"
+                name="location_url"
+                placeholder="https://www.google.com/maps?q=12.9716,77.5946"
+                value={formData.location_url}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
 
-  <label>
-    Upload Images:
-    <input type="file" accept="image/*" multiple onChange={(e) => setImages(Array.from(e.target.files).slice(0, 3))} />
-  </label>
+          <label>
+            Upload Images:
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={(e) => setImages(Array.from(e.target.files).slice(0, 3))}
+            />
+          </label>
 
-  <button type="submit" style={{ padding: '10px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '4px' }}>
-    Submit
-  </button>
-</form>
-
+          <button type="submit" className="btn btn-large" style={{ width: "100%" }}>
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

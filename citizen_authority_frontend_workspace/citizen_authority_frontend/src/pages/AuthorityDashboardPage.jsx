@@ -24,41 +24,53 @@ export default function AuthorityDashboardPage() {
   }, []);
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">All Reported Issues</h2>
+    <div className="container" style={{ paddingTop: "48px" }}>
+      <div className="card-bg">
+        <h2 className="text-2xl font-bold mb-4" style={{ color: "var(--primary)" }}>All Reported Issues</h2>
 
-      {error && <p className="text-red-600">{error}</p>}
-      {issues.length === 0 ? (
-        <p>No issues found.</p>
-      ) : (
-        <table className="w-full border border-gray-300">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border px-4 py-2">Name</th>
-              <th className="border px-4 py-2">Address</th>
-              <th className="border px-4 py-2">Category</th>
-              <th className="border px-4 py-2">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {issues.map((issue) => (
-              <tr key={issue.id} className="hover:bg-gray-50">
-                <td className="border px-4 py-2">{issue.name}</td>
-                <td className="border px-4 py-2">{issue.address}</td>
-                <td className="border px-4 py-2">{issue.category}</td>
-                <td className="border px-4 py-2">
-                  <Link
-                    to={`/issue/${issue.id}`}
-                    className="text-blue-600 hover:underline"
-                  >
-                    View Details
-                  </Link>
-                </td>
+        {error && <p className="text-red-600">{error}</p>}
+        {issues.length === 0 ? (
+          <p>No issues found.</p>
+        ) : (
+          <table className="table-modern" style={{ width: "100%" }}>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Category</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
+            <tbody>
+              {issues.map((issue) => (
+                <tr key={issue.id}>
+                  <td>{issue.name}</td>
+                  <td>{issue.address}</td>
+                  <td>{issue.category}</td>
+                  <td>
+                    <Link
+                      to={`/issue/${issue.id}`}
+                      className="btn"
+                      style={{
+                        padding: "7px 16px",
+                        fontSize: "0.99rem",
+                        borderRadius: "12px",
+                        background: "var(--primary)",
+                        color: "#fff",
+                        fontWeight: 600,
+                        textDecoration: "none",
+                        boxShadow: "0 2px 10px 0px #ac91e99b"
+                      }}
+                    >
+                      View Details
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }

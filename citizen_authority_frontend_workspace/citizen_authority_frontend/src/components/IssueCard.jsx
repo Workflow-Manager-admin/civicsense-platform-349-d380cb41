@@ -1,10 +1,20 @@
 // File: components/IssueCard.jsx
 export default function IssueCard({ issue }) {
   return (
-    <div className="p-4 border rounded mb-2">
-      <h3 className="text-lg font-bold">{issue.title}</h3>
-      <p>{issue.description}</p>
-      <p>Status: {issue.status}</p>
+    <div className="card">
+      <h3 className="text-xl font-bold mb-2" style={{ color: "var(--primary)" }}>{issue.title}</h3>
+      <p className="mb-2" style={{ color: "var(--text-secondary)" }}>{issue.description}</p>
+      <span className="badge" style={{
+        background: "var(--accent-light)",
+        color: "var(--accent)",
+        padding: "0.25em 0.85em",
+        borderRadius: "1em",
+        fontWeight: 600,
+        marginTop: "6px",
+        display: "inline-block"
+      }}>
+        Status: {issue.status}
+      </span>
     </div>
   );
 }

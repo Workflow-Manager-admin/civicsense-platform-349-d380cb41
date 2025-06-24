@@ -95,57 +95,87 @@ export default function IssueDetailPage() {
   if (!issue) return <p>Issue not found.</p>;
 
   return (
-    <div style={{ maxWidth: '800px', margin: '20px auto', padding: '20px', background: '#f9f9f9' }}>
-      <h2 style={{ fontSize: '24px', marginBottom: '10px' }}>{issue.title}</h2>
+    <div className="container" style={{ maxWidth: "800px", margin: "40px auto", paddingTop: "24px" }}>
+      <div className="card-bg" style={{ background: "#f8f5fc" }}>
+        <h2 className="text-xl font-bold mb-2" style={{ color: "var(--primary)", marginBottom: "18px" }}>{issue.title}</h2>
 
-      <p><strong>Name:</strong> {issue.name}</p>
-      <p><strong>Address:</strong> {issue.address}</p>
-      <p><strong>Phone:</strong> {issue.phone}</p>
-      <p><strong>Category:</strong> {issue.category}</p>
-      <p><strong>Description:</strong> {issue.description}</p>
+        <div className="mb-2"><strong style={{ color: "var(--primary-dark)" }}>Name:</strong> {issue.name}</div>
+        <div className="mb-2"><strong style={{ color: "var(--primary-dark)" }}>Address:</strong> {issue.address}</div>
+        <div className="mb-2"><strong style={{ color: "var(--primary-dark)" }}>Phone:</strong> {issue.phone}</div>
+        <div className="mb-2"><strong style={{ color: "var(--primary-dark)" }}>Category:</strong> {issue.category}</div>
+        <div className="mb-4"><strong style={{ color: "var(--primary-dark)" }}>Description:</strong> {issue.description}</div>
 
-      <div style={{ marginTop: '10px' }}>
-        <strong>Summary (AI):</strong>
-        <p style={{ backgroundColor: '#eef', padding: '10px' }}>{summary}</p>
-      </div>
+        <div className="mb-2">
+          <strong style={{ color: "var(--accent)" }}>Summary (AI):</strong>
+          <p style={{
+            background: "var(--primary-light)",
+            color: "#341132",
+            padding: "11px",
+            borderRadius: "12px",
+            boxShadow: "0 0 4px 0 #b69ddb6b",
+            marginTop: "4px"
+          }}>{summary}</p>
+        </div>
 
-      <div style={{ marginTop: '10px' }}>
-        <strong>Suggested Reply (AI):</strong>
-        <p style={{ backgroundColor: '#e8f5e9', padding: '10px', fontStyle: 'italic' }}>{reply}</p>
-      </div>
+        <div className="mb-2">
+          <strong style={{ color: "var(--accent)" }}>Suggested Reply (AI):</strong>
+          <p style={{
+            background: "#f3e6fa",
+            color: "#492a68",
+            padding: "12px",
+            borderRadius: "12px",
+            fontStyle: "italic",
+            marginTop: "4px"
+          }}>{reply}</p>
+        </div>
 
-      <div style={{ marginTop: '10px' }}>
-        <strong>Assign Priority:</strong>
-        <select
-          value={priority}
-          onChange={handlePriorityChange}
-          style={{ marginLeft: '10px', padding: '6px' }}
-        >
-          <option value="">Select</option>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-      </div>
+        <div className="mb-2" style={{ marginTop: "18px" }}>
+          <strong style={{ color: "var(--primary-dark)" }}>Assign Priority:</strong>
+          <select
+            value={priority}
+            onChange={handlePriorityChange}
+            style={{ marginLeft: "10px", padding: "8px 13px", borderRadius: "9px" }}
+          >
+            <option value="">Select</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
 
-      {issue.images && issue.images.length > 0 && (
-        <div style={{ marginTop: '20px' }}>
-          <strong>Images:</strong>
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            {issue.images.map((url, i) => (
-              <img key={i} src={url} alt={`Issue ${i}`} style={{ width: '120px', borderRadius: '4px' }} />
-            ))}
+        {issue.images && issue.images.length > 0 && (
+          <div style={{ marginTop: "22px" }}>
+            <strong style={{ color: "var(--primary)" }}>Images:</strong>
+            <div style={{ display: "flex", gap: "13px", flexWrap: "wrap", marginTop: "8px" }}>
+              {issue.images.map((url, i) => (
+                <img key={i} src={url} alt={`Issue ${i}`} style={{
+                  width: "120px",
+                  borderRadius: "12px",
+                  boxShadow: "0 2px 12px #a7a2b280"
+                }} />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {issue.location_url && (
-        <div style={{ marginTop: '20px' }}>
-          <a href={issue.location_url} target="_blank" rel="noopener noreferrer">
-            📍 View Location on Google Maps
-          </a>
-        </div>
-      )}
+        {issue.location_url && (
+          <div style={{ marginTop: "22px" }}>
+            <a
+              href={issue.location_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "var(--accent)",
+                fontWeight: 700,
+                fontSize: "1rem",
+                textDecoration: "underline"
+              }}
+            >
+              📍 View Location on Google Maps
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

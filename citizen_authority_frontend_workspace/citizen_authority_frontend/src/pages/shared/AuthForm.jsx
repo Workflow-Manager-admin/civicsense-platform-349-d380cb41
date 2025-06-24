@@ -36,12 +36,28 @@ export default function AuthForm({ role, type }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-10">
-      <h2 className="text-xl mb-4">{type === 'signup' ? 'Sign Up' : 'Login'} as {role}</h2>
-      {error && <p className="text-red-600">{error}</p>}
-      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="Email" className="input" />
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="Password" className="input" />
-      <button type="submit" className="btn mt-2">{type === 'signup' ? 'Sign Up' : 'Login'}</button>
-    </form>
+    <div className="container" style={{ maxWidth: "440px", margin: "50px auto", paddingTop: "64px" }}>
+      <form className="card-bg" onSubmit={handleSubmit}>
+        <h2 className="text-xl font-bold mb-2" style={{ color: "var(--primary)" }}>
+          {type === 'signup' ? 'Sign Up' : 'Login'} as {role}
+        </h2>
+        {error && <p className="text-red-600 error-message">{error}</p>}
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          placeholder="Email"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          placeholder="Password"
+        />
+        <button type="submit" className="btn btn-large mt-2">{type === 'signup' ? 'Sign Up' : 'Login'}</button>
+      </form>
+    </div>
   );
 }
