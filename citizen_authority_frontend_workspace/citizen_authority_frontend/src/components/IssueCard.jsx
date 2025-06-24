@@ -1,10 +1,18 @@
-// File: components/IssueCard.jsx
+/**
+ * Civic Issue Card using brown-orange palette tokens
+ */
 export default function IssueCard({ issue }) {
   const getStatusBg = (status) => {
     if (status === "resolved") return "var(--success)";
     if (status === "in progress") return "var(--primary-hover)";
     return "var(--primary)";
   };
+  const getStatusColor = (status) => {
+    if (status === "resolved") return "var(--background)";
+    if (status === "in progress") return "var(--text-color)";
+    return "var(--background)";
+  };
+
   return (
     <div
       className="card"
@@ -16,6 +24,7 @@ export default function IssueCard({ issue }) {
         minWidth: 250,
         boxShadow: "var(--shadow)",
         background: "var(--card-bg)",
+        border: "1.5px solid var(--border-color)"
       }}
     >
       <h3
@@ -44,7 +53,7 @@ export default function IssueCard({ issue }) {
         aria-label={`Status: ${issue.status}`}
         style={{
           background: getStatusBg(issue.status),
-          color: "var(--background)",
+          color: getStatusColor(issue.status),
           padding: "0.45em 1.05em",
           borderRadius: "1em",
           fontWeight: 900,
@@ -52,7 +61,7 @@ export default function IssueCard({ issue }) {
           display: "inline-block",
           fontSize: "1rem",
           letterSpacing: "0.03em",
-          boxShadow: "0 2px 8px 0 #6d28d94a"
+          boxShadow: "0 2px 8px 0 #ea580c44"
         }}
       >
         Status: <span style={{ textTransform: "capitalize" }}>{issue.status}</span>

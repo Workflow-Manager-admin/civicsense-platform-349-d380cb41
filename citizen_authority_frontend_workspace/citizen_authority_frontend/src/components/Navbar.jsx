@@ -1,7 +1,6 @@
 // File: components/Navbar.jsx
 import { Link } from 'react-router-dom';
-import { supabase } from '../supabase/supabaseClient'; // CORRECT
-
+import { supabase } from '../supabase/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
@@ -22,7 +21,11 @@ export default function Navbar() {
       aria-label="Main Navigation"
       role="navigation"
       tabIndex={0}
-      style={{ boxShadow: "var(--shadow)" }}
+      style={{
+        boxShadow: "var(--shadow)",
+        borderBottom: "2.5px solid var(--border-color)",
+        background: "var(--card-bg)"
+      }}
     >
       <div className="logo" tabIndex={0} aria-label="CivicFlow home brand">
         <span
@@ -56,7 +59,7 @@ export default function Navbar() {
             outline: "2px solid transparent",
             outlineOffset: "2px"
           }}
-          onFocus={e => e.target.style.outline = "2px solid var(--accent)"}
+          onFocus={e => e.target.style.outline = "2px solid var(--primary)"}
           onBlur={e => e.target.style.outline = "2px solid transparent"}
         >
           Home
@@ -69,7 +72,7 @@ export default function Navbar() {
             outline: "2px solid transparent",
             outlineOffset: "2px"
           }}
-          onFocus={e => e.target.style.outline = "2px solid var(--danger)"}
+          onFocus={e => e.target.style.outline = "2px solid var(--error)"}
           onBlur={e => e.target.style.outline = "2px solid transparent"}
         >
           Logout

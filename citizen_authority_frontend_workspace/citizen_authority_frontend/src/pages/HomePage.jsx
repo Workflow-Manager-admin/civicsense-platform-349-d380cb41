@@ -12,13 +12,19 @@ const HomePage = () => {
         className="hero"
         role="banner"
         tabIndex={0}
-        style={{ outline: "none" }}
+        style={{
+          outline: "none",
+          background: "linear-gradient(110deg, var(--primary-light), var(--card-bg))",
+          borderRadius: "var(--radius)"
+        }}
         aria-labelledby="main-hero-heading"
       >
-        <div className="subtitle" style={{ fontSize: "1.18rem", color: "var(--accent)", letterSpacing: "0.03em", textTransform: "uppercase" }}>
+        <div className="subtitle"
+          style={{ fontSize: "1.18rem", color: "var(--primary-hover)", letterSpacing: "0.03em", textTransform: "uppercase" }}>
           A Modern Civic Issue Platform
         </div>
-        <h1 className="title" id="main-hero-heading" style={{ fontFamily: "Inter, Segoe UI, Arial, sans-serif" }}>
+        <h1 className="title" id="main-hero-heading"
+            style={{ fontFamily: "Inter, Segoe UI, Arial, sans-serif", color: "var(--text-color)" }}>
           Welcome to <span style={{ color: "var(--primary)", fontFamily: "inherit" }}>CivicFlow</span>
         </h1>
         <p
@@ -50,7 +56,8 @@ const HomePage = () => {
             minWidth: 272,
             maxWidth: 480,
             outline: "none",
-            background: "var(--secondary)"
+            background: "var(--card-bg)",
+            border: "1.5px solid var(--border-color)"
           }}
         >
           <h2
@@ -85,13 +92,13 @@ const HomePage = () => {
               to="/login/citizen"
               aria-label="Login as Citizen"
               style={{
-                background: "var(--accent)",
-                color: "#171631",
+                background: "var(--primary)",
+                color: "var(--background)",
                 fontWeight: 700,
                 outline: "2px solid transparent",
                 outlineOffset: "2px"
               }}
-              onFocus={e => e.target.style.outline = "2.5px solid var(--accent)"}
+              onFocus={e => e.target.style.outline = "2.5px solid var(--primary)"}
               onBlur={e => e.target.style.outline = "2px solid transparent"}
             >
               Login as Citizen
@@ -107,13 +114,14 @@ const HomePage = () => {
             minWidth: 272,
             maxWidth: 480,
             outline: "none",
-            background: "var(--secondary)"
+            background: "var(--card-bg)",
+            border: "1.5px solid var(--border-color)"
           }}
         >
           <h2
             className="text-xl font-semibold mb-2"
             style={{
-              color: "var(--accent)",
+              color: "var(--primary)",
               fontFamily: "inherit",
               fontSize: "1.22rem"
             }}
@@ -142,13 +150,13 @@ const HomePage = () => {
               to="/login/authority"
               aria-label="Login as Authority"
               style={{
-                background: "var(--accent)",
-                color: "#1a1a27",
+                background: "var(--primary)",
+                color: "var(--background)",
                 fontWeight: 700,
                 outline: "2px solid transparent",
                 outlineOffset: "2px"
               }}
-              onFocus={e => e.target.style.outline = "2.5px solid var(--accent)"}
+              onFocus={e => e.target.style.outline = "2.5px solid var(--primary)"}
               onBlur={e => e.target.style.outline = "2px solid transparent"}
             >
               Login as Authority
