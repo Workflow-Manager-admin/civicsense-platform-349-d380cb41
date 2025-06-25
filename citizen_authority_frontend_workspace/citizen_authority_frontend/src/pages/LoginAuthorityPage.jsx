@@ -36,7 +36,10 @@ export default function LoginAuthorityPage() {
       .maybeSingle();
 
     // If profile missing, self-heal/create profile – strict on session, payload, and diagnostics
-    if ((!profileData || profileError?.code === 'PGRST116' || profileError?.status === 406 || profileError?.status === 403) && user.id && user.email) {
+    if (
+      (!profileData || profileError?.code === 'PGRST116' || profileError?.status === 406 || profileError?.status === 403)
+      && user.id && user.email
+    ) {
       // Defensive: session must be valid and match this user
       const sessRes = await supabase.auth.getSession();
       const sessionUser = sessRes?.data?.session?.user;
@@ -56,21 +59,23 @@ export default function LoginAuthorityPage() {
         return;
       }
 
-      // Insert authority profile if completely missing (self-heal initial migration or first login)
-      const { error: insertProfileError, data: insertProfileData } = await supabase
+      // Use upsert instead of insert to allow role switching, or correcting prior state
+      // (This ensures if the user was created accidentally as a citizen, logging in via authority will upsert to authority.)
+      const { data: upsertProfileData, error: upsertProfileError } = await supabase
         .from('profiles')
-        .insert([payload]);
-      if (insertProfileError) {
+        .upsert([payload], { onConflict: ['id'], returning: 'representation' });
+
+      if (upsertProfileError) {
         setError(
-          'Could not create authority profile: ' + insertProfileError.message +
+          'Could not create authority profile: ' + upsertProfileError.message +
           "\nDiagnostics: sessionUser=" + JSON.stringify(sessionUser) +
           ", user=" + JSON.stringify(user) + ", payload=" + JSON.stringify(payload) +
-          "\nSee assets/supabase.md for upsert/insert self-heal policy" 
+          "\nSee assets/supabase.md for upsert self-heal policy"
         );
         return;
       }
-      if (insertProfileData) {
-        console.log("[DIAG] LoginAuthorityPage: Profile insert returned data:", insertProfileData);
+      if (upsertProfileData) {
+        console.log("[DIAG] LoginAuthorityPage: Profile upsert returned data:", upsertProfileData);
       }
       // Re-fetch profile with maybeSingle
       const { data: refetchedProfile, error: refetchError } = await supabase
@@ -79,7 +84,7 @@ export default function LoginAuthorityPage() {
         .eq('id', user.id)
         .maybeSingle();
       if (refetchError || !refetchedProfile) {
-        setError('Could not fetch user role after creating profile (see supabase.md).');
+        setError('Could not fetch user role after upserting profile (see supabase.md).');
         return;
       }
       profileData = refetchedProfile;
