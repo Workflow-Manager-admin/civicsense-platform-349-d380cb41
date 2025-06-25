@@ -6,8 +6,8 @@ import React from "react";
  * Usage: <Spinner size={22} /> or <Spinner inline />
  */
 export default function Spinner({ size = 22, inline = false, color }) {
-  // Prefer CSS variable matching palette if available.
-  const spinnerColor = color || "var(--primary)";
+  // Use project brand blue #1465D8 as default spinner color (for distinct theme alignment).
+  const spinnerColor = color || "#1465D8";
   return (
     <span
       role="status"
