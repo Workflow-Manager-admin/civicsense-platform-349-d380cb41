@@ -21,4 +21,14 @@ modules by path ./.ve/ 15.1 KiB
   modules by path ./.ve/*.js 10.6 KiB 2 modules
   modules by path ./.ve/*.css 2.93 KiB 2 modules
   ./.ve/EditorOverlay.jsx 1.58 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 1737 ms
+webpack 5.99.9 compiled successfully in 1758 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 2.42 MiB
+  asset bundle.js 2.42 MiB [emitted] (name: main)
+  asset main.f412519bd79ce99fc309.hot-update.js 6.99 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.f412519bd79ce99fc309.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.42 MiB = bundle.js 2.42 MiB main.f412519bd79ce99fc309.hot-update.js 6.99 KiB
+cached modules 2.06 MiB [cached] 172 modules
+runtime modules 28.7 KiB 15 modules
+./src/pages/SignupCitizenPage.jsx 4.24 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 113 ms

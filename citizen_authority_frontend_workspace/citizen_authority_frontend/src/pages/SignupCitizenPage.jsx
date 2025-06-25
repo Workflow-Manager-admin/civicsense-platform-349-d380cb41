@@ -16,15 +16,17 @@ export default function SignupCitizenPage() {
   /**
    * Handles the signup process for a new citizen:
    * - Registers user with Supabase Auth.
-   * - On successful registration, creates/updates the user record in the 'profiles' table with role 'citizen'.
-   * - Provides error feedback for both auth and profiles insertion.
+   * - PROVIDES A SAFE UP-SERT LOGIC for the profile:
+   *   - Only attempts upsert if a valid user object with id and email is returned (i.e., after confirmation for providers that require it).
+   *   - Otherwise, notifies user to confirm their account and advises login after confirmation, per Supabase recommended flow.
+   * - Prevents broken upserts that trigger RLS or constraint errors.
    */
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
 
     // 1. Register user with Supabase Auth
-    const { data, error: signupError } = await supabase.auth.signUp({
+    const { data: signupData, error: signupError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -37,22 +39,28 @@ export default function SignupCitizenPage() {
       return;
     }
 
-    // In some cases, Supabase will not return user object until email is confirmed.
-    // Inform user if confirmation required
-    const user = data?.user;
-    if (!user) {
+    // Supabase will (by default) ONLY return a user immediately for some providers,
+    // otherwise only after email confirmation. For initial signups, often user is null.
+    const user = signupData?.user;
+
+    if (!user || !user.id || !user.email) {
+      // No insert into profiles at this stage; wait for login with confirmed email.
       alert(
-        "Signup successful! Please check your email to confirm before logging in."
+        "Signup successful! Please check your email to confirm your account. After confirmation, log in to complete registration."
       );
       navigate('/login/citizen');
       return;
     }
 
-    // 2. Upsert role into 'profiles' table
+    // After confirmation (user object present), upsert profile row
     try {
+      // Full upsert with required fields, DO NOT attempt without all info
       const { error: profileError } = await supabase
         .from('profiles')
-        .upsert([{ id: user.id, email, role: 'citizen' }], { onConflict: ['id'] });
+        .upsert(
+          [{ id: user.id, email: user.email, role: 'citizen' }],
+          { onConflict: ['id'] }
+        );
 
       if (profileError) {
         setError(
@@ -60,16 +68,16 @@ export default function SignupCitizenPage() {
         );
         return;
       }
+
+      alert(
+        'Signup successful! Profile created. Please check your email to confirm, then log in.'
+      );
+      navigate('/login/citizen');
     } catch (dbErr) {
       setError(
         "Unexpected error updating user profile: " + (dbErr.message || dbErr)
       );
-      return;
     }
-    alert(
-      'Signup successful! Please check your email to confirm before logging in.'
-    );
-    navigate('/login/citizen');
   };
 
   return (
