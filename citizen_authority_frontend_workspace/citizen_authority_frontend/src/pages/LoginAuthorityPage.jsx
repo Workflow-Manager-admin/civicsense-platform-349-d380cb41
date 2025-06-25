@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase/supabaseClient';
+import ResendConfirmationEmail from "../components/ResendConfirmationEmail";
 
 export default function LoginAuthorityPage() {
   const [email, setEmail] = useState('');
@@ -137,6 +138,12 @@ export default function LoginAuthorityPage() {
               <span style={{ fontWeight: 700 }}>Tip:</span> If you have not confirmed your email address,
               please check your inbox (and spam/junk folder) for the confirmation link sent to you after signup.
               You must confirm your email before logging in.
+              {email && (
+                <span style={{ display: "block", marginTop: 7 }}>
+                  Didn&apos;t get the email? You can&nbsp;
+                  <ResendConfirmationEmail email={email} variant="inline" />
+                </span>
+              )}
             </div>
           </>
         )}
