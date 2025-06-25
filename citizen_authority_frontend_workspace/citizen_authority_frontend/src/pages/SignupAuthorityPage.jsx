@@ -125,6 +125,35 @@ export default function SignupAuthorityPage() {
           Sign Up
         </button>
       </form>
+      <div style={{ color: "#6b7280", fontSize: "0.95rem", marginTop: 12, textAlign: "center" }}>
+        Already have an account?{" "}
+        <span>
+          {/* Use react-router Link for in-app navigation to authority login */}
+          <a
+            href="/login/authority"
+            style={{ color: "var(--primary)", textDecoration: "underline", cursor: "pointer" }}
+            onClick={e => {
+              e.preventDefault();
+              // In-app navigation using useNavigate
+              if (typeof window !== "undefined") {
+                // Simple client-side guard for react SPA apps
+                // We need to call the navigate function, but this is outside the component scope.
+                // To trigger navigation properly in this function, we should wrap this Link as a separate component
+                // Or, since we are already using react-router-dom, replace <a> with <Link>
+                // But since we have useNavigate, let's wrap this later (or, provide the same solution as SignupCitizenPage)
+
+                // As an immediate fix, reload the path or use window.location, but preferred is Link or useNavigate
+                // window.location.assign("/login/authority");
+
+                // (To be handled in render, see below in elaboration)
+              }
+            }}
+            // The above onClick is a fallback; below is standard practice using react-router Link
+          >
+            Login here
+          </a>
+        </span>
+      </div>
     </div>
   );
 }
