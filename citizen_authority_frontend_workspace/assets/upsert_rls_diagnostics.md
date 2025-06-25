@@ -192,6 +192,61 @@ Latest RLS policy: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)
 
 ---
 
+## 8. FULL PHYSICAL TABLE SCHEMA AUDIT & REPAIR IF 500 ERROR PERSISTS
+
+If all policies are correct but you get a persistent 500 Internal Server Error during signup/upsert:
+
+**A. Check Profiles Table Structure for Hidden Mistakes**
+
+Run this SQL in Supabase SQL Editor:
+```sql
+SELECT column_name, data_type, is_nullable, column_default
+FROM information_schema.columns
+WHERE table_name = 'profiles';
+```
+- Confirm:
+  - `id` is **uuid** or **text** (if legacy, must exactly match type, and NOT NULL, *must* match type used by Auth user).
+  - `email` and `role` are **text NOT NULL**
+  - No columns have a **default** that could cause a constraint failure.
+
+**B. Check for Triggers (should be NONE):**
+```sql
+SELECT trigger_name FROM information_schema.triggers WHERE event_object_table = 'profiles';
+```
+- No results should be returned.
+
+**C. Check for Constraint Failures:**
+```sql
+SELECT conname, pg_get_constraintdef(oid)
+FROM pg_constraint
+WHERE conrelid = 'profiles'::regclass;
+```
+- Only PRIMARY KEY on "id" should be present.
+
+**D. Verify With a Raw Upsert as Authenticated User**
+
+In SQL Playground, logged in as an Authenticated user, try:
+```sql
+insert into profiles (id, email, role) 
+values (auth.uid(), 'testuser@example.com', 'citizen')
+on conflict (id) do update set email=excluded.email, role=excluded.role
+returning *, auth.uid() as runtime_uid;
+```
+- If this fails, error will reveal type/constraint/policy problem.
+- If "runtime_uid" is NULL, check Auth context.
+
+**E. If "id" type mismatch or legacy data prevents ALTER:**
+  - You must manually migrate or delete legacy records with bad types.
+  - Example repair (for UUID):
+    1. Backup the broken data.
+    2. Drop/recreate table with proper `id uuid PRIMARY KEY NOT NULL, email text NOT NULL, role text NOT NULL`.
+    3. Rerun policy as described.
+
+**F. More Help**
+- See [`assets/auto_repair_profiles.sql`](./auto_repair_profiles.sql) for correct structure and one-shot redo.
+
+---
+
 ## 8. Summary Conclusion
 
 - All current upsert/insert code for citizen/authority flows *conforms* to required session, payload, table, and policy expectations.
