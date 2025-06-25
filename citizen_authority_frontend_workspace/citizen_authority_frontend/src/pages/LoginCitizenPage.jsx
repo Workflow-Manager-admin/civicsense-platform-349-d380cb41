@@ -35,14 +35,17 @@ export default function LoginCitizenPage() {
       .eq('id', user.id)
       .single();
 
-    // 🧩 Step 2: Insert citizen role if missing (always provide all required fields)
+    // 🧩 Step 2: Upsert citizen role if missing (always provide all required fields, use onConflict: ['id'])
     if ((!profileData || profileError?.code === 'PGRST116') && user.id && user.email) {
-      const { error: insertError } = await supabase.from('profiles').insert([
-        { id: user.id, email: user.email, role: 'citizen' }
-      ]);
-
-      if (insertError) {
-        setError("Failed to insert citizen profile: " + insertError.message);
+      const { error: upsertError } = await supabase
+        .from('profiles')
+        .upsert(
+          [{ id: user.id, email: user.email, role: 'citizen' }],
+          { onConflict: ['id'] }
+        );
+      
+      if (upsertError) {
+        setError("Failed to upsert citizen profile: " + upsertError.message);
         return;
       }
 
@@ -53,7 +56,7 @@ export default function LoginCitizenPage() {
         .single();
 
       if (newFetchError || !newProfile) {
-        setError("Unable to retrieve role after inserting.");
+        setError("Unable to retrieve role after upserting.");
         return;
       }
 
