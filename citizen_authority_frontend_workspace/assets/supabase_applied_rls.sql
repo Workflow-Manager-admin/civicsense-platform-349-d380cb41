@@ -2,7 +2,15 @@
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
 -- Remove ALL conflicting INSERT/UPDATE policies (DROP if exist)
-DROP POLICY IF EXISTS "Users can insert or update their own profile" ON profiles;
+DO $$
+DECLARE
+    pol RECORD;
+BEGIN
+    FOR pol IN SELECT policyname FROM pg_policies WHERE tablename = 'profiles'
+    LOOP
+        EXECUTE 'DROP POLICY IF EXISTS "' || pol.policyname || '" ON profiles;';
+    END LOOP;
+END$$;
 
 -- Add only the correct upsert ("insert or update own profile") policy
 CREATE POLICY "Users can insert or update their own profile"

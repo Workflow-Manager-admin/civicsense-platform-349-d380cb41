@@ -12,14 +12,22 @@ If you see:
 **Run this SQL in Supabase SQL Editor:**
 
 ```sql
--- 1. Confirm RLS is enabled
+-- Clean up all policies and apply ONLY the correct one for upsert!
+-- 1. Enable RLS
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
--- 2. Remove ALL conflicting INSERT/UPDATE policies
-DROP POLICY IF EXISTS "Users can insert or update their own profile" ON profiles;
--- (Repeat DROP for any other INSERT/UPDATE policies if they exist, e.g. "Allow insert", "Allow update", etc.)
+-- 2. Remove ALL INSERT/UPDATE policies
+DO $$
+DECLARE
+    pol RECORD;
+BEGIN
+    FOR pol IN SELECT policyname FROM pg_policies WHERE tablename = 'profiles'
+    LOOP
+        EXECUTE 'DROP POLICY IF EXISTS "' || pol.policyname || '" ON profiles;';
+    END LOOP;
+END$$;
 
--- 3. Create the correct upsert policy (USE DOUBLE-QUOTES ONLY)
+-- 3. Create the correct upsert policy
 CREATE POLICY "Users can insert or update their own profile"
   ON profiles
   FOR INSERT, UPDATE
@@ -33,25 +41,24 @@ After applying, check policies:
 ```sql
 SELECT * FROM pg_policies WHERE tablename = 'profiles';
 ```
-There should be only one INSERT/UPDATE policy present for 'profiles':
-- **"Users can insert or update their own profile"** with `USING (auth.uid() = id)` and `WITH CHECK (auth.uid() = id)`
+- There should only be the "Users can insert or update their own profile" policy for inserts/updates.
 
-### ⚠️ Best Practices
+### ⚠️ Additional Troubleshooting
 
-- DOUBLE-QUOTES for names with spaces: `"Users can insert or update their own profile"`
-- Always provide *both* `USING` and `WITH CHECK` clauses.
-- REMOVE conflicting or legacy policies, or your application may see silent permission failures.
-- No other tables need insert/update profile policies unless your schema requires them.
-
----
-
-### 🚨 Still Failing? Checklist
-
-- Auth session: user must be logged in (so `auth.uid()` works).
-- Upsert: always supply all required fields, especially `id: auth.uid()`
-- Table structure: `id` is `TEXT NOT NULL PRIMARY KEY`, and `email`, `role` as NOT NULL.
-- No conflicting policies – run `SELECT * FROM pg_policies...` to confirm!
+- Both `USING (auth.uid() = id)` and `WITH CHECK (auth.uid() = id)` must be present.
+- Authenticated session *must* exist at insert time (`auth.uid()` is NOT NULL).
+- Upsert payload must use `{id: user.id, email, role}` (nothing else!).
+- Table columns must be: `id` (TEXT, PK, NOT NULL), `email` (TEXT, NOT NULL), `role` (TEXT, NOT NULL).
 
 ---
 
-_Last update: policy SQL and best practices to resolve all profile upsert RLS and API key permission issues in Supabase. See also supabase_applied_rls.sql for deployment._
+### Still Failing Checklist
+
+- You must be logged in; session/auth context required (`auth.uid()` is current user).
+- Upserts must use all three fields and NOT supply bad/null `id`.
+- No "legacy" or extra conflicting INSERT/UPDATE policies on table.
+- Table schema must match: `id` TEXT NOT NULL PRIMARY KEY, `email`, `role` TEXT NOT NULL.
+
+---
+
+_Last update: Best practices to guarantee citizen/authority profile upsert in Supabase, resolving all known RLS and API key issues. See also supabase_applied_rls.sql for actual deployment SQL._
