@@ -627,7 +627,7 @@ export default function IssueFormPage() {
               cursor: loading ? "not-allowed" : "pointer",
               transition: "background 0.15s",
               boxShadow: "0 2px 12px #A8D5BA17",
-              position: "relative",
+              position: "relative"
             }}
             onMouseOver={e => { if (!loading) e.target.style.background = "#93C6A0"; }}
             onMouseOut={e => { if (!loading) e.target.style.background = "#A8D5BA"; }}
@@ -635,7 +635,15 @@ export default function IssueFormPage() {
             aria-busy={loading}
           >
             {loading ? (
-              <span className="btn-spinner" style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }}>
+              <span className="btn-spinner" style={{
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}>
                 <Spinner size={24} inline color="#93C6A0" />
               </span>
             ) : (

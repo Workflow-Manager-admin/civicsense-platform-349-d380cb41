@@ -181,6 +181,7 @@ export default function LoginAuthorityPage() {
           type="submit"
           disabled={loading}
           aria-busy={loading}
+          style={{ position: "relative", width: "100%" }}
         >
           {/* Spinner must be centered and visible with proper color in loading state */}
           {loading ? (
@@ -189,7 +190,9 @@ export default function LoginAuthorityPage() {
               left: "50%",
               top: "50%",
               transform: "translate(-50%, -50%)",
-              display: "flex"
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}>
               <Spinner size={22} inline color="#A8D5BA" />
             </span>

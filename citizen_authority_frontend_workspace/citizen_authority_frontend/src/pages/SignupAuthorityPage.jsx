@@ -139,9 +139,20 @@ export default function SignupAuthorityPage() {
           type="submit"
           disabled={loading}
           aria-busy={loading}
+          style={{ position: "relative", width: "100%" }}
         >
           {loading ? (
-            <span className="btn-spinner"><Spinner size={22} inline color="var(--primary)" /></span>
+            <span className="btn-spinner" style={{
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+              <Spinner size={22} inline color="#A8D5BA" />
+            </span>
           ) : (
             "Sign Up"
           )}

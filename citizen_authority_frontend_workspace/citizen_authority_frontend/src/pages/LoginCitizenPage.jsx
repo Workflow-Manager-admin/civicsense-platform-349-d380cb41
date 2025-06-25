@@ -178,6 +178,7 @@ export default function LoginCitizenPage() {
           type="submit"
           disabled={loading}
           aria-busy={loading}
+          style={{ position: "relative", width: "100%" }}
         >
           {/* Ensure Spinner is visible, centered, and color matches button text */}
           {loading ? (
@@ -186,7 +187,9 @@ export default function LoginCitizenPage() {
               left: "50%",
               top: "50%",
               transform: "translate(-50%, -50%)",
-              display: "flex"
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}>
               <Spinner size={22} inline color="#A8D5BA" />
             </span>
