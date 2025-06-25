@@ -141,7 +141,15 @@ export default function SignupCitizenPage() {
           aria-busy={loading}
         >
           {loading ? (
-            <span className="btn-spinner"><Spinner size={22} inline color="var(--primary)" /></span>
+            <span className="btn-spinner" style={{
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              display: "flex"
+            }}>
+              <Spinner size={22} inline color="#A8D5BA" />
+            </span>
           ) : (
             "Sign Up"
           )}
