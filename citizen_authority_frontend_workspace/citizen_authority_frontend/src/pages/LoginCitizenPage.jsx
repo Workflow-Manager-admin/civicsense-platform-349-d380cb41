@@ -42,27 +42,38 @@ export default function LoginCitizenPage() {
       user.email
     ) {
       // Defensive: check session before upsert
-      const sessRes = await supabase.auth.getSession();
-      const sessionUser = sessRes?.data?.session?.user;
+      // 🔥 BUGFIX: Always refresh session via supabase.auth.getUser() AND supabase.auth.getSession(), to guarantee auth context is not stale
+      let sessionUser = null;
+      try {
+        // supabase.auth.refreshSession() is not available in v2+, so we just re-get user and session
+        const userRes = await supabase.auth.getUser();
+        if (userRes?.data?.user) sessionUser = userRes.data.user;
+        const sessRes = await supabase.auth.getSession();
+        if (sessRes?.data?.session?.user) sessionUser = sessRes.data.session.user;
+      } catch (e) {
+        // Defensive, shouldn't happen unless client totally misconfigured
+        setError("Supabase session error: " + e.message);
+        return;
+      }
 
-      // Verbose diagnostic logging for RLS/session edge cases
-      console.log("[DIAG] LoginCitizenPage: user object returned by login:", user);
-      console.log("[DIAG] LoginCitizenPage: sessionUser from getSession():", sessionUser);
-      const upsertData = { id: user.id, email: user.email, role: 'citizen' };
-      console.log("[DIAG] LoginCitizenPage: upsert payload will be:", upsertData);
-
+      // Extra hard failsafe: if sessionUser missing, force a logout for full re-login flow
       if (!sessionUser || sessionUser.id !== user.id) {
+        await supabase.auth.signOut(); // Clear any partial session
         setError(
-          "User session not fully established. Please log out and log back in. (sessionUser=" +
+          "User session is not fully established or mismatched. Please log in again to continue. (sessionUser=" +
           JSON.stringify(sessionUser) +
           ", user=" +
           JSON.stringify(user) +
-          ")"
+          ")\nIf this recurs after re-login, please contact support (potential browser localstorage/cookie issue)."
         );
         return;
       }
 
       // Strict payload shape (id/email/role and nothing else)
+      const upsertData = { id: user.id, email: user.email, role: 'citizen' };
+      console.log("[DIAG] LoginCitizenPage: Final validated sessionUser is:", sessionUser);
+      console.log("[DIAG] LoginCitizenPage: Upsert payload about to send:", upsertData);
+
       let upsertRes = await supabase
         .from('profiles')
         .upsert(
@@ -73,41 +84,35 @@ export default function LoginCitizenPage() {
 
       let upsertError = upsertRes.error;
 
-      // Detailed diagnostics for all error cases
-      if (upsertRes?.data) {
-        console.log("[DIAG] Upsert returned data:", upsertRes.data);
-      }
-      if (upsertError) {
-        // Print diagnostic block and propagate full error
-        console.error(
-          "[DIAG] Upsert failed with error:",
-          upsertError, "Payload:", upsertData
-        );
-      }
+      // Diagnostics for all error cases
+      if (upsertRes?.data) console.log("[DIAG] Upsert returned data:", upsertRes.data);
+      if (upsertError) console.error("[DIAG] Upsert failed with error:", upsertError, "Payload:", upsertData);
 
-      // Catch 406/403 errors, report with troubleshooting context
-      if (upsertError && (upsertError.code === 'PGRST116' || upsertError.status === 406 || upsertError.status === 403)) {
+      // If we fail on RLS, forcibly log out so the user can start from a clean session
+      if (upsertError && (upsertError.code === '42501' || upsertError.code === 'PGRST116' || upsertError.status === 406 || upsertError.status === 403)) {
+        await supabase.auth.signOut();
         setError(
-          "Failed to upsert citizen profile: " +
+          "Failed to upsert citizen profile due to security/session issue: " +
           upsertError.message +
-          "\n(See assets/supabase.md for RLS upsert troubleshooting.)\n" +
+          "\nA forced logout was performed. Please log in again to re-sync your session context for profile update.\n\n" +
           "SessionUser: " + JSON.stringify(sessionUser) + "\n" +
           "User: " + JSON.stringify(user) + "\n" +
           "Upsert payload: " + JSON.stringify(upsertData) + "\n" +
-          "Latest RLS policy: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)."
+          "If this persists, an admin must check Supabase policies and client key/project setup.\n" +
+          "Latest RLS policy must be: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)."
         );
         return;
       } else if (upsertError) {
         setError(
           "Failed to upsert citizen profile: " +
           upsertError.message +
-          "\nUpsert Diagnostics:\nSessionUser: " +
+          "\nSessionUser: " +
           JSON.stringify(sessionUser) +
           "\nUser: " +
           JSON.stringify(user) +
           "\nPayload: " +
           JSON.stringify(upsertData) +
-          "\nSee assets/supabase.md for RLS upsert troubleshooting."
+          "\nSee assets/supabase.md for troubleshooting."
         );
         return;
       }
