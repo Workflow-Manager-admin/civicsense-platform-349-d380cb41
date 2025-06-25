@@ -5,6 +5,7 @@
 1. **Enable Row Level Security and Allow Upserts for Own Profile**
     ```sql
     ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+    DROP POLICY IF EXISTS "Users can insert or update their own profile" ON profiles;
     CREATE POLICY "Users can insert or update their own profile"
       ON profiles FOR INSERT, UPDATE
       USING (auth.uid() = id);
@@ -26,10 +27,21 @@
     CREATE UNIQUE INDEX IF NOT EXISTS profiles_email_idx ON profiles(email);
     ```
 
-3. **Verify**: Use Supabase SQL Editor or dashboard to run the above. Only after this will signup/upsert work correctly.
+3. **Verify Policy is Active and No Contradicting RLS:**
+    - Use the Supabase dashboard or SQL editor to ensure that **only the above RLS policy** is active for `profiles` inserts/updates.
+    - Any older conflicting RLS policies must be dropped.
+
+4. **Troubleshooting — Checklist:**
+    - If you still get "Database error saving new user" or `upsert` fails:
+      1. Ensure you are passing all NOT NULL fields—esp. `id`, `email`, `role`—in every insert/upsert of `profiles`.
+      2. Confirm that your client is authenticated (i.e., session exists and `auth.uid()` returns the correct value).
+      3. Review database logs for constraint violation, null values, or RLS failures.
+
+5. **Best Practice:**
+    - Upsert the profile **after** the user is confirmed/logged in, or if immediate insert, handle the case where user object may be missing (common after signUp when email verification is required).
 
 ---
 
-*This documentation update reflects the required SQL you (or your admin) must run, since API-based inspection is not permitted from this agent workspace. Once applied, the signup/profile upsert flow should work without "Database error saving new user" for both citizens and authorities.*
+*This file reflects the required SQL you (or your admin) must run, since API-based inspection is not permitted from this agent workspace. Once applied, the signup/profile upsert flow should work correctly for both citizens and authorities.*
 
-_Last update: Automated diagnosis - direct SQL actions required!_
+_Last update: Automated diagnosis — direct SQL actions required!_
