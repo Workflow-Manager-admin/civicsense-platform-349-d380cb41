@@ -55,7 +55,13 @@ export default function SignupCitizenPage() {
     }
 
     try {
-      // Safe upsert: pass all required fields. Never send null/undefined.
+      // ------------- RLS/PROFILE POLICY IMPACT -------------
+      // All upserts to 'profiles' MUST supply id=user.id, email, and role. The RLS policy for INSERT/UPDATE:
+      //   USING (auth.uid() = id)
+      //   WITH CHECK (auth.uid() = id)
+      // This enforces that only the authenticated user can create/update *their* profile row.
+      // If this upsert fails, check latest policy in assets/supabase.md and assets/supabase_applied_rls.sql.
+
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert(
@@ -65,7 +71,8 @@ export default function SignupCitizenPage() {
 
       if (profileError) {
         setError(
-          "Database error saving new user profile: " + profileError.message
+          "Database error saving new user profile: " + profileError.message +
+          "\nIf you see RLS/permission errors, confirm policies as described in assets/supabase.md."
         );
         return;
       }
@@ -76,7 +83,8 @@ export default function SignupCitizenPage() {
       navigate('/login/citizen');
     } catch (dbErr) {
       setError(
-        "Unexpected error updating user profile: " + (dbErr.message || dbErr)
+        "Unexpected error updating user profile: " + (dbErr.message || dbErr) +
+        "\n(See assets/supabase.md for upsert policies and required fields.)"
       );
     }
   };

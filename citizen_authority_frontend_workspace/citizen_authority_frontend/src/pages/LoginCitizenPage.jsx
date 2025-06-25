@@ -36,6 +36,12 @@ export default function LoginCitizenPage() {
       .single();
 
     // 🧩 Step 2: Upsert citizen role if missing (always provide all required fields, use onConflict: ['id'])
+    // IMPORTANT: To comply with RLS (see assets/supabase.md), every upsert to 'profiles' must include:
+    //   - id: user.id (from auth)
+    //   - email: user.email
+    //   - role: 'citizen'
+    // Otherwise, the upsert will FAIL if RLS is enabled. Policy:
+    //   USING (auth.uid() = id) WITH CHECK (auth.uid() = id)
     if ((!profileData || profileError?.code === 'PGRST116') && user.id && user.email) {
       const { error: upsertError } = await supabase
         .from('profiles')
@@ -45,7 +51,8 @@ export default function LoginCitizenPage() {
         );
       
       if (upsertError) {
-        setError("Failed to upsert citizen profile: " + upsertError.message);
+        setError("Failed to upsert citizen profile: " + upsertError.message +
+            "\n(See assets/supabase.md for RLS upsert troubleshooting.)");
         return;
       }
 
