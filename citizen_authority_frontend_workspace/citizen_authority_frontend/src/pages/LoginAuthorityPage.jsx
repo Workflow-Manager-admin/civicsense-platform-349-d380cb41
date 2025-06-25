@@ -37,13 +37,26 @@ export default function LoginAuthorityPage() {
 
     // If profile missing, optionally create it (but only if user.email exists and role is clear)
     if ((!profileData || profileError?.code === 'PGRST116') && user.id && user.email) {
+      // Diagnostics for session before profile insert
+      const sessRes = await supabase.auth.getSession();
+      const sessionUser = sessRes?.data?.session?.user;
+      console.log("[DIAG] LoginAuthorityPage: user object is", user);
+      console.log("[DIAG] LoginAuthorityPage: sessionUser is", sessionUser);
+      const payload = { id: user.id, email: user.email, role: 'authority' };
+      console.log("[DIAG] LoginAuthorityPage: upsert payload:", payload);
+
       // Insert authority profile if completely missing (self-healing for initial migration)
-      const { error: insertProfileError } = await supabase.from('profiles').insert([
-        { id: user.id, email: user.email, role: 'authority' }
+      const { error: insertProfileError, data: insertProfileData } = await supabase.from('profiles').insert([
+        payload
       ]);
       if (insertProfileError) {
-        setError('Could not create authority profile: ' + insertProfileError.message);
+        setError('Could not create authority profile: ' + insertProfileError.message +
+          "\nDiagnostics: sessionUser=" + JSON.stringify(sessionUser) +
+          ", user=" + JSON.stringify(user) + ", payload=" + JSON.stringify(payload));
         return;
+      }
+      if (insertProfileData) {
+        console.log("[DIAG] LoginAuthorityPage: Profile insert returned data:", insertProfileData);
       }
       // Now re-fetch
       const { data: refetchedProfile, error: refetchError } = await supabase

@@ -62,34 +62,53 @@ export default function SignupCitizenPage() {
       // Defensive: Only do upsert if session is fully valid and user.id present
       const sessRes = await supabase.auth.getSession();
       const sessionUser = sessRes?.data?.session?.user;
+
+      // Diagnostics
+      console.log("[DIAG] SignupCitizenPage: user from signupData:", user);
+      console.log("[DIAG] SignupCitizenPage: sessionUser from getSession():", sessionUser);
+
       if (!sessionUser || sessionUser.id !== user.id) {
         setError(
-          "User session not fully established. Please log out, confirm your email, and log back in to complete registration."
+          "User session not fully established. Please log out, confirm your email, and log back in to complete registration.\n" +
+          "sessionUser=" + JSON.stringify(sessionUser) + ", user=" + JSON.stringify(user)
         );
         return;
       }
 
       // Defensive upsert - always supply all required fields, and force Accept/application/json if possible:
+      const upsertPayload = { id: user.id, email: user.email, role: 'citizen' };
       let upsertRes = await supabase
         .from('profiles')
         .upsert(
-          [{ id: user.id, email: user.email, role: 'citizen' }],
+          [upsertPayload],
           { onConflict: ['id'], returning: 'representation', ignoreDuplicates: false }
         )
         .select('id,email,role');
 
       let profileError = upsertRes.error;
+
+      if (upsertRes?.data) {
+        console.log("[DIAG] SignupCitizenPage: Upsert returned data:", upsertRes.data);
+      }
+      if (profileError) {
+        console.error("[DIAG] SignupCitizenPage: Upsert failed with error:", profileError, "Payload:", upsertPayload);
+      }
+
       // If 403/406, inform user with all checklist troubleshooting (session, Accept, RLS policy)
       if (profileError && (profileError.status === 406 || profileError.status === 403 || profileError.code === "PGRST116")) {
         setError(
           "Database error saving new user profile (RLS/Permission/Accept): " + profileError.message +
-          "\nChecklist: (1) Are you logged in? (2) Are your profile upserts sending id/email/role? (3) Is RLS policy in Supabase exactly as: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)?\nSee assets/supabase.md."
+          "\nChecklist: (1) Are you logged in? (2) Are your profile upserts sending id/email/role? (3) Is RLS policy in Supabase exactly as: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)?\nSee assets/supabase.md.\n" +
+          "Diagnostics:\nsessionUser: " + JSON.stringify(sessionUser) + "\nuser: " + JSON.stringify(user) +
+          "\npayload: " + JSON.stringify(upsertPayload)
         );
         return;
       } else if (profileError) {
         setError(
           "Database error saving new user profile: " + profileError.message +
-          "\nIf you see RLS/permission errors, confirm policies as described in assets/supabase.md."
+          "\nIf you see RLS/permission errors, confirm policies as described in assets/supabase.md.\n" +
+          "Diagnostics:\nsessionUser: " + JSON.stringify(sessionUser) + "\nuser: " + JSON.stringify(user) +
+          "\npayload: " + JSON.stringify(upsertPayload)
         );
         return;
       }

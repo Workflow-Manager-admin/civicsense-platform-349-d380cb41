@@ -7,49 +7,48 @@
 <i> [webpack-dev-server] On Your Network (IPv4): http://172.17.0.2:3000/
 <i> [webpack-dev-server] Content not from webpack is served from './public' directory
 Injecting EditorRootWrapper import: ../.ve/EditorRootWrapper
-<i> [webpack-dev-middleware] wait until bundle finished: /
 asset bundle.js 2.42 MiB [emitted] (name: main)
 asset index.html 1.98 KiB [emitted]
 runtime modules 28.7 KiB 15 modules
 orphan modules 1.06 KiB [orphan] 4 modules
 modules by path ./node_modules/ 1.96 MiB 147 modules
-modules by path ./src/ 99 KiB
-  modules by path ./src/pages/*.jsx 70.2 KiB 8 modules
+modules by path ./src/ 98.2 KiB
+  modules by path ./src/pages/*.jsx 69.9 KiB 8 modules
   modules by path ./src/*.css 17.7 KiB 4 modules
-  modules by path ./src/components/*.jsx 5 KiB 2 modules
+  modules by path ./src/components/*.jsx 4.52 KiB 2 modules
   + 3 modules
 modules by path ./.ve/ 15.1 KiB
   modules by path ./.ve/*.js 10.6 KiB 2 modules
   modules by path ./.ve/*.css 2.93 KiB 2 modules
   ./.ve/EditorOverlay.jsx 1.58 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 1920 ms
+webpack 5.99.9 compiled successfully in 2005 ms
 assets by status 1.98 KiB [cached] 1 asset
 assets by path *.js 2.43 MiB
   asset bundle.js 2.42 MiB [emitted] (name: main)
-  asset main.e90ec960337dcf508930.hot-update.js 9.29 KiB [emitted] [immutable] [hmr] (name: main)
-asset main.e90ec960337dcf508930.hot-update.json 28 bytes [emitted] [immutable] [hmr]
-Entrypoint main 2.43 MiB = bundle.js 2.42 MiB main.e90ec960337dcf508930.hot-update.js 9.29 KiB
+  asset main.025cddf6de7a2df5d1d2.hot-update.js 8.92 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.025cddf6de7a2df5d1d2.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.43 MiB = bundle.js 2.42 MiB main.025cddf6de7a2df5d1d2.hot-update.js 8.92 KiB
 cached modules 2.07 MiB [cached] 172 modules
 runtime modules 28.7 KiB 15 modules
-./src/pages/SignupCitizenPage.jsx 6.31 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 116 ms
+./src/pages/LoginCitizenPage.jsx 5.87 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 140 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 2.44 MiB
+  asset bundle.js 2.43 MiB [emitted] (name: main)
+  asset main.1d917d10f02dd14a6a9a.hot-update.js 10.2 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.1d917d10f02dd14a6a9a.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.44 MiB = bundle.js 2.43 MiB main.1d917d10f02dd14a6a9a.hot-update.js 10.2 KiB
+cached modules 2.07 MiB [cached] 172 modules
+runtime modules 28.7 KiB 15 modules
+./src/pages/SignupCitizenPage.jsx 7.18 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 121 ms
 assets by status 1.98 KiB [cached] 1 asset
 assets by path *.js 2.43 MiB
-  asset bundle.js 2.42 MiB [emitted] (name: main)
-  asset main.941827047c20f53811e3.hot-update.js 7.84 KiB [emitted] [immutable] [hmr] (name: main)
-asset main.941827047c20f53811e3.hot-update.json 28 bytes [emitted] [immutable] [hmr]
-Entrypoint main 2.43 MiB = bundle.js 2.42 MiB main.941827047c20f53811e3.hot-update.js 7.84 KiB
+  asset bundle.js 2.43 MiB [emitted] (name: main)
+  asset main.4a338e7cfa38c9c2569c.hot-update.js 7.76 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.4a338e7cfa38c9c2569c.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.43 MiB = bundle.js 2.43 MiB main.4a338e7cfa38c9c2569c.hot-update.js 7.76 KiB
 cached modules 2.07 MiB [cached] 172 modules
 runtime modules 28.7 KiB 15 modules
-./src/pages/LoginCitizenPage.jsx 4.85 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 91 ms
-assets by status 1.98 KiB [cached] 1 asset
-assets by path *.js 2.43 MiB
-  asset bundle.js 2.42 MiB [emitted] (name: main)
-  asset main.6bac9a80709d0ed65688.hot-update.js 3.79 KiB [emitted] [immutable] [hmr] (name: main)
-asset main.6bac9a80709d0ed65688.hot-update.json 28 bytes [emitted] [immutable] [hmr]
-Entrypoint main 2.43 MiB = bundle.js 2.42 MiB main.6bac9a80709d0ed65688.hot-update.js 3.79 KiB
-cached modules 2.07 MiB [cached] 172 modules
-runtime modules 28.7 KiB 15 modules
-./src/components/ProtectedRoute.jsx 1.49 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 65 ms
+./src/pages/LoginAuthorityPage.jsx 4.76 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 85 ms
