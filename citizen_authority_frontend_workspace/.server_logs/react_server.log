@@ -12,7 +12,7 @@ asset index.html 1.98 KiB [emitted]
 runtime modules 28.7 KiB 15 modules
 orphan modules 1.06 KiB [orphan] 4 modules
 modules by path ./node_modules/ 1.96 MiB 147 modules
-modules by path ./src/ 93.8 KiB
+modules by path ./src/ 94.5 KiB
   modules by path ./src/pages/*.jsx 67 KiB 8 modules
   modules by path ./src/*.css 17.7 KiB 4 modules
   modules by path ./src/components/*.jsx 4.28 KiB 2 modules
@@ -21,14 +21,14 @@ modules by path ./.ve/ 15.1 KiB
   modules by path ./.ve/*.js 10.6 KiB 2 modules
   modules by path ./.ve/*.css 2.93 KiB 2 modules
   ./.ve/EditorOverlay.jsx 1.58 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 1904 ms
+webpack 5.99.9 compiled successfully in 1962 ms
 assets by status 1.98 KiB [cached] 1 asset
 assets by path *.js 2.42 MiB
   asset bundle.js 2.42 MiB [emitted] (name: main)
-  asset main.91d9fcc7464b5a41e170.hot-update.js 2.67 KiB [emitted] [immutable] [hmr] (name: main)
-asset main.91d9fcc7464b5a41e170.hot-update.json 28 bytes [emitted] [immutable] [hmr]
-Entrypoint main 2.42 MiB = bundle.js 2.42 MiB main.91d9fcc7464b5a41e170.hot-update.js 2.67 KiB
+  asset main.5a97dc6022089dab13f6.hot-update.js 3.67 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.5a97dc6022089dab13f6.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.42 MiB = bundle.js 2.42 MiB main.5a97dc6022089dab13f6.hot-update.js 3.67 KiB
 cached modules 2.07 MiB [cached] 172 modules
 runtime modules 28.7 KiB 15 modules
-./src/supabase/supabaseClient.js 1.09 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 134 ms
+./src/supabase/supabaseClient.js 2.05 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 139 ms
