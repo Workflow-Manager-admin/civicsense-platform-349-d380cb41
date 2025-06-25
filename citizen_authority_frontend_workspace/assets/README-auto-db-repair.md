@@ -1,9 +1,12 @@
 # Automated 'profiles' Table Repair SQL — CivicSense
 
 **⚠️ ACTION REQUIRED:**
-Before running or debugging this app, you MUST run the SQL repair script (`auto_repair_profiles.sql`) in your Supabase SQL Editor. This cannot be fully automated from the code!
+Before running or debugging this app, you MUST run the SQL repair script (`auto_repair_profiles.sql`) in your Supabase SQL Editor.  
+**If you encounter ANY errors applying the RLS policy or upsert fails with "violates row-level security", "column type" (UUID vs TEXT), or legacy triggers issues: THIS SCRIPT MUST BE RUN BEFORE THE POLICY!**
 
-**How to fix your database for profile upserts and RLS errors:**
+---
+
+**How to fully heal your database for profile upserts and RLS errors:**
 
 1. **Open your Supabase dashboard (https://app.supabase.com)**
 2. **Go to SQL Editor**
@@ -21,23 +24,24 @@ Before running or debugging this app, you MUST run the SQL repair script (`auto_
        USING (auth.uid() = id)
        WITH CHECK (auth.uid() = id);
      ```
-   - **No other table/policy is changed.**
+   - **No other table/policy is changed!**
 
-5. After running, you should execute these in the SQL editor to verify:
+5. After running, you should verify using SQL:
    ```sql
    SELECT * FROM information_schema.columns WHERE table_name = 'profiles';
    SELECT * FROM pg_policies WHERE tablename = 'profiles';
    ```
-   - Confirm:
+   - You MUST see:
      - `id` = UUID, primary key
      - `email`, `role` = text NOT NULL
-     - Only above upsert policy exists for 'profiles'
+     - **Only ONE upsert policy** as above for 'profiles'
 
 ---
 
-**NOTE:**  
-- If `id` values were previously TEXT, you must migrate or remove broken rows before this.
-- If this is not performed, you'll see 403/406 errors, "violates row-level security", and upsert failures from the React app.
-- See also `assets/upsert_rls_diagnostics.md` for full troubleshooting and verification.
+**IMPORTANT:**  
+- *Run this before ANY RLS policy if profile upsert or RLS configuration fails due to broken schema, triggers, or type errors.*
+- If `id` values were previously TEXT, migrate or remove broken rows before running this.
+- Failure to do so results in persistent 403/406 errors, "violates row-level security", or upsert failures from the React app.
+- See also `assets/upsert_rls_diagnostics.md` for full troubleshooting and verification scripts.
 
-_Last update: This script is required for all environments to resolve ALL row-level security and schema errors on user profile upserts for CivicSense._
+_Last update: This script is required for all environments to resolve ALL row-level security and schema errors on user profile upserts for CivicSense.  Always repair schema before fixing RLS policy!_

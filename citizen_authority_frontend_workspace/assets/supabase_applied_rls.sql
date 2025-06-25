@@ -33,3 +33,10 @@ CREATE POLICY "Users can insert or update their own profile"
 -- Example upsert as authenticated user (run in SQL Playground or via API):
 -- insert into profiles (id, email, role) values (auth.uid(), 'test@example.com', 'citizen')
 -- on conflict (id) do update set email=excluded.email, role=excluded.role;
+
+-- 🚨 If RLS violation persists, check for:
+--   - Stale policies (re-run above for RLS reset)
+--   - Incorrect Auth session (auth.uid() == profile.id)
+--   - Null payload fields or mis-typed columns (see assets/auto_repair_profiles.sql)
+--   - Full diagnostic in assets/upsert_rls_diagnostics.md
+
