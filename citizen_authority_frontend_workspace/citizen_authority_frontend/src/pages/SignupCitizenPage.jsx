@@ -2,37 +2,22 @@ import { useState } from 'react';
 import { supabase } from '../supabase/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 
-/**
- * Signup page for citizens.
- * Handles creation of auth account and profile role in Supabase.
- */
 export default function SignupCitizenPage() {
-  // (Diagnostics of Supabase environment variables and process.env removed
-  // since runtime access to process.env is not supported in the browser.
-  // Supabase is already configured in supabaseClient.js using proper build-time env injection.)
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  // PUBLIC_INTERFACE
-  /**
-   * Handles the signup process for a new citizen:
-   * - Registers user with Supabase Auth.
-   * - Provides safe profile upsert logic: Upsert is only attempted if a valid user object (with *both* id and email) is returned by Supabase. 
-   * - Otherwise, notifies user to confirm email and login, following Supabase best practices to avoid database constraint/RLS errors.
-   */
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
 
-    // Register user with Supabase Auth
+    // Step 1: Register user via Supabase Auth
     const { data: signupData, error: signupError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: 'http://localhost:3000/login/citizen',
+        emailRedirectTo: 'https://vscode-internal-21759-beta.beta01.cloud.kavia.ai/login/citizen',
       },
     });
 
@@ -41,87 +26,59 @@ export default function SignupCitizenPage() {
       return;
     }
 
-    // Supabase may NOT return a user in signupData immediately if email needs confirmation.
-    // Insert profile row ONLY if a complete user object is present.
     const user = signupData?.user;
 
-    if (!user || !user.id || !user.email) {
-      // No insert at this stage; wait for login after confirmation.
-      alert(
-        "Signup successful! Please check your email to confirm your account. After confirmation, log in to complete registration."
-      );
+    // Step 2: If no session yet (email not confirmed), alert user
+    if (!user?.id || !user?.email) {
+      alert("Signup successful! Please confirm your email, then log in.");
       navigate('/login/citizen');
       return;
     }
 
     try {
-      // ------------- RLS/PROFILE POLICY IMPACT -------------
-      // All upserts to 'profiles' MUST supply id=user.id, email, and role.
-      // If this upsert fails with 403/406, check Accept header and double check session.
-
-      // Defensive: Only do upsert if session is fully valid and user.id present
-      const sessRes = await supabase.auth.getSession();
-      const sessionUser = sessRes?.data?.session?.user;
-
-      // Diagnostics
-      console.log("[DIAG] SignupCitizenPage: user from signupData:", user);
-      console.log("[DIAG] SignupCitizenPage: sessionUser from getSession():", sessionUser);
+      // Step 3: Wait for session to become active (if it exists)
+      const { data: sessionData } = await supabase.auth.getSession();
+      const sessionUser = sessionData?.session?.user;
 
       if (!sessionUser || sessionUser.id !== user.id) {
-        setError(
-          "User session not fully established. Please log out, confirm your email, and log back in to complete registration.\n" +
-          "sessionUser=" + JSON.stringify(sessionUser) + ", user=" + JSON.stringify(user)
-        );
+        setError("Session not active. Please confirm your email, then log in.");
         return;
       }
 
-      // Defensive upsert - always supply all required fields, and force Accept/application/json if possible:
-      const upsertPayload = { id: user.id, email: user.email, role: 'citizen' };
+      // Step 4: Upsert user profile to 'profiles' table
+      const upsertPayload = {
+        id: user.id,
+        email: user.email, // ✅ This will now be valid
+        role: 'citizen',
+      };
 
-      let upsertRes = await supabase
+      const { error: profileError } = await supabase
         .from('profiles')
-        .upsert(
-          [upsertPayload],
-          { onConflict: ['id'], returning: 'representation', ignoreDuplicates: false }
-        )
-        .select('id,email,role');
-      let profileError = upsertRes.error;
+        .upsert([upsertPayload], {
+          onConflict: ['id'],
+          returning: 'representation',
+        });
 
-      if (upsertRes?.data) {
-        console.log("[DIAG] SignupCitizenPage: Upsert returned data:", upsertRes.data);
-      }
       if (profileError) {
-        console.error("[DIAG] SignupCitizenPage: Upsert failed with error:", profileError, "Payload:", upsertPayload);
-      }
+        const rlsHint =
+          profileError.code === 'PGRST116' ||
+          profileError.status === 403 ||
+          profileError.status === 406;
 
-      // If 403/406 or policy error, inform user fully
-      if (profileError && (profileError.status === 406 || profileError.status === 403 || profileError.code === "PGRST116")) {
-        setError(
-          "Database error saving new user profile (RLS/Permission/Accept): " + profileError.message +
-          "\nChecklist: (1) Are you logged in? (2) Profile upserts must use id/email/role. (3) Is RLS policy in Supabase EXACTLY: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)?\nSee assets/supabase.md for full diagnosis." +
-          "\nDiagnostics:\nsessionUser: " + JSON.stringify(sessionUser) + "\nuser: " + JSON.stringify(user) +
-          "\npayload: " + JSON.stringify(upsertPayload)
-        );
-        return;
-      } else if (profileError) {
         setError(
           "Database error saving new user profile: " + profileError.message +
-          "\nIf you see RLS/permission errors, confirm policies as described in assets/supabase.md.\n" +
-          "Diagnostics:\nsessionUser: " + JSON.stringify(sessionUser) + "\nuser: " + JSON.stringify(user) +
-          "\npayload: " + JSON.stringify(upsertPayload)
+          (rlsHint
+            ? "\nCheck your RLS policy: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)"
+            : "")
         );
         return;
       }
 
-      alert(
-        'Signup successful! Profile created. Please check your email to confirm, then log in.'
-      );
+      alert("Signup successful! Please confirm your email and log in.");
       navigate('/login/citizen');
-    } catch (dbErr) {
-      setError(
-        "Unexpected error updating user profile: " + (dbErr.message || dbErr) +
-        "\n(See assets/supabase.md for upsert policies and required fields.)"
-      );
+
+    } catch (err) {
+      setError("Unexpected error: " + (err.message || err));
     }
   };
 
@@ -147,9 +104,7 @@ export default function SignupCitizenPage() {
           minLength={6}
           autoComplete="new-password"
         />
-        <button className="btn btn-large mt-2" type="submit">
-          Sign Up
-        </button>
+        <button className="btn btn-large mt-2" type="submit">Sign Up</button>
       </form>
       <div style={{ color: "#6b7280", fontSize: "0.95rem", marginTop: 12 }}>
         Already have an account? <a href="/login/citizen" style={{ color: "var(--primary)" }}>Login here</a>
