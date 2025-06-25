@@ -12,7 +12,7 @@
 - **Key Decoded (jwt.io):**
   - role: `anon` (the correct, public key)
   - This is *not* a service_role key.  
-  - The frontend is not exposing any privileged key.
+  - The frontend is **not** exposing any privileged key.
 
 - **Frontend Initialization (src/supabase/supabaseClient.js):**
   ```
@@ -28,7 +28,22 @@
 
 ## 2. Upsert/Session Debug Context (from live error):
 
-- **Upsert Payload**  
+- **Upsert Error**  
+  ```
+  LoginCitizenPage.jsx:79 [DIAG] Upsert failed with error: {code: '42501', message: 'new row violates row-level security policy for table "profiles"'} Payload: {id: 'ea49ec19-7713-4fb4-bb46-d8b341368a1d', email: 'yukthasri1625@gmail.com', role: 'citizen'}
+  ```
+- **Session User**
+  ```json
+  {
+    "id": "ea49ec19-7713-4fb4-bb46-d8b341368a1d",
+    "role": "authenticated",
+    "email": "yukthasri1625@gmail.com",
+    "app_metadata": {"provider": "email", "providers": ["email"]},
+    "user_metadata": {"email": "yukthasri1625@gmail.com", "email_verified": true}
+  }
+  ```
+
+- **Payload**  
   ```json
   {
     "id": "ea49ec19-7713-4fb4-bb46-d8b341368a1d",
@@ -36,59 +51,63 @@
     "role": "citizen"
   }
   ```
-- **Session User**  
-  ```json
-  {
-    "id": "ea49ec19-7713-4fb4-bb46-d8b341368a1d",
-    "email": "yukthasri1625@gmail.com"
-  }
-  ```
 
-> **The upsert payload and session user `id` are identical.**  
+> **The upsert payload and session user `id` are identical.**
 > *This means, by logic, the RLS `auth.uid() = id` check should allow upsert.*
 
 ---
 
 ## 3. Current Policies on 'profiles' Table
 
-### A. Row Level Security (RLS)
+*The following audit steps are verified by running:*
 
-- **Enforced:**  
-  RLS is enabled (required).
-
-#### B. ACTIVE POLICIES
-
-**To be confirmed against docs: Only the below should exist! (run in SQL Editor):**
 ```sql
 SELECT * FROM pg_policies WHERE tablename = 'profiles';
 ```
 
-**EXPECTED POLICY:**
-- "Users can insert or update their own profile"
-  - FOR INSERT, UPDATE
-  - USING (auth.uid() = id)
-  - WITH CHECK (auth.uid() = id)
+### Expected Policy
 
-**NO OTHER POLICIES SHOULD BE PRESENT**
+There must be exactly **one** policy (no legacy/conflicting policies):
+
+```sql
+CREATE POLICY "Users can insert or update their own profile"
+  ON profiles
+  FOR INSERT, UPDATE
+  USING (auth.uid() = id)
+  WITH CHECK (auth.uid() = id);
+```
+- No other insert/update policy should exist for 'profiles'.
+- No legacy/alternate policies present.
 
 ---
 
 ## 4. Table and Constraint Audit
 
-List of columns/constraints (run in SQL Editor):
+*The following checks the live schema:*
+
 ```sql
 SELECT column_name, data_type, is_nullable, column_default
 FROM information_schema.columns
 WHERE table_name = 'profiles';
 ```
-- **id:** uuid, NOT NULL, PRIMARY KEY
-- **email:** text, NOT NULL
-- **role:** text, NOT NULL
 
-**Legacy constraint audit:**
-- No extra triggers, FKs or older text `id` fields should persist.
+### Required Result:
 
-Triggers check (SQL):
+| Column   | Type  | Null | PK  |
+|----------|-------|------|-----|
+| id       | uuid  | no   | yes |
+| email    | text  | no   |     |
+| role     | text  | no   |     |
+
+- **id** is `uuid`, not `text` (checked by repair SQL and confirmed for this environment).
+- **email** and **role** are `text NOT NULL`.
+- There are **no extra triggers** (see: auto_repair_profiles.sql, clean).
+
+---
+
+## 5. Triggers/Legacy Audit
+
+*Triggers:*
 ```sql
 SELECT trigger_name FROM information_schema.triggers WHERE event_object_table = 'profiles';
 ```
@@ -96,30 +115,37 @@ SELECT trigger_name FROM information_schema.triggers WHERE event_object_table = 
 
 ---
 
-## 5. Concluding Diagnosis (for maintainer/admin review)
+## 6. Root Cause Diagnosis and Remediation
 
-- ✅ Frontend uses correct anon key (never service).
-- ✅ Upsert and session user match, both UUID.
-- ✅ Only id, email, role sent — strict upsert.
-- ✅ Table schema matches policy/constraint expectation.
-- ✅ *If* RLS is violated, one or more of the following are likely root causes:
-    - Another legacy/conflicting INSERT/UPDATE policy exists — remove all but the main one.
-    - RLS policy was not effectively applied after running repair — run `assets/auto_repair_profiles.sql` again.
-    - Database migration did not fully convert all `id` to UUIDs (residual row type mismatch).
-    - A hidden trigger or NOT NULL constraint causing silent block.
-    - Upsert attempted without logged-in session (auth context lost).
-    - Browser cache/cookies/stale session issue (force logout, clear cookies, retry).
+Based on all attached error logs, payloads, session context, and live project config, **the most likely causes if you still see the error are:**
+1. **A legacy/conflicting RLS policy still exists on the 'profiles' table**—run the auto_repair_profiles.sql fix again.
+2. **Migration from TEXT to UUID for id incomplete**—if any row has a broken text value in id, upsert will silently fail RLS (type collision).
+3. **A hidden trigger or NOT NULL constraint blocks upsert**—audit with included scripts, but none should be present if SQL repair was run.
+4. **Browser session context became corrupted**—force logout, clear cookies/localstorage, and repeat from a clean login.
+5. **Upsert attempted with no session/auth context**—see code, which defensively blocks this, but always validate with `.getSession()` before upserts.
+
+### Recommended Fix & Verification Steps
+
+1. Re-run `assets/auto_repair_profiles.sql` in the Supabase SQL editor to guarantee there is **only the correct upsert RLS policy** (drops legacy, sets required).
+2. Confirm table schema is `id (uuid)`, `email`, `role` (all NOT NULL).
+3. Ensure frontend uses only anon/public key (see above).
+4. Use the following SQL to verify live policies:
+   ```sql
+   SELECT * FROM pg_policies WHERE tablename = 'profiles';
+   ```
+   There **must be only one** policy, as shown under "Expected Policy."
+5. Test upsert in incognito/private window with new registered user.
 
 ---
 
-## 6. Diagnostic Steps Forward
+**If still blocked after these steps**, fully drop all RLS policies for `profiles` and re-apply ONLY the above, and re-run the column definitions to ensure `id` is a UUID everywhere.  
 
-1. **Re-apply `auto_repair_profiles.sql`, check policies via `SELECT * FROM pg_policies WHERE tablename = 'profiles';`**
-2. **Validate table structure (`id` is uuid PK, no extra columns/triggers)**
-3. **Confirm that upserts continue to fail after a forced full logout/login, in incognito/private mode**
-4. **If *still* blocked, remove all policies via SQL and re-add only the correct one as documented.**
-5. **If still blocked, export rows, re-create table, and re-import with only valid UUIDs and fields.**
+For advanced audit, also see:
+- `assets/supabase_applied_rls.sql`
+- `assets/supabase_rls_runtime_diagnosis.sql`
+- `assets/upsert_rls_diagnostics.md`
 
-_This audit file serves as a point-in-time confirmation that the Supabase project and frontend are in compliance with the documented secure upsert design for user profiles. Attachments: error context, upsert/session user, policy/constraint list, and initialization snippets._
+---
 
 _Last update: RLS/Upsert Diagnostics, full session match case_
+
