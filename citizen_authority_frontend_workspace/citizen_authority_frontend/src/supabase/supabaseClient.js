@@ -1,5 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
 
+// ==================== SUPABASE ENV DIAGNOSTIC LOGGING ====================
+console.log('[Supabase Diagnostics] URL:', process.env.REACT_APP_SUPABASE_URL);
+console.log(
+  '[Supabase Diagnostics] KEY:',
+  process.env.REACT_APP_SUPABASE_KEY
+    ? process.env.REACT_APP_SUPABASE_KEY.slice(0, 5) +
+      '...' +
+      process.env.REACT_APP_SUPABASE_KEY.slice(-5)
+    : 'undefined'
+);
+// ================= END SUPABASE ENV DIAGNOSTIC LOGGING ====================
 /**
  * PUBLIC_INTERFACE
  * Supabase client for database/auth/storage, configured using environment variables if present
