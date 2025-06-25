@@ -1,37 +1,43 @@
 # Automated 'profiles' Table Repair SQL — CivicSense
 
-Place this file in your assets folder to enable full healing of the Supabase 'profiles' table.
-**Admin Instructions:**
+**⚠️ ACTION REQUIRED:**
+Before running or debugging this app, you MUST run the SQL repair script (`auto_repair_profiles.sql`) in your Supabase SQL Editor. This cannot be fully automated from the code!
 
-1. Open the Supabase dashboard.
-2. Go to SQL Editor.
-3. Paste the contents of `auto_repair_profiles.sql` into a new SQL script.
-4. Run the script for instant healing: this will
-   - Ensure 'id' column is **UUID primary key**
-   - Ensure 'email' and 'role' columns exist (TEXT, NOT NULL)
-   - Remove all triggers from 'profiles'
-   - Drop ALL existing RLS policies on 'profiles'
-   - Enable only the *correct* policy:
-     ```
+**How to fix your database for profile upserts and RLS errors:**
+
+1. **Open your Supabase dashboard (https://app.supabase.com)**
+2. **Go to SQL Editor**
+3. **Upload or paste the contents of `assets/auto_repair_profiles.sql`**
+4. **Run it** for full automated healing:
+   - Ensures `id` column in `profiles` is **UUID primary key**
+   - Ensures `email` and `role` columns exist (TEXT, NOT NULL)
+   - Removes all triggers from `profiles`
+   - Drops ALL existing RLS policies on `profiles`
+   - Enables only the correct upsert policy:
+     ```sql
      CREATE POLICY "Users can insert or update their own profile"
        ON profiles
        FOR INSERT, UPDATE
        USING (auth.uid() = id)
        WITH CHECK (auth.uid() = id);
      ```
-   - NO other side effects.
+   - **No other table/policy is changed.**
 
-5. After execution, run:
+5. After running, you should execute these in the SQL editor to verify:
    ```sql
    SELECT * FROM information_schema.columns WHERE table_name = 'profiles';
    SELECT * FROM pg_policies WHERE tablename = 'profiles';
    ```
-   Ensure that:
-   - id = uuid, primary key
-   - email, role = text NOT NULL
-   - Only one RLS policy exists as above.
+   - Confirm:
+     - `id` = UUID, primary key
+     - `email`, `role` = text NOT NULL
+     - Only above upsert policy exists for 'profiles'
+
+---
 
 **NOTE:**  
-If ids were previously text, you may need to manually migrate old data or users, as re-casting to uuid will fail if any rows do not match uuid format. Clean up broken ids before running this!
+- If `id` values were previously TEXT, you must migrate or remove broken rows before this.
+- If this is not performed, you'll see 403/406 errors, "violates row-level security", and upsert failures from the React app.
+- See also `assets/upsert_rls_diagnostics.md` for full troubleshooting and verification.
 
-_Last update: full auto-repair healer for Supabase citizen/authority login and signup, for CivicSense platform._
+_Last update: This script is required for all environments to resolve ALL row-level security and schema errors on user profile upserts for CivicSense._
