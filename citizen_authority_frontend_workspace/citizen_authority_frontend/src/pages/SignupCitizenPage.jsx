@@ -123,13 +123,6 @@ export default function SignupCitizenPage() {
         />
         <button className="btn btn-large mt-2" type="submit">Sign Up</button>
       </form>
-      {/* Resend confirmation email option for users who enter email but missed confirmation */}
-      <div style={{ marginTop: 16, marginBottom: 10 }}>
-        <span style={{ color: "#707070", fontSize: "0.99rem" }}>
-          Didn&apos;t get the confirmation email?&nbsp;
-        </span>
-        <ResendConfirmationEmail email={email} variant="inline" />
-      </div>
       <div style={{ color: "#6b7280", fontSize: "0.95rem", marginTop: 12 }}>
         Already have an account? <span style={{}}>
           {/* Use react-router Link for in-app navigation */}
