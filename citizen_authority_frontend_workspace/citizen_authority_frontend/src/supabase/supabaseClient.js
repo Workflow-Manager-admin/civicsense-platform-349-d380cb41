@@ -44,6 +44,24 @@ const supabaseKey = getEnv(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3em5xenRxbHZrZW94anpsaGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwNzIzMzMsImV4cCI6MjA2NTY0ODMzM30.4SBDmL0SuVsGqQeubAKjVH0lXX5JInlM-f5vg4gFHsk"
 );
 
+// ==================== SUPABASE CLIENT DIAGNOSTICS ====================
+console.log(
+  "[Supabase DIAGNOSTICS] Supabase client is being initialized with:",
+  {
+    REACT_APP_SUPABASE_URL: supabaseUrl,
+    REACT_APP_SUPABASE_KEY_first_8: (supabaseKey || "").slice(0, 8),
+    REACT_APP_SUPABASE_KEY_length: (supabaseKey || "").length,
+    env_process: typeof process !== "undefined" && process.env && {
+      REACT_APP_SUPABASE_URL: process.env.REACT_APP_SUPABASE_URL,
+      REACT_APP_SUPABASE_KEY_first_8: (process.env.REACT_APP_SUPABASE_KEY || "").slice(0, 8)
+    },
+    env_window: typeof window !== "undefined" && window._env_ && {
+      REACT_APP_SUPABASE_URL: window._env_.REACT_APP_SUPABASE_URL,
+      REACT_APP_SUPABASE_KEY_first_8: (window._env_.REACT_APP_SUPABASE_KEY || "").slice(0, 8)
+    }
+  }
+);
+// ================= END SUPABASE CLIENT DIAGNOSTICS ===================
 // Patch: Add extra runtime warning if fallback from defaults is used (build context or runtime).
 if (
   supabaseKey === "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3em5xenRxbHZrZW94anpsaGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwNzIzMzMsImV4cCI6MjA2NTY0ODMzM30.4SBDmL0SuVsGqQeubAKjVH0lXX5JInlM-f5vg4gFHsk"

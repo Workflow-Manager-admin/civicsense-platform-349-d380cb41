@@ -7,6 +7,15 @@ import { useNavigate } from 'react-router-dom';
  * Handles creation of auth account and profile role in Supabase.
  */
 export default function SignupCitizenPage() {
+  // DIAGNOSTICS: Print current Supabase client config at runtime
+  // eslint-disable-next-line no-console
+  if (typeof window !== "undefined") {
+    console.log('[SignupCitizenPage DIAGNOSTICS] Supabase DIAG start – window.env:', {
+      REACT_APP_SUPABASE_URL: process.env.REACT_APP_SUPABASE_URL,
+      REACT_APP_SUPABASE_KEY_first_8: (process.env.REACT_APP_SUPABASE_KEY || "").slice(0, 8),
+      supabase_url_from_client: (window.supabase && window.supabase.supabaseUrl) || undefined,
+    });
+  }
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
