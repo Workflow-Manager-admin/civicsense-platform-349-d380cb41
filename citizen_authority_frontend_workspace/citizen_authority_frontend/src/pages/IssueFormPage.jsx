@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { supabase } from '../supabase/supabaseClient';
 import axios from 'axios';
 import emailjs from 'emailjs-com';
+import Spinner from '../components/Spinner';
 
 // ... [AI functions: summarizeIssue, embedText, cosineSimilarity, generateTags] ...
 
@@ -101,6 +102,7 @@ export default function IssueFormPage() {
   const [images, setImages] = useState([]);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -113,25 +115,29 @@ export default function IssueFormPage() {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setLoading(true);
 
     const { data: userData, error: userError } = await supabase.auth.getUser();
     const user = userData?.user;
 
     if (!user || userError) {
       setError('User not authenticated.');
+      setLoading(false);
       return;
     }
 
     if (formData.location_url) {
-      const regex = /^https:\/\/www\.google\.com\/maps\?q=(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)$/;
+      const regex = /^https:\/\/www\.google\.com\/maps\?q=(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)/;
       if (!regex.test(formData.location_url.trim())) {
         setError('Invalid Google Maps link.');
+        setLoading(false);
         return;
       }
     }
 
     if (formData.category === 'other' && !customCategory.trim()) {
       setError('Please specify the issue category.');
+      setLoading(false);
       return;
     }
 
@@ -160,12 +166,14 @@ export default function IssueFormPage() {
       } catch (uploadError) {
         console.error('Upload Failed:', uploadError.message);
         setError(`Failed to upload images: ${uploadError.message}`);
+        setLoading(false);
         return;
       }
     }
 
     if (formData.description.length < 250) {
       setError('Description must be at least 250 characters for AI summarization.');
+      setLoading(false);
       return;
     }
 
@@ -178,6 +186,7 @@ export default function IssueFormPage() {
     } catch (err) {
       console.error('AI error:', err.response?.data || err.message);
       setError('AI services failed. Please try again later.');
+      setLoading(false);
       return;
     }
 
@@ -195,6 +204,7 @@ export default function IssueFormPage() {
 
       if (isDuplicate) {
         setError('This issue may already be reported.');
+        setLoading(false);
         return;
       }
     } catch (err) {
@@ -214,6 +224,7 @@ export default function IssueFormPage() {
 
     if (insertError) {
       setError(insertError.message);
+      setLoading(false);
     } else {
       setSuccess('Issue submitted successfully.');
       setFormData({
@@ -228,22 +239,22 @@ export default function IssueFormPage() {
       });
       setCustomCategory('');
       setImages([]);
+      setLoading(false);
 
       // ✅ Send confirmation email
       const userEmail = user?.email;
-
       if (userEmail) {
         try {
           await emailjs.send(
-            'service_0lso4od',       // 🔁 Replace with EmailJS service ID
-            'template_rpsj2zc',      // 🔁 Replace with template ID
+            'service_0lso4od',
+            'template_rpsj2zc',
             {
               name: formData.name,
               title: formData.title,
               description: formData.description,
-              to_email: userEmail     // Template variable
+              to_email: userEmail
             },
-            'hRaD4qFMR-kuDWqtN'         // 🔁 Replace with your public key
+            'hRaD4qFMR-kuDWqtN'
           );
           console.log("Confirmation email sent.");
         } catch (emailErr) {
@@ -602,6 +613,7 @@ export default function IssueFormPage() {
           {/* Submit Button */}
           <button
             type="submit"
+            className={loading ? "btn btn-loading" : ""}
             style={{
               width: "100%",
               background: "#A8D5BA",
@@ -612,14 +624,23 @@ export default function IssueFormPage() {
               border: "none",
               borderRadius: 10,
               padding: "14px 0",
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               transition: "background 0.15s",
               boxShadow: "0 2px 12px #A8D5BA17",
+              position: "relative",
             }}
-            onMouseOver={e => { e.target.style.background = "#93C6A0"; }}
-            onMouseOut={e => { e.target.style.background = "#A8D5BA"; }}
+            onMouseOver={e => { if (!loading) e.target.style.background = "#93C6A0"; }}
+            onMouseOut={e => { if (!loading) e.target.style.background = "#A8D5BA"; }}
+            disabled={loading}
+            aria-busy={loading}
           >
-            Submit
+            {loading ? (
+              <span className="btn-spinner" style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }}>
+                <Spinner size={24} inline color="#93C6A0" />
+              </span>
+            ) : (
+              "Submit"
+            )}
           </button>
         </form>
         <style>{`

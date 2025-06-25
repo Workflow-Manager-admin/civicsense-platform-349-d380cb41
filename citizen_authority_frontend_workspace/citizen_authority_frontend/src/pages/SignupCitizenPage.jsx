@@ -3,16 +3,20 @@ import { supabase } from '../supabase/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import ResendConfirmationEmail from "../components/ResendConfirmationEmail";
 
+import Spinner from '../components/Spinner';
+
 export default function SignupCitizenPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   // Defensive: Ensure no upsert occurs unless session, user, and email are all valid
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     // Step 1: Register user via Supabase Auth
     const { data: signupData, error: signupError } = await supabase.auth.signUp({
@@ -25,6 +29,7 @@ export default function SignupCitizenPage() {
 
     if (signupError) {
       setError("Signup error: " + signupError.message);
+      setLoading(false);
       return;
     }
 
@@ -33,6 +38,7 @@ export default function SignupCitizenPage() {
     // Step 2: If no session yet (email not confirmed), alert user
     if (!user?.id || !user?.email) {
       alert("Signup successful! Please confirm your email, then log in.");
+      setLoading(false);
       navigate('/login/citizen');
       return;
     }
@@ -44,21 +50,25 @@ export default function SignupCitizenPage() {
 
       if (!sessionUser || sessionUser.id !== user.id) {
         setError("Session not active. Please confirm your email, then log in.");
+        setLoading(false);
         return;
       }
 
       // Step 4: Validate upsert only if all required fields
       if (!user || !user.id || !user.email) {
         setError("Cannot upsert profile: missing user id or email.");
+        setLoading(false);
         return;
       }
       if (!sessionUser || !sessionUser.id) {
         setError("Cannot upsert profile: missing session or session user id.");
+        setLoading(false);
         return;
       }
       // Defensive: Email must not be empty string (schema requires NOT NULL)
       if (typeof user.email !== 'string' || user.email.trim().length === 0) {
         setError("Cannot upsert profile: user email is empty.");
+        setLoading(false);
         return;
       }
 
@@ -88,14 +98,17 @@ export default function SignupCitizenPage() {
             ? "\nCheck your RLS policy: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)"
             : "")
         );
+        setLoading(false);
         return;
       }
 
       alert("Signup successful! Please confirm your email and log in.");
+      setLoading(false);
       navigate('/login/citizen');
 
     } catch (err) {
       setError("Unexpected error: " + (err.message || err));
+      setLoading(false);
     }
   };
 
@@ -121,7 +134,18 @@ export default function SignupCitizenPage() {
           minLength={6}
           autoComplete="new-password"
         />
-        <button className="btn btn-large mt-2" type="submit">Sign Up</button>
+        <button
+          className={`btn btn-large mt-2${loading ? " btn-loading" : ""}`}
+          type="submit"
+          disabled={loading}
+          aria-busy={loading}
+        >
+          {loading ? (
+            <span className="btn-spinner"><Spinner size={22} inline color="var(--primary)" /></span>
+          ) : (
+            "Sign Up"
+          )}
+        </button>
       </form>
       <div style={{ color: "#6b7280", fontSize: "0.95rem", marginTop: 12 }}>
         Already have an account? <span style={{}}>

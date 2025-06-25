@@ -7,17 +7,21 @@ import { useNavigate } from 'react-router-dom';
  * upserts user profile into the 'profiles' table with role: 'authority', matching schema.
  * Only affects authority signup; does not impact citizen flow.
  */
+import Spinner from '../components/Spinner';
+
 export default function SignupAuthorityPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // PUBLIC_INTERFACE
   /** Handle signup as authority, and upsert profiles row with role: 'authority' after session is established. */
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     // 1. Register user via Supabase Auth, redirect to login after email confirmation
     const { data: signupData, error: signupError } = await supabase.auth.signUp({
@@ -30,6 +34,7 @@ export default function SignupAuthorityPage() {
 
     if (signupError) {
       setError("Database error saving new user: " + signupError.message);
+      setLoading(false);
       return;
     }
 
@@ -38,6 +43,7 @@ export default function SignupAuthorityPage() {
     // 2. If email not confirmed/session not yet available, prompt to confirm email and stop
     if (!user?.id || !user?.email) {
       alert('Signup successful! Please check your email to confirm your account before logging in.');
+      setLoading(false);
       navigate('/login/authority');
       return;
     }
@@ -49,20 +55,24 @@ export default function SignupAuthorityPage() {
 
       if (!sessionUser || sessionUser.id !== user.id) {
         setError("Session not active. Please confirm your email, then log in.");
+        setLoading(false);
         return;
       }
 
       // 4. Defensive schema checks
       if (!user || !user.id || !user.email) {
         setError("Cannot upsert authority profile: missing user id or email.");
+        setLoading(false);
         return;
       }
       if (!sessionUser || !sessionUser.id) {
         setError("Cannot upsert authority profile: missing session or session user id.");
+        setLoading(false);
         return;
       }
       if (typeof user.email !== 'string' || user.email.trim().length === 0) {
         setError("Cannot upsert authority profile: user email is empty.");
+        setLoading(false);
         return;
       }
 
@@ -92,13 +102,16 @@ export default function SignupAuthorityPage() {
             ? "\nCheck your RLS policy: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)"
             : "")
         );
+        setLoading(false);
         return;
       }
 
       alert("Signup successful! Please confirm your email and log in as Authority.");
+      setLoading(false);
       navigate('/login/authority');
     } catch (err) {
       setError("Unexpected error: " + (err.message || err));
+      setLoading(false);
     }
   };
 
@@ -121,8 +134,17 @@ export default function SignupAuthorityPage() {
           onChange={e => setPassword(e.target.value)}
           required
         />
-        <button className="btn btn-large mt-2" type="submit">
-          Sign Up
+        <button
+          className={`btn btn-large mt-2${loading ? " btn-loading" : ""}`}
+          type="submit"
+          disabled={loading}
+          aria-busy={loading}
+        >
+          {loading ? (
+            <span className="btn-spinner"><Spinner size={22} inline color="var(--primary)" /></span>
+          ) : (
+            "Sign Up"
+          )}
         </button>
       </form>
       <div style={{ color: "#6b7280", fontSize: "0.95rem", marginTop: 12, textAlign: "center" }}>

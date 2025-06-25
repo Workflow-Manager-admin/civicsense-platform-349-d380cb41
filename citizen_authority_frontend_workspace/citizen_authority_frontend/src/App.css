@@ -249,6 +249,23 @@ button:focus-visible, input[type="submit"]:focus-visible {
   border: 2px solid #a892e944;
 }
 
+.btn.btn-loading, .btn.btn-loading:disabled {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+  opacity: 0.72;
+}
+
+.btn .btn-spinner, .btn.btn-loading .btn-spinner {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 a.btn, a.btn:visited {
   display: inline-block;
   text-decoration: none;
