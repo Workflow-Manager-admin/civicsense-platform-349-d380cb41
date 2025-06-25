@@ -131,7 +131,17 @@ export default function SignupCitizenPage() {
         <ResendConfirmationEmail email={email} variant="inline" />
       </div>
       <div style={{ color: "#6b7280", fontSize: "0.95rem", marginTop: 12 }}>
-        Already have an account? <a href="/login/citizen" style={{ color: "var(--primary)" }}>Login here</a>
+        Already have an account? <span style={{}}>
+          {/* Use react-router Link for in-app navigation */}
+          <a
+            href="/login/citizen"
+            style={{ color: "var(--primary)", textDecoration: "underline", cursor: "pointer" }}
+            onClick={e => {
+              e.preventDefault();
+              navigate('/login/citizen');
+            }}
+          >Login here</a>
+        </span>
       </div>
     </div>
   );
