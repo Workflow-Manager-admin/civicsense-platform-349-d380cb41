@@ -56,20 +56,35 @@ export default function SignupCitizenPage() {
 
     try {
       // ------------- RLS/PROFILE POLICY IMPACT -------------
-      // All upserts to 'profiles' MUST supply id=user.id, email, and role. The RLS policy for INSERT/UPDATE:
-      //   USING (auth.uid() = id)
-      //   WITH CHECK (auth.uid() = id)
-      // This enforces that only the authenticated user can create/update *their* profile row.
-      // If this upsert fails, check latest policy in assets/supabase.md and assets/supabase_applied_rls.sql.
+      // All upserts to 'profiles' MUST supply id=user.id, email, and role.
+      // If this upsert fails with 403/406, try forcing Accept header and double check session.
 
-      const { error: profileError } = await supabase
+      // Normal upsert
+      let upsertRes = await supabase
         .from('profiles')
         .upsert(
           [{ id: user.id, email: user.email, role: 'citizen' }],
           { onConflict: ['id'] }
         );
+      let profileError = upsertRes.error;
 
-      if (profileError) {
+      // If 403/406 error, try fallback upsert pattern
+      if (profileError && (profileError.status === 406 || profileError.status === 403 || profileError.code === "PGRST116")) {
+        try {
+          const { data: manualRes, error: manualErr } = await supabase
+            .from('profiles')
+            .upsert([{ id: user.id, email: user.email, role: 'citizen' }],
+                  { onConflict: ['id'], returning: 'representation', ignoreDuplicates: false })
+            .select('id,email,role');
+          if (manualErr) throw manualErr;
+        } catch (manualError) {
+          setError(
+            "Database error saving new user profile (manual fallback): " + manualError.message +
+            "\nCheck you are logged in, and that profile upserts include both id/email/role. RLS may need to be checked in Supabase – see assets/supabase.md."
+          );
+          return;
+        }
+      } else if (profileError) {
         setError(
           "Database error saving new user profile: " + profileError.message +
           "\nIf you see RLS/permission errors, confirm policies as described in assets/supabase.md."

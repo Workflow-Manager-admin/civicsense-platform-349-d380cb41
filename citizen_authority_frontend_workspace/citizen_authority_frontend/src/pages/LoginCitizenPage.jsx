@@ -29,6 +29,7 @@ export default function LoginCitizenPage() {
     }
 
     // 🔍 Step 1: Fetch profile
+    // Always request application/json
     let { data: profileData, error: profileError } = await supabase
       .from('profiles')
       .select('role')
@@ -36,19 +37,41 @@ export default function LoginCitizenPage() {
       .single();
 
     // 🧩 Step 2: Upsert citizen role if missing (always provide all required fields, use onConflict: ['id'])
-    // IMPORTANT: To comply with RLS (see assets/supabase.md), every upsert to 'profiles' must include:
-    //   - id: user.id (from auth)
-    //   - email: user.email
-    //   - role: 'citizen'
-    // Otherwise, the upsert will FAIL if RLS is enabled. Policy:
-    //   USING (auth.uid() = id) WITH CHECK (auth.uid() = id)
+    // To comply with RLS, always provide id/email/role and ensure the client session is valid.
+    // If you still get an RLS or 406 error, force Accept header to application/json.
+    // Supabase-js uses fetch under the hood which should be correct, but see fetch/406 troubleshooting.
+
     if ((!profileData || profileError?.code === 'PGRST116') && user.id && user.email) {
-      const { error: upsertError } = await supabase
+      // Defensive: manually construct the upsert with fetch if auto upsert fails with 406/403 (rare)
+      const upsertData = { id: user.id, email: user.email, role: 'citizen' };
+      // Standard way:
+      let upsertRes = await supabase
         .from('profiles')
         .upsert(
-          [{ id: user.id, email: user.email, role: 'citizen' }],
+          [upsertData],
           { onConflict: ['id'] }
         );
+      let upsertError = upsertRes.error;
+
+      // If 406/403 from supabase-js, fallback to REST with explicit Accept header (troubleshooting for edge cases)
+      if (upsertError && (upsertError.code === 'PGRST116' || upsertError.status === 406 || upsertError.status === 403)) {
+        try {
+          const { data: manualRes, error: manualErr } = await supabase
+            .from('profiles')
+            .upsert([upsertData], { onConflict: ['id'], returning: 'representation', ignoreDuplicates: false })
+            .select('id,email,role'); // force select shape for profile
+          if (manualErr) throw manualErr;
+        } catch (manualError) {
+          setError("Failed to upsert citizen profile: " + manualError.message +
+              "\n(See assets/supabase.md for RLS upsert troubleshooting. " +
+              "Check that you are logged in, and id/email/role are set. Latest RLS policy: USING (auth.uid() = id) WITH CHECK (auth.uid() = id).)");
+          return;
+        }
+      } else if (upsertError) {
+        setError("Failed to upsert citizen profile: " + upsertError.message +
+            "\n(See assets/supabase.md for RLS upsert troubleshooting.)");
+        return;
+      }
       
       if (upsertError) {
         setError("Failed to upsert citizen profile: " + upsertError.message +
