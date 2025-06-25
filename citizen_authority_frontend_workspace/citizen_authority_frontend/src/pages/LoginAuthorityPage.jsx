@@ -114,7 +114,32 @@ export default function LoginAuthorityPage() {
     <div className="container" style={{ maxWidth: "440px", margin: "50px auto", paddingTop: "64px" }}>
       <form className="card-bg" onSubmit={handleLogin}>
         <h2 className="text-xl font-bold mb-2" style={{ color: "var(--primary)" }}>Login as Authority</h2>
-        {error && <p className="text-red-600 error-message">{error}</p>}
+        {error && (
+          <>
+            <p className="text-red-600 error-message">{error}</p>
+            {/* Additional contextual hint for unconfirmed email */}
+            <div
+              style={{
+                color: "#b85c38",
+                background: "#FFEFEF",
+                border: "1.2px solid #e57373",
+                borderRadius: "8px",
+                fontWeight: 500,
+                fontSize: "0.99rem",
+                padding: "9px 14px",
+                marginTop: "4px",
+                marginBottom: "6px",
+                textAlign: "left"
+              }}
+              role="note"
+              aria-live="polite"
+            >
+              <span style={{ fontWeight: 700 }}>Tip:</span> If you have not confirmed your email address,
+              please check your inbox (and spam/junk folder) for the confirmation link sent to you after signup.
+              You must confirm your email before logging in.
+            </div>
+          </>
+        )}
         <input
           type="email"
           placeholder="Email"
