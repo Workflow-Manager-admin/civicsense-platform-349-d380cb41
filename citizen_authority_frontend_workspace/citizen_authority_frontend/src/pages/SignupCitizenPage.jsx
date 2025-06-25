@@ -16,16 +16,14 @@ export default function SignupCitizenPage() {
   /**
    * Handles the signup process for a new citizen:
    * - Registers user with Supabase Auth.
-   * - PROVIDES A SAFE UP-SERT LOGIC for the profile:
-   *   - Only attempts upsert if a valid user object with id and email is returned (i.e., after confirmation for providers that require it).
-   *   - Otherwise, notifies user to confirm their account and advises login after confirmation, per Supabase recommended flow.
-   * - Prevents broken upserts that trigger RLS or constraint errors.
+   * - Provides safe profile upsert logic: Upsert is only attempted if a valid user object (with *both* id and email) is returned by Supabase. 
+   * - Otherwise, notifies user to confirm email and login, following Supabase best practices to avoid database constraint/RLS errors.
    */
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
 
-    // 1. Register user with Supabase Auth
+    // Register user with Supabase Auth
     const { data: signupData, error: signupError } = await supabase.auth.signUp({
       email,
       password,
@@ -39,12 +37,12 @@ export default function SignupCitizenPage() {
       return;
     }
 
-    // Supabase will (by default) ONLY return a user immediately for some providers,
-    // otherwise only after email confirmation. For initial signups, often user is null.
+    // Supabase may NOT return a user in signupData immediately if email needs confirmation.
+    // Insert profile row ONLY if a complete user object is present.
     const user = signupData?.user;
 
     if (!user || !user.id || !user.email) {
-      // No insert into profiles at this stage; wait for login with confirmed email.
+      // No insert at this stage; wait for login after confirmation.
       alert(
         "Signup successful! Please check your email to confirm your account. After confirmation, log in to complete registration."
       );
@@ -52,9 +50,8 @@ export default function SignupCitizenPage() {
       return;
     }
 
-    // After confirmation (user object present), upsert profile row
     try {
-      // Full upsert with required fields, DO NOT attempt without all info
+      // Safe upsert: pass all required fields. Never send null/undefined.
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert(
@@ -91,6 +88,7 @@ export default function SignupCitizenPage() {
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
+          autoComplete="email"
         />
         <input
           type="password"
@@ -98,11 +96,16 @@ export default function SignupCitizenPage() {
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
+          minLength={6}
+          autoComplete="new-password"
         />
         <button className="btn btn-large mt-2" type="submit">
           Sign Up
         </button>
       </form>
+      <div style={{ color: "#6b7280", fontSize: "0.95rem", marginTop: 12 }}>
+        Already have an account? <a href="/login/citizen" style={{ color: "var(--primary)" }}>Login here</a>
+      </div>
     </div>
   );
 }

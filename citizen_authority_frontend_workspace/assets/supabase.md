@@ -11,33 +11,35 @@ Frontend and signup code has correct Supabase Auth logic and calls upsert on `pr
   - Review Supabase dashboard or CLI.  
 - [x] **Check Table Constraints**:
   - Is `email` column nullable or required?
+    - `email` column in `profiles` must be NOT NULL and UNIQUE.
   - Is there a unique key constraint? Are insert failures due to conflict with existing data?
+    - If NOT NULL or UNIQUE constraint is violated, Supabase returns a constraint/violations error.
 - [x] **Profile Upsert in App**:
-  - Frontend code attempts `upsert` on `profiles` after signup (see `SignupCitizenPage.jsx`).
-  - Payload: `{ id: user.id, email, role: 'citizen' }`.
-  - If user object missing (not confirmed yet), only Auth record created.
+  - Frontend and backend must always upsert to `profiles` **after confirming a non-null `user` object with both `id` AND `email`**.
+  - Example canonical payload: `{ id: user.id, email: user.email, role: 'citizen'|'authority' }`
+  - Never allow any insert that omits or sends null/empty for required columns (`id`, `email`, `role`).
+  - If user object missing (not confirmed yet), only Auth record created, **DO NOT insert profile at this point**.
 - [x] **Error Pattern**:
   - If the user is created but profile fails, error shows as "Database error saving new user profile: ...".
   - If upsert is blocked by RLS/constraint, provides error details.
 - [x] **Test Direct Insert on Edge cases**:
-  - Does manual insert via Supabase REST or SQL with a known confirmed user work?
-  - Test confirmed user with no existing profile, and with one present (conflict).
+  - Does manual insert via Supabase REST or SQL with a known confirmed user (with both id and email and matching Auth record) work?
+  - Test confirmed user with no existing profile, and with one present (conflict). **Insert must provide all: `id`, `email`, `role`.**
 - [x] **Key Next Steps**:
   - If RLS is enabled, ensure a policy allows:
     ```sql
-    CREATE POLICY "Users can insert their own profiles"
+    CREATE POLICY "Users can insert or update their own profile"
     ON profiles
-    FOR INSERT USING (auth.uid() = id);
+    FOR INSERT, UPDATE
+    USING (auth.uid() = id);
     ```
-    - Or for upsert:
-    ```sql
-    FOR INSERT, UPDATE USING (auth.uid() = id);
-    ```
-  - If constraints on `email`, ensure newly signed up user provides non-null unique `email`.
-  - Option: Allow unauthenticated inserts **only** for new users at signup, or ensure App always calls `upsert` after Auth signup and email confirmation.
-  - Document test insert SQL for troubleshooting in the Supabase SQL Editor.
+    - This policy is ESSENTIAL and must be enabled for `profiles` or upserts will silently fail with "Database error" or "not permitted."
+  - If constraints on `email`, ensure all upserts include non-null unique `email` at all times. **Do not upsert if `user.email` or `user.id` is missing.**
+  - Only allow insert/upsert after Auth signup has returned the complete user object (i.e., after confirmation).
+  - Document test insert SQL for troubleshooting in the Supabase SQL Editor:
 
 ---
+
 
 ## Common Problems and Solutions Checklist
 

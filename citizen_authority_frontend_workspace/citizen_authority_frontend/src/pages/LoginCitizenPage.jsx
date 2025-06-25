@@ -35,14 +35,14 @@ export default function LoginCitizenPage() {
       .eq('id', user.id)
       .single();
 
-    // 🧩 Step 2: Insert citizen role if missing
-    if (!profileData || profileError?.code === 'PGRST116') {
+    // 🧩 Step 2: Insert citizen role if missing (always provide all required fields)
+    if ((!profileData || profileError?.code === 'PGRST116') && user.id && user.email) {
       const { error: insertError } = await supabase.from('profiles').insert([
-        { id: user.id, role: 'citizen' }
+        { id: user.id, email: user.email, role: 'citizen' }
       ]);
 
       if (insertError) {
-        setError("Failed to insert citizen profile.");
+        setError("Failed to insert citizen profile: " + insertError.message);
         return;
       }
 

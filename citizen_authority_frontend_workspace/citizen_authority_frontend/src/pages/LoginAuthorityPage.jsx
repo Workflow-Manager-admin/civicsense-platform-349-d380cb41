@@ -35,7 +35,31 @@ export default function LoginAuthorityPage() {
       .eq('id', user.id)
       .single();
 
-    if (profileError || !profileData) {
+    // If profile missing, optionally create it (but only if user.email exists and role is clear)
+    if ((!profileData || profileError?.code === 'PGRST116') && user.id && user.email) {
+      // Insert authority profile if completely missing (self-healing for initial migration)
+      const { error: insertProfileError } = await supabase.from('profiles').insert([
+        { id: user.id, email: user.email, role: 'authority' }
+      ]);
+      if (insertProfileError) {
+        setError('Could not create authority profile: ' + insertProfileError.message);
+        return;
+      }
+      // Now re-fetch
+      const { data: refetchedProfile, error: refetchError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+      if (refetchError || !refetchedProfile) {
+        setError('Could not fetch user role after creating profile.');
+        return;
+      }
+      // Assign for downstream logic
+      profileData = refetchedProfile;
+    }
+
+    if (!profileData || !profileData.role) {
       setError('Could not fetch user role from profiles table.');
       return;
     }
