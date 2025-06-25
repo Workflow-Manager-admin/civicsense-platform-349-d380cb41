@@ -8,6 +8,7 @@ export default function SignupCitizenPage() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Defensive: Ensure no upsert occurs unless session, user, and email are all valid
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
@@ -45,7 +46,22 @@ export default function SignupCitizenPage() {
         return;
       }
 
-      // Step 4: Upsert user profile to 'profiles' table
+      // Step 4: Validate upsert only if all required fields
+      if (!user || !user.id || !user.email) {
+        setError("Cannot upsert profile: missing user id or email.");
+        return;
+      }
+      if (!sessionUser || !sessionUser.id) {
+        setError("Cannot upsert profile: missing session or session user id.");
+        return;
+      }
+      // Defensive: Email must not be empty string (schema requires NOT NULL)
+      if (typeof user.email !== 'string' || user.email.trim().length === 0) {
+        setError("Cannot upsert profile: user email is empty.");
+        return;
+      }
+
+      // Step 5: Upsert user profile to 'profiles' table – only after all checks
       const upsertPayload = {
         id: user.id,
         email: user.email, // ✅ This will now be valid
