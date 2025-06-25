@@ -77,6 +77,7 @@ export default function SignupCitizenPage() {
 
       // Defensive upsert - always supply all required fields, and force Accept/application/json if possible:
       const upsertPayload = { id: user.id, email: user.email, role: 'citizen' };
+
       let upsertRes = await supabase
         .from('profiles')
         .upsert(
@@ -84,7 +85,6 @@ export default function SignupCitizenPage() {
           { onConflict: ['id'], returning: 'representation', ignoreDuplicates: false }
         )
         .select('id,email,role');
-
       let profileError = upsertRes.error;
 
       if (upsertRes?.data) {
@@ -94,12 +94,12 @@ export default function SignupCitizenPage() {
         console.error("[DIAG] SignupCitizenPage: Upsert failed with error:", profileError, "Payload:", upsertPayload);
       }
 
-      // If 403/406, inform user with all checklist troubleshooting (session, Accept, RLS policy)
+      // If 403/406 or policy error, inform user fully
       if (profileError && (profileError.status === 406 || profileError.status === 403 || profileError.code === "PGRST116")) {
         setError(
           "Database error saving new user profile (RLS/Permission/Accept): " + profileError.message +
-          "\nChecklist: (1) Are you logged in? (2) Are your profile upserts sending id/email/role? (3) Is RLS policy in Supabase exactly as: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)?\nSee assets/supabase.md.\n" +
-          "Diagnostics:\nsessionUser: " + JSON.stringify(sessionUser) + "\nuser: " + JSON.stringify(user) +
+          "\nChecklist: (1) Are you logged in? (2) Profile upserts must use id/email/role. (3) Is RLS policy in Supabase EXACTLY: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)?\nSee assets/supabase.md for full diagnosis." +
+          "\nDiagnostics:\nsessionUser: " + JSON.stringify(sessionUser) + "\nuser: " + JSON.stringify(user) +
           "\npayload: " + JSON.stringify(upsertPayload)
         );
         return;

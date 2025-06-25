@@ -1,26 +1,41 @@
 import { createClient } from '@supabase/supabase-js';
 
 /**
- * SUPABASE CLIENT INITIALIZATION
- * -------------------------------
- * We use build-time injected environment variables for:
- *   - SUPABASE_URL  : Project URL (should begin with https://)
- *   - SUPABASE_KEY  : Service role key (backend) or anon key (frontend)
- * 
- * During local dev, these are hardcoded. In deployment, use process.env vars or a .env loader at build time.
- * DO NOT expose the service role key in the frontend! Use anon key for client-side use.
- * 
- * If your code breaks after RLS policy updates, see: assets/supabase.md and assets/supabase_applied_rls.sql.
- * 
- * Notes:
- * - The current anon/public API key and the project URL are hardcoded below for development convenience.
- * - Upgrade to loading these from environment variables in production.
- * - All 'profiles' upserts/updates *MUST* include 'id' = user.id to pass RLS policy enforcement.
+ * SUPABASE CLIENT INITIALIZATION (RLS/Profiles Upsert-Ready)
+ *
+ * - Uses project URL and anon PUBLIC KEY for front-end only.
+ * - DO NOT expose service_role key here; ONLY use anon/public API key.
+ * - Set env vars (SUPABASE_URL/SUPABASE_KEY) at build for production; hardcoded for local dev (see below).
+ * - Upserts/inserts to 'profiles' table *must* use { id, email, role }, and 'id' == user.id (from Auth).   *
+ * - See assets/supabase.md for diagnosis if you see any 403/406 errors on upsert/profile APIs.
+ *
+ * -- RLS: The only valid upsert/insert policy for 'profiles' is:
+ *    CREATE POLICY "Users can insert or update their own profile"
+ *      ON profiles FOR INSERT, UPDATE
+ *      USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
  */
-const supabaseUrl = 'https://kwznqztqlvkeoxjzlhkm.supabase.co'; // See .env/Supabase dashboard for the latest
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3em5xenRxbHZrZW94anpsaGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwNzIzMzMsImV4cCI6MjA2NTY0ODMzM30.4SBDmL0SuVsGqQeubAKjVH0lXX5JInlM-f5vg4gFHsk'; // anon/public key ONLY
+/* TODO: Use environment variables for production deployment */
+const supabaseUrl = 'https://kwznqztqlvkeoxjzlhkm.supabase.co'; // Update as needed
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3em5xenRxbHZrZW94anpsaGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwNzIzMzMsImV4cCI6MjA2NTY0ODMzM30.4SBDmL0SuVsGqQeubAKjVH0lXX5JInlM-f5vg4gFHsk'; // ANON key only!
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
-// ↑ Always use anon/public key here. If you see profile upsert/insert errors, check that the client is
-//   initialized with the correct project URL/key and that 'id' = user.id is used for upserting to 'profiles'.
-//   See assets/supabase.md for latest policy and troubleshooting.
+/**
+ * Create the Supabase JS client:
+ * - All requests set Accept: application/json internally.
+ * - If you encounter persistent 406 errors, check Accept header, session, and RLS as per assets/upsert_rls_diagnostics.md
+ */
+export const supabase = createClient(
+  supabaseUrl,
+  supabaseKey,
+  {
+    auth: {
+      persistSession: true
+    },
+    global: {
+      // Defensive for fetch (406-proxy fix): always accept JSON for all endpoints
+      headers: { 'Accept': 'application/json' }
+    }
+  }
+);
+
+// ↑ Always use ANON/public key, and check see-upsert diagnostics if insert fails.
+//   See: assets/supabase.md and assets/upsert_rls_diagnostics.md for full diagnosis instructions.

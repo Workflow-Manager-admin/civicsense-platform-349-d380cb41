@@ -41,26 +41,28 @@ export default function LoginCitizenPage() {
       user.id &&
       user.email
     ) {
+      // Defensive: check session before upsert
       const sessRes = await supabase.auth.getSession();
       const sessionUser = sessRes?.data?.session?.user;
 
-      // Log diagnostic info (output to browser console)
+      // Verbose diagnostic logging for RLS/session edge cases
       console.log("[DIAG] LoginCitizenPage: user object returned by login:", user);
       console.log("[DIAG] LoginCitizenPage: sessionUser from getSession():", sessionUser);
-      console.log("[DIAG] LoginCitizenPage: upsert payload will be:", { id: user.id, email: user.email, role: 'citizen' });
+      const upsertData = { id: user.id, email: user.email, role: 'citizen' };
+      console.log("[DIAG] LoginCitizenPage: upsert payload will be:", upsertData);
 
       if (!sessionUser || sessionUser.id !== user.id) {
         setError(
           "User session not fully established. Please log out and log back in. (sessionUser=" +
-            JSON.stringify(sessionUser) +
-            ", user=" +
-            JSON.stringify(user) +
-            ")"
+          JSON.stringify(sessionUser) +
+          ", user=" +
+          JSON.stringify(user) +
+          ")"
         );
         return;
       }
-      const upsertData = { id: user.id, email: user.email, role: 'citizen' };
 
+      // Strict payload shape (id/email/role and nothing else)
       let upsertRes = await supabase
         .from('profiles')
         .upsert(
@@ -68,44 +70,48 @@ export default function LoginCitizenPage() {
           { onConflict: ['id'], returning: 'representation', ignoreDuplicates: false }
         )
         .select('id,email,role');
+
       let upsertError = upsertRes.error;
 
-      // Log diagnostic info for upsert
+      // Detailed diagnostics for all error cases
       if (upsertRes?.data) {
         console.log("[DIAG] Upsert returned data:", upsertRes.data);
       }
       if (upsertError) {
-        console.error("[DIAG] Upsert failed with error:", upsertError, "Payload:", upsertData);
+        // Print diagnostic block and propagate full error
+        console.error(
+          "[DIAG] Upsert failed with error:",
+          upsertError, "Payload:", upsertData
+        );
       }
 
-      // If 406/403, inform user and point at troubleshooting, and show more detail (with diagnostics)
+      // Catch 406/403 errors, report with troubleshooting context
       if (upsertError && (upsertError.code === 'PGRST116' || upsertError.status === 406 || upsertError.status === 403)) {
         setError(
           "Failed to upsert citizen profile: " +
-            upsertError.message +
-            "\n" +
-            "(See assets/supabase.md for RLS upsert troubleshooting.)\n" +
-            "SessionUser: " + JSON.stringify(sessionUser) + "\n" +
-            "User: " + JSON.stringify(user) + "\n"+
-            "Upsert payload: " + JSON.stringify(upsertData) + "\n" +
-            "Latest RLS policy: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)."
+          upsertError.message +
+          "\n(See assets/supabase.md for RLS upsert troubleshooting.)\n" +
+          "SessionUser: " + JSON.stringify(sessionUser) + "\n" +
+          "User: " + JSON.stringify(user) + "\n" +
+          "Upsert payload: " + JSON.stringify(upsertData) + "\n" +
+          "Latest RLS policy: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)."
         );
         return;
       } else if (upsertError) {
         setError(
           "Failed to upsert citizen profile: " +
-            upsertError.message +
-            "\nUpsert Diagnostics:\nSessionUser: " +
-            JSON.stringify(sessionUser) +
-            "\nUser: " +
-            JSON.stringify(user) +
-            "\nPayload: " +
-            JSON.stringify(upsertData) +
-            "\nSee assets/supabase.md for RLS upsert troubleshooting."
+          upsertError.message +
+          "\nUpsert Diagnostics:\nSessionUser: " +
+          JSON.stringify(sessionUser) +
+          "\nUser: " +
+          JSON.stringify(user) +
+          "\nPayload: " +
+          JSON.stringify(upsertData) +
+          "\nSee assets/supabase.md for RLS upsert troubleshooting."
         );
         return;
       }
-      // Fetch profile *again* using maybeSingle for 100% safe fallback
+      // Fetch profile again defensively with maybeSingle
       const { data: newProfile, error: newFetchError } = await supabase
         .from('profiles')
         .select('role')
@@ -113,7 +119,7 @@ export default function LoginCitizenPage() {
         .maybeSingle();
 
       if (newFetchError || !newProfile) {
-        setError("Unable to retrieve role after upserting.");
+        setError("Unable to retrieve role after upserting (see supabase.md troubleshooting).");
         return;
       }
       profileData = newProfile;
