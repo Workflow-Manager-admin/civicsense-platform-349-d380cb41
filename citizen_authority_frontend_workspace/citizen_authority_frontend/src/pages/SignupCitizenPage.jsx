@@ -57,33 +57,35 @@ export default function SignupCitizenPage() {
     try {
       // ------------- RLS/PROFILE POLICY IMPACT -------------
       // All upserts to 'profiles' MUST supply id=user.id, email, and role.
-      // If this upsert fails with 403/406, try forcing Accept header and double check session.
+      // If this upsert fails with 403/406, check Accept header and double check session.
 
-      // Normal upsert
+      // Defensive: Only do upsert if session is fully valid and user.id present
+      const sessRes = await supabase.auth.getSession();
+      const sessionUser = sessRes?.data?.session?.user;
+      if (!sessionUser || sessionUser.id !== user.id) {
+        setError(
+          "User session not fully established. Please log out, confirm your email, and log back in to complete registration."
+        );
+        return;
+      }
+
+      // Defensive upsert - always supply all required fields, and force Accept/application/json if possible:
       let upsertRes = await supabase
         .from('profiles')
         .upsert(
           [{ id: user.id, email: user.email, role: 'citizen' }],
-          { onConflict: ['id'] }
-        );
-      let profileError = upsertRes.error;
+          { onConflict: ['id'], returning: 'representation', ignoreDuplicates: false }
+        )
+        .select('id,email,role');
 
-      // If 403/406 error, try fallback upsert pattern
+      let profileError = upsertRes.error;
+      // If 403/406, inform user with all checklist troubleshooting (session, Accept, RLS policy)
       if (profileError && (profileError.status === 406 || profileError.status === 403 || profileError.code === "PGRST116")) {
-        try {
-          const { data: manualRes, error: manualErr } = await supabase
-            .from('profiles')
-            .upsert([{ id: user.id, email: user.email, role: 'citizen' }],
-                  { onConflict: ['id'], returning: 'representation', ignoreDuplicates: false })
-            .select('id,email,role');
-          if (manualErr) throw manualErr;
-        } catch (manualError) {
-          setError(
-            "Database error saving new user profile (manual fallback): " + manualError.message +
-            "\nCheck you are logged in, and that profile upserts include both id/email/role. RLS may need to be checked in Supabase – see assets/supabase.md."
-          );
-          return;
-        }
+        setError(
+          "Database error saving new user profile (RLS/Permission/Accept): " + profileError.message +
+          "\nChecklist: (1) Are you logged in? (2) Are your profile upserts sending id/email/role? (3) Is RLS policy in Supabase exactly as: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)?\nSee assets/supabase.md."
+        );
+        return;
       } else if (profileError) {
         setError(
           "Database error saving new user profile: " + profileError.message +

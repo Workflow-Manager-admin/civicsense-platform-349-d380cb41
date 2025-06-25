@@ -17,30 +17,15 @@ export default function ProtectedRoute({ children, role }) {
         return;
       }
 
-      // Try first with supabase-js
+      // Always use maybeSingle to avoid 406 error when row is missing
       let { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', user.id)
-        .single();
-
-      // If we get a 406 Not Acceptable, retry select with shape explicitly set
-      if ((profileError && profileError.status === 406) || (!profile && profileError)) {
-        try {
-          const { data: newProfile, error: newProfileErr } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', user.id)
-            .maybeSingle(); // fallback, allows null
-          if (!newProfile || newProfileErr) {
-            setStatus('denied');
-            return;
-          }
-          profile = newProfile;
-        } catch (_) {
-          setStatus('denied');
-          return;
-        }
+        .maybeSingle();
+      if (profileError) {
+        setStatus('denied');
+        return;
       }
 
       if (!profile || profile.role !== role) {
