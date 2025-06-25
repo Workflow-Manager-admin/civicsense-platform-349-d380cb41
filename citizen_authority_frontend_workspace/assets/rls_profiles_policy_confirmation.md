@@ -1,6 +1,6 @@
 # ✅ CivicSense: 'profiles' Table RLS Policy State Confirmation
 
-**Profiles table 'Row Level Security' (RLS) policies are now fully compliant and minimal for user upsert flows.**
+**Profiles table 'Row Level Security' (RLS) policies are now fully compliant and minimal for user upsert flows. All redundant INSERT and UPDATE policies have been removed, and only the correct policy remains.**
 
 ---
 
