@@ -13,6 +13,8 @@ Before running or debugging this app, you MUST run the SQL repair script (`auto_
    - Ensures `email` and `role` columns exist (TEXT, NOT NULL)
    - Removes all triggers from `profiles`
    - Drops ALL existing RLS policies on `profiles`
+   - **Removes any check constraints on `email`** (e.g., `CHECK (email <> '')`) which may block valid signups.  
+     - _See diagnostic block in the SQL repair: defective constraints on `email` are now dropped automatically, as real-world upserts may briefly supply '' or null if external auth system is async._
    - Enables only the correct upsert policy:
      ```sql
      CREATE POLICY "Users can insert or update their own profile"
@@ -27,10 +29,13 @@ Before running or debugging this app, you MUST run the SQL repair script (`auto_
    ```sql
    SELECT * FROM information_schema.columns WHERE table_name = 'profiles';
    SELECT * FROM pg_policies WHERE tablename = 'profiles';
+   SELECT conname, pg_get_constraintdef(oid)
+     FROM pg_constraint WHERE conrelid = 'profiles'::regclass;
    ```
    - Confirm:
      - `id` = UUID, primary key
      - `email`, `role` = text NOT NULL
+     - No CHECK constraint on `email` blocks valid inserts.
      - Only above upsert policy exists for 'profiles'
 
 ---

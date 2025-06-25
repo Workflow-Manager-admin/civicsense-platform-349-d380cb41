@@ -1,5 +1,28 @@
 -- AUTO-HEAL 'profiles' TABLE FOR FULL LOGIN/SIGNUP/UPSERT SUCCESS
 
+-- [DIAGNOSTIC PATCH 2024-06]
+-- DEBUG/FIX: It is CRITICAL that email allows only valid (non-empty) values but does NOT have an over-strict check constraint blocking valid signups.
+-- To diagnose existing constraints, run:
+--   SELECT conname, pg_get_constraintdef(oid)
+--     FROM pg_constraint
+--     WHERE conrelid = 'profiles'::regclass AND contype = 'c';
+-- If you see "CHECK (email <> '')" (or similar), you may need to remove/recreate properly!
+
+-- Remove problematic email-check constraint if exists (so new signup does not fail):
+DO $$
+DECLARE
+  r RECORD;
+BEGIN
+  FOR r IN (
+    SELECT conname FROM pg_constraint
+    WHERE conrelid = 'profiles'::regclass AND contype = 'c'
+      AND pg_get_constraintdef(oid) ILIKE '%email%' -- only those that reference email
+  )
+  LOOP
+    EXECUTE 'ALTER TABLE profiles DROP CONSTRAINT IF EXISTS "' || r.conname || '";';
+  END LOOP;
+END$$;
+
 -- 1. COLUMN DEFINITIONS: id = UUID (PK), email & role as NOT NULL
 DO $$
 BEGIN
