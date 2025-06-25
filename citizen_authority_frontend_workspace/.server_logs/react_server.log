@@ -21,7 +21,7 @@ modules by path ./.ve/ 15.1 KiB
   modules by path ./.ve/*.js 10.6 KiB 2 modules
   modules by path ./.ve/*.css 2.93 KiB 2 modules
   ./.ve/EditorOverlay.jsx 1.58 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 2361 ms
+webpack 5.99.9 compiled successfully in 2092 ms
 Injecting EditorRootWrapper import: ../.ve/EditorRootWrapper
 assets by status 2.43 MiB [cached] 1 asset
 asset index.html 1.98 KiB [emitted]
@@ -39,22 +39,4 @@ javascript modules 96 KiB
     ./.ve/EditorRootWrapper.js 2.68 KiB [built]
     ./.ve/EditorOverlay.jsx 1.58 KiB [built]
     ./.ve/SidePanel.js 7.93 KiB [built]
-webpack 5.99.9 compiled successfully in 518 ms
-Injecting EditorRootWrapper import: ../.ve/EditorRootWrapper
-assets by status 2.43 MiB [cached] 1 asset
-asset index.html 1.98 KiB [emitted]
-cached modules 1.98 MiB (javascript) 28.7 KiB (runtime) [cached] 172 modules
-javascript modules 96 KiB
-  modules by path ./src/ 83.8 KiB
-    modules by path ./src/pages/*.jsx 73 KiB 8 modules
-    modules by path ./src/components/*.jsx 4.52 KiB
-      ./src/components/ProtectedRoute.jsx 1.49 KiB [built]
-      ./src/components/Navbar.jsx 3.03 KiB [built]
-    ./src/index.js 530 bytes [built]
-    ./src/App.jsx 3.98 KiB [built]
-    ./src/supabase/supabaseClient.js 1.84 KiB [built]
-  modules by path ./.ve/ 12.2 KiB
-    ./.ve/EditorRootWrapper.js 2.68 KiB [built]
-    ./.ve/EditorOverlay.jsx 1.58 KiB [built]
-    ./.ve/SidePanel.js 7.93 KiB [built]
-webpack 5.99.9 compiled successfully in 320 ms
+webpack 5.99.9 compiled successfully in 342 ms
