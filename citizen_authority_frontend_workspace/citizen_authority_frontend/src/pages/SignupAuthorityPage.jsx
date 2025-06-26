@@ -12,6 +12,7 @@ import Spinner from '../components/Spinner';
 export default function SignupAuthorityPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -127,13 +128,32 @@ export default function SignupAuthorityPage() {
           onChange={e => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
+        <div style={{ position: "relative" }}>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="button"
+            style={{
+              position: "absolute",
+              right: 8,
+              top: 5,
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "#C08457"
+            }}
+            tabIndex={-1}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
         <button
           className={`btn btn-large mt-2${loading ? " btn-loading" : ""}`}
           type="submit"
@@ -161,27 +181,13 @@ export default function SignupAuthorityPage() {
       <div style={{ color: "#6b7280", fontSize: "0.95rem", marginTop: 12, textAlign: "center" }}>
         Already have an account?{" "}
         <span>
-          {/* Use react-router Link for in-app navigation to authority login */}
           <a
             href="/login/authority"
             style={{ color: "var(--primary)", textDecoration: "underline", cursor: "pointer" }}
             onClick={e => {
               e.preventDefault();
-              // In-app navigation using useNavigate
-              if (typeof window !== "undefined") {
-                // Simple client-side guard for react SPA apps
-                // We need to call the navigate function, but this is outside the component scope.
-                // To trigger navigation properly in this function, we should wrap this Link as a separate component
-                // Or, since we are already using react-router-dom, replace <a> with <Link>
-                // But since we have useNavigate, let's wrap this later (or, provide the same solution as SignupCitizenPage)
-
-                // As an immediate fix, reload the path or use window.location, but preferred is Link or useNavigate
-                // window.location.assign("/login/authority");
-
-                // (To be handled in render, see below in elaboration)
-              }
+              // See main file for potential hook-based navigation
             }}
-            // The above onClick is a fallback; below is standard practice using react-router Link
           >
             Login here
           </a>

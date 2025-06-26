@@ -7,6 +7,7 @@ import Spinner from '../components/Spinner';
 export default function LoginAuthorityPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -35,25 +36,19 @@ export default function LoginAuthorityPage() {
         return;
       }
 
-      // ✅ Always fetch the profile role (with maybeSingle for RLS 406/empty)
       let { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', user.id)
         .maybeSingle();
 
-      // If profile missing, self-heal/create profile – strict on session, payload, and diagnostics
       if (
         (!profileData || profileError?.code === 'PGRST116' || profileError?.status === 406 || profileError?.status === 403)
         && user.id && user.email
       ) {
-        // Defensive: session must be valid and match this user
         const sessRes = await supabase.auth.getSession();
         const sessionUser = sessRes?.data?.session?.user;
-        console.log("[DIAG] LoginAuthorityPage: user object is", user);
-        console.log("[DIAG] LoginAuthorityPage: sessionUser is", sessionUser);
         const payload = { id: user.id, email: user.email, role: 'authority' };
-        console.log("[DIAG] LoginAuthorityPage: authority profile insert payload:", payload);
 
         if (!sessionUser || sessionUser.id !== user.id) {
           setError(
@@ -67,8 +62,6 @@ export default function LoginAuthorityPage() {
           return;
         }
 
-        // Use upsert instead of insert to allow role switching, or correcting prior state
-        // (This ensures if the user was created accidentally as a citizen, logging in via authority will upsert to authority.)
         const { data: upsertProfileData, error: upsertProfileError } = await supabase
           .from('profiles')
           .upsert([payload], { onConflict: ['id'], returning: 'representation' });
@@ -83,10 +76,6 @@ export default function LoginAuthorityPage() {
           setLoading(false);
           return;
         }
-        if (upsertProfileData) {
-          console.log("[DIAG] LoginAuthorityPage: Profile upsert returned data:", upsertProfileData);
-        }
-        // Re-fetch profile with maybeSingle
         const { data: refetchedProfile, error: refetchError } = await supabase
           .from('profiles')
           .select('role')
@@ -106,12 +95,10 @@ export default function LoginAuthorityPage() {
         return;
       }
 
-      // ✅ Optional: log login
       await supabase.from('logins').insert([
         { user_id: user.id, role: profileData.role }
       ]);
 
-      // ✅ Redirect based on role
       setLoading(false);
       if (profileData.role === 'authority') {
         navigate('/dashboard');
@@ -133,7 +120,6 @@ export default function LoginAuthorityPage() {
         {error && (
           <>
             <p className="text-red-600 error-message">{error}</p>
-            {/* Additional contextual hint for unconfirmed email */}
             <div
               style={{
                 color: "#b85c38",
@@ -169,13 +155,32 @@ export default function LoginAuthorityPage() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div style={{ position: "relative" }}>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="button"
+            style={{
+              position: "absolute",
+              right: 8,
+              top: 5,
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "#C08457"
+            }}
+            tabIndex={-1}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
         <button
           className={`btn btn-large mt-2${loading ? " btn-loading" : ""}`}
           type="submit"
@@ -183,7 +188,6 @@ export default function LoginAuthorityPage() {
           aria-busy={loading}
           style={{ position: "relative", width: "100%" }}
         >
-          {/* Spinner must be centered and visible with proper color in loading state */}
           {loading ? (
             <span className="btn-spinner" style={{
               position: "absolute",

@@ -8,6 +8,7 @@ import Spinner from '../components/Spinner';
 export default function SignupCitizenPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ export default function SignupCitizenPage() {
       // Step 5: Upsert user profile to 'profiles' table – only after all checks
       const upsertPayload = {
         id: user.id,
-        email: user.email, // ✅ This will now be valid
+        email: user.email, 
         role: 'citizen',
       };
 
@@ -125,15 +126,34 @@ export default function SignupCitizenPage() {
           required
           autoComplete="email"
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-          minLength={6}
-          autoComplete="new-password"
-        />
+        <div style={{ position: "relative" }}>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            minLength={6}
+            autoComplete="new-password"
+          />
+          <button
+            type="button"
+            style={{
+              position: "absolute",
+              right: 8,
+              top: 5,
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "#C08457"
+            }}
+            tabIndex={-1}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
         <button
           className={`btn btn-large mt-2${loading ? " btn-loading" : ""}`}
           type="submit"
@@ -159,8 +179,7 @@ export default function SignupCitizenPage() {
         </button>
       </form>
       <div style={{ color: "#6b7280", fontSize: "0.95rem", marginTop: 12 }}>
-        Already have an account? <span style={{}}>
-          {/* Use react-router Link for in-app navigation */}
+        Already have an account? <span>
           <a
             href="/login/citizen"
             style={{ color: "var(--primary)", textDecoration: "underline", cursor: "pointer" }}

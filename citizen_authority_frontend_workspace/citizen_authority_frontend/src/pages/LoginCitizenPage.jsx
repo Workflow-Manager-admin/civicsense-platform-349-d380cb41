@@ -6,6 +6,7 @@ import Spinner from '../components/Spinner';
 export default function LoginCitizenPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -40,21 +41,15 @@ export default function LoginCitizenPage() {
         .eq('id', user.id)
         .maybeSingle();
 
-      // Defensive: Only attempt upsert if profile missing, and after checking (re-)logged in user session
       if (
         (!profileData || profileError?.code === 'PGRST116' || profileError?.status === 406 || profileError?.status === 403) &&
         user.id &&
         user.email
       ) {
-        // Defensive: check session before upsert
         const sessRes = await supabase.auth.getSession();
         const sessionUser = sessRes?.data?.session?.user;
 
-        // Verbose diagnostic logging for RLS/session edge cases
-        console.log("[DIAG] LoginCitizenPage: user object returned by login:", user);
-        console.log("[DIAG] LoginCitizenPage: sessionUser from getSession():", sessionUser);
         const upsertData = { id: user.id, email: user.email, role: 'citizen' };
-        console.log("[DIAG] LoginCitizenPage: upsert payload will be:", upsertData);
 
         if (!sessionUser || sessionUser.id !== user.id) {
           setError(
@@ -68,7 +63,6 @@ export default function LoginCitizenPage() {
           return;
         }
 
-        // Strict payload shape (id/email/role and nothing else)
         let upsertRes = await supabase
           .from('profiles')
           .upsert(
@@ -79,19 +73,6 @@ export default function LoginCitizenPage() {
 
         let upsertError = upsertRes.error;
 
-        // Detailed diagnostics for all error cases
-        if (upsertRes?.data) {
-          console.log("[DIAG] Upsert returned data:", upsertRes.data);
-        }
-        if (upsertError) {
-          // Print diagnostic block and propagate full error
-          console.error(
-            "[DIAG] Upsert failed with error:",
-            upsertError, "Payload:", upsertData
-          );
-        }
-
-        // Catch 406/403 errors, report with troubleshooting context
         if (upsertError && (upsertError.code === 'PGRST116' || upsertError.status === 406 || upsertError.status === 403)) {
           setError(
             "Failed to upsert citizen profile: " +
@@ -119,7 +100,6 @@ export default function LoginCitizenPage() {
           setLoading(false);
           return;
         }
-        // Fetch profile again defensively with maybeSingle
         const { data: newProfile, error: newFetchError } = await supabase
           .from('profiles')
           .select('role')
@@ -166,13 +146,32 @@ export default function LoginCitizenPage() {
           onChange={e => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
+        <div style={{ position: "relative" }}>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="button"
+            style={{
+              position: "absolute",
+              right: 8,
+              top: 5,
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "#C08457"
+            }}
+            tabIndex={-1}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
         <button
           className={`btn btn-large mt-2${loading ? " btn-loading" : ""}`}
           type="submit"
@@ -180,7 +179,6 @@ export default function LoginCitizenPage() {
           aria-busy={loading}
           style={{ position: "relative", width: "100%" }}
         >
-          {/* Ensure Spinner is visible, centered, and color matches button text */}
           {loading ? (
             <span className="btn-spinner" style={{
               position: "absolute",
