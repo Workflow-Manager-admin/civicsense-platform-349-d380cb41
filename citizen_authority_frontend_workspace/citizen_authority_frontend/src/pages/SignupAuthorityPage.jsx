@@ -1,94 +1,82 @@
+/* src/pages/SignupAuthorityPage.jsx */
 import { useState } from 'react';
 import { supabase } from '../supabase/supabaseClient';
 import { useNavigate, Link } from 'react-router-dom';
 
-/**
- * Signup page for authority users. After successful signup and upon valid session,
- * upserts user profile into the 'profiles' table with role: 'authority', matching schema.
- * Only affects authority signup; does not impact citizen flow.
- */
 import Spinner from '../components/Spinner';
+import PasswordInput from '../components/PasswordInput';
 
+/**
+ * Sign-up page for **Authority** users.
+ * After a successful sign-up (and an active session) it upserts a row in
+ * the `profiles` table with `role: 'authority'`.
+ */
 export default function SignupAuthorityPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // PUBLIC_INTERFACE
-  /** Handle signup as authority, and upsert profiles row with role: 'authority' after session is established. */
+  const navigate = useNavigate();
+
+  // ---------------------------------------------------------------------------
+  // Handle sign-up
+  // ---------------------------------------------------------------------------
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    // 1. Register user via Supabase Auth, redirect to login after email confirmation
     const { data: signupData, error: signupError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: 'http://localhost:3000/login/authority', // after confirmation
-      }
+        emailRedirectTo: 'http://localhost:3000/login/authority',
+      },
     });
 
     if (signupError) {
-      setError("Database error saving new user: " + signupError.message);
+      setError(`Signup error: ${signupError.message}`);
       setLoading(false);
       return;
     }
 
     const user = signupData?.user;
 
-    // 2. If email not confirmed/session not yet available, prompt to confirm email and stop
+    // No confirmed e-mail yet → tell the user, then send them to login
     if (!user?.id || !user?.email) {
-      alert('Signup successful! Please check your email to confirm your account before logging in.');
+      alert('Signup successful! Please confirm your email, then log in.');
       setLoading(false);
       navigate('/login/authority');
       return;
     }
 
     try {
-      // 3. Wait/check for the session to be active (after confirmation)
       const { data: sessionData } = await supabase.auth.getSession();
       const sessionUser = sessionData?.session?.user;
 
       if (!sessionUser || sessionUser.id !== user.id) {
-        setError("Session not active. Please confirm your email, then log in.");
+        setError('Session not active. Please confirm your email, then log in.');
         setLoading(false);
         return;
       }
 
-      // 4. Defensive schema checks
-      if (!user || !user.id || !user.email) {
-        setError("Cannot upsert authority profile: missing user id or email.");
-        setLoading(false);
-        return;
-      }
-      if (!sessionUser || !sessionUser.id) {
-        setError("Cannot upsert authority profile: missing session or session user id.");
-        setLoading(false);
-        return;
-      }
-      if (typeof user.email !== 'string' || user.email.trim().length === 0) {
-        setError("Cannot upsert authority profile: user email is empty.");
+      // ─────────────────────────────────────────────────────────────────────────
+      // Defensive checks
+      // ─────────────────────────────────────────────────────────────────────────
+      if (!user.email?.trim()) {
+        setError('Cannot upsert profile: user email is empty.');
         setLoading(false);
         return;
       }
 
-      // 5. Upsert profile in 'profiles' table with role: 'authority'
-      const upsertPayload = {
-        id: user.id,
-        email: user.email,
-        role: 'authority', // guaranteed lower-case, as per schema/policy
-      };
-
+      // Upsert profile row
       const { error: profileError } = await supabase
         .from('profiles')
-        .upsert([upsertPayload], {
-          onConflict: ['id'],
-          returning: 'representation',
-        });
+        .upsert(
+          [{ id: user.id, email: user.email, role: 'authority' }],
+          { onConflict: ['id'], returning: 'representation' },
+        );
 
       if (profileError) {
         const rlsHint =
@@ -97,96 +85,108 @@ export default function SignupAuthorityPage() {
           profileError.status === 406;
 
         setError(
-          "Database error saving new authority profile: " + profileError.message +
-          (rlsHint
-            ? "\nCheck your RLS policy: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)"
-            : "")
+          `Database error saving profile: ${profileError.message}${
+            rlsHint
+              ? '\nCheck your RLS policy: USING (auth.uid() = id) WITH CHECK (auth.uid() = id)'
+              : ''
+          }`,
         );
         setLoading(false);
         return;
       }
 
-      alert("Signup successful! Please confirm your email and log in as Authority.");
+      alert('Signup successful! Please confirm your email, then log in.');
       setLoading(false);
       navigate('/login/authority');
     } catch (err) {
-      setError("Unexpected error: " + (err.message || err));
+      setError(`Unexpected error: ${err.message || err}`);
       setLoading(false);
     }
   };
 
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
   return (
-    <div className="container" style={{ maxWidth: "440px", margin: "50px auto", paddingTop: "64px" }}>
+    <div
+      className="container"
+      style={{ maxWidth: 440, margin: '50px auto', paddingTop: 64 }}
+    >
       <form className="card-bg" onSubmit={handleSignup}>
-        <h2 className="text-xl font-bold mb-2" style={{ color: "var(--primary)" }}>Sign Up as Authority</h2>
+        <h2
+          className="text-xl font-bold mb-2"
+          style={{ color: 'var(--primary)' }}
+        >
+          Sign Up as Authority
+        </h2>
+
         {error && <p className="text-red-600 error-message">{error}</p>}
+
         <input
           type="email"
           placeholder="Email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           required
+          autoComplete="email"
         />
-        <input
-          type="password"
-          placeholder="Password"
+
+        <PasswordInput
           value={password}
           onChange={e => setPassword(e.target.value)}
+          placeholder="Password"
           required
+          minLength={6}
+          autoComplete="new-password"
         />
+
         <button
-          className={`btn btn-large mt-2${loading ? " btn-loading" : ""}`}
           type="submit"
+          className={`btn btn-large mt-2${loading ? ' btn-loading' : ''}`}
           disabled={loading}
           aria-busy={loading}
-          style={{ position: "relative", width: "100%" }}
+          style={{ position: 'relative', width: '100%' }}
         >
           {loading ? (
-            <span className="btn-spinner" style={{
-              position: "absolute",
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}>
+            <span
+              className="btn-spinner"
+              style={{
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               <Spinner size={22} inline color="#A8D5BA" />
             </span>
           ) : (
-            "Sign Up"
+            'Sign Up'
           )}
         </button>
       </form>
-      <div style={{ color: "#6b7280", fontSize: "0.95rem", marginTop: 12, textAlign: "center" }}>
-        Already have an account?{" "}
-        <span>
-          {/* Use react-router Link for in-app navigation to authority login */}
-          <a
-            href="/login/authority"
-            style={{ color: "var(--primary)", textDecoration: "underline", cursor: "pointer" }}
-            onClick={e => {
-              e.preventDefault();
-              // In-app navigation using useNavigate
-              if (typeof window !== "undefined") {
-                // Simple client-side guard for react SPA apps
-                // We need to call the navigate function, but this is outside the component scope.
-                // To trigger navigation properly in this function, we should wrap this Link as a separate component
-                // Or, since we are already using react-router-dom, replace <a> with <Link>
-                // But since we have useNavigate, let's wrap this later (or, provide the same solution as SignupCitizenPage)
 
-                // As an immediate fix, reload the path or use window.location, but preferred is Link or useNavigate
-                // window.location.assign("/login/authority");
-
-                // (To be handled in render, see below in elaboration)
-              }
-            }}
-            // The above onClick is a fallback; below is standard practice using react-router Link
-          >
-            Login here
-          </a>
-        </span>
-      </div>
+      {/* ─────────────────────────────────────────────────────────────────────── */}
+      {/* Already-have-account link → Authority login (SPA navigation)           */}
+      {/* ─────────────────────────────────────────────────────────────────────── */}
+      <p
+        style={{
+          color: '#6b7280',
+          fontSize: '0.95rem',
+          marginTop: 12,
+          textAlign: 'center',
+        }}
+      >
+        Already have an account?{' '}
+        <Link
+          to="/login/authority"  /* change to "/login/citizen" if desired */
+          style={{ color: 'var(--primary)', textDecoration: 'underline' }}
+        >
+          Login here
+        </Link>
+      </p>
     </div>
   );
 }

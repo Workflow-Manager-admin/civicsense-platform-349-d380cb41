@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { supabase } from '../supabase/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
+import PasswordInput from '../components/PasswordInput';
 
 export default function LoginCitizenPage() {
   const [email, setEmail] = useState('');
@@ -166,11 +167,10 @@ export default function LoginCitizenPage() {
           onChange={e => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Password"
+        <PasswordInput
           value={password}
           onChange={e => setPassword(e.target.value)}
+          placeholder="Password"
           required
         />
         <button

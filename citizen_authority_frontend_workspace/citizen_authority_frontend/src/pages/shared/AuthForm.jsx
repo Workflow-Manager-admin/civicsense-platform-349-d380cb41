@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../supabase/supabaseClient';
+import PasswordInput from '../../components/PasswordInput';
 
 //import { supabase } from '../supabase/supabaseclient';
 
@@ -49,12 +50,11 @@ export default function AuthForm({ role, type }) {
           required
           placeholder="Email"
         />
-        <input
-          type="password"
+        <PasswordInput
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          onChange={e => setPassword(e.target.value)}
           placeholder="Password"
+          required
         />
         <button type="submit" className="btn btn-large mt-2">{type === 'signup' ? 'Sign Up' : 'Login'}</button>
       </form>
