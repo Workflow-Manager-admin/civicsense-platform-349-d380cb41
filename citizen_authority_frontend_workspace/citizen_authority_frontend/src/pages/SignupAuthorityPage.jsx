@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../supabase/supabaseClient';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 /**
  * Signup page for authority users. After successful signup and upon valid session,
