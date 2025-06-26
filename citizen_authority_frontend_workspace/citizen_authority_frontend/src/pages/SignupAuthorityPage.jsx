@@ -8,6 +8,7 @@ import { useNavigate, Link } from 'react-router-dom';
  * Only affects authority signup; does not impact citizen flow.
  */
 import Spinner from '../components/Spinner';
+import PasswordInput from '../components/PasswordInput';
 
 export default function SignupAuthorityPage() {
   const [email, setEmail] = useState('');

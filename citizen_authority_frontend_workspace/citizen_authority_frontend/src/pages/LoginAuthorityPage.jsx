@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase/supabaseClient';
 import ResendConfirmationEmail from "../components/ResendConfirmationEmail";
 import Spinner from '../components/Spinner';
+import PasswordInput from '../components/PasswordInput';
 
 export default function LoginAuthorityPage() {
   const [email, setEmail] = useState('');
@@ -169,11 +170,10 @@ export default function LoginAuthorityPage() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Password"
+        <PasswordInput
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={setPassword}
+          placeholder="Password"
           required
         />
         <button

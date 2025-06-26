@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ResendConfirmationEmail from "../components/ResendConfirmationEmail";
 
 import Spinner from '../components/Spinner';
+import PasswordInput from '../components/PasswordInput';
 
 export default function SignupCitizenPage() {
   const [email, setEmail] = useState('');
@@ -125,11 +126,10 @@ export default function SignupCitizenPage() {
           required
           autoComplete="email"
         />
-        <input
-          type="password"
-          placeholder="Password"
+        <PasswordInput
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={setPassword}
+          placeholder="Password"
           required
           minLength={6}
           autoComplete="new-password"
