@@ -127,14 +127,35 @@ async def soft_delete_issue(issue_id: str, user: str = "citizen"):
 @router.patch(
     "/{issue_id}/delete_by_authority",
     status_code=204,
-    summary="Soft-delete an issue (authority)"
+    summary="Soft-delete an issue (authority)",
+    tags=["Issues"],
+    operation_id="softDeleteIssueAuthority"
 )
 async def authority_delete_issue(
     issue_id: str, authority: bool = Depends(authority_required)
 ):
     """
-    Sets 'isDeleted' to true and deletedBy='authority' for the specified issue.
-    Only for authorized authority users.
+    Authority soft-deletes an issue.
+
+    This endpoint marks the issue as deleted by setting 'isDeleted' to True and
+    'deletedBy' to 'authority' instead of deleting the record.
+
+    Use this for authority-driven deletions so that these issues will appear in
+    the authority's "Deleted Issues" view instead of being hard-deleted.
+
+    PATCH /issues/{issue_id}/delete_by_authority
+
+    Args:
+        issue_id (str): The unique identifier of the issue to soft-delete.
+        authority (bool): Dependency indicating user has authority role. (auth placeholder)
+
+    Returns:
+        No content on success. Raises 403 if not authority.
+
+    Notes:
+        - This is a PATCH (not DELETE) endpoint.
+        - Soft deletion is implemented by updating the Supabase issue record.
+        - Affected record will be queryable by isDeleted=true and deletedBy=authority.
     """
     if not authority:
         raise HTTPException(status_code=403, detail="Not authorized.")
