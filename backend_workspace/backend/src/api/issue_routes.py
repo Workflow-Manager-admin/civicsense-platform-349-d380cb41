@@ -31,17 +31,25 @@ async def fetch_issues_from_supabase(
         "Content-Type": "application/json"
     }
     params = {}
-    if is_deleted is True:
-        params["isDeleted"] = "eq.true"
-    elif is_deleted is False:
-        params["isDeleted"] = "eq.false"
+
+    # Always include all relevant query params (null disables filter), make explicit for clarity
+    if is_deleted is not None:
+        params["isDeleted"] = f"eq.{str(is_deleted).lower()}"
     if deleted_by is not None:
+        # Do not send eq.None (should be omitted from query)
         params["deletedBy"] = f"eq.{deleted_by}"
+
+    # For debugging, print params (real deployment should remove)
+    # print("fetch_issues_from_supabase params:", params)
+
     full_url = f"{url}/rest/v1/{ISSUES_TABLE}"
     async with httpx.AsyncClient() as client:
         resp = await client.get(full_url, headers=headers, params=params)
         if resp.status_code != 200:
-            raise HTTPException(status_code=500, detail="Failed to fetch issues.")
+            raise HTTPException(status_code=500, detail=f"Failed to fetch issues: {resp.text}")
+        # Defensive: log response for debug if needed
+        # print("fetch_issues_from_supabase response:", resp.json())
+        # Convert missing fields to None where necessary
         return [Issue(**item) for item in resp.json()]
 
 
@@ -101,8 +109,9 @@ async def list_issues(
         issues = await fetch_issues_from_supabase(is_deleted=False)
     return IssueListResponse(issues=issues)
 
-
 # PUBLIC_INTERFACE
+
+
 @router.patch("/{issue_id}/delete", status_code=204, summary="Soft-delete an issue (citizen)")
 async def soft_delete_issue(issue_id: str, user: str = "citizen"):
     """
@@ -159,4 +168,3 @@ async def list_deleted_issues(
         )
     issues = await fetch_issues_from_supabase(is_deleted=True, deleted_by=deleted_by)
     return IssueListResponse(issues=issues)
-
