@@ -60,11 +60,12 @@ export default function AuthorityDashboardPage() {
       setDeleting("");
       return;
     } else {
-      setIssues((curr) => curr.filter(x => x.id !== id)); // Immediate update
+      // Instead of only local filter, always fetch current issues
       setSnackbar({ open: true, msg: "Issue deleted successfully." });
       setSuccess("");
       setError("");
       setDeleting("");
+      await fetchIssues();
     }
   };
 
