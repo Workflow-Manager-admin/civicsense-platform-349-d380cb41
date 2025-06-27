@@ -11,11 +11,21 @@ router = APIRouter(prefix="/issues", tags=["Issues"])
 
 
 def get_supabase_params():
-    """Fetch Supabase URL and KEY from environment variables."""
+    """Fetch Supabase URL and KEY from environment variables.
+    Returns:
+        (url, key): tuple of (str, str)
+    Raises:
+        HTTPException: If either is not set, for API clarity.
+    """
     url = os.getenv("SUPABASE_URL")
     key = os.getenv("SUPABASE_KEY")
     if not url or not key:
-        raise RuntimeError("Supabase configuration missing in environment variables.")
+        # Return recognizable FastAPI error for diagnostic
+        raise HTTPException(
+            status_code=500,
+            detail="SUPABASE_URL or SUPABASE_KEY is missing from environment. "
+                   "Please set these variables for backend API access."
+        )
     return url, key
 
 
