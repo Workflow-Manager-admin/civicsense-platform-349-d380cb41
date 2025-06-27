@@ -19,3 +19,9 @@ ALTER TABLE issues ADD COLUMN IF NOT EXISTS is_deleted BOOLEAN NOT NULL DEFAULT 
 - SUPABASE_DB_URL: connection string (not used for REST API, but available)
 
 This configuration enables soft delete for issues and ensures all compliant endpoints.
+
+> **Note:** As of now, automated migrations via the agent/API are not possible due to missing `run_sql` RPC permissions on this Supabase instance. Please run the below SQL manually in the Supabase SQL Editor if the migration has not already been applied:
+>
+> ```sql
+> ALTER TABLE issues ADD COLUMN IF NOT EXISTS is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
+> ```
