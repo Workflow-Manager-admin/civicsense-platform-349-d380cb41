@@ -2,6 +2,7 @@
   "name": "react-kavia",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@supabase/supabase-js": "^2.50.0",
     "axios": "^1.10.0",
