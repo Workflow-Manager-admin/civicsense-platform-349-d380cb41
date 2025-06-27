@@ -36,6 +36,39 @@ SELECT * FROM pg_policies WHERE tablename = 'profiles';
 There should be only one INSERT/UPDATE policy present for 'profiles':
 - **"Users can insert or update their own profile"** with `USING (auth.uid() = id)` and `WITH CHECK (auth.uid() = id)`
 
+---
+
+##  🗑️ Enabling Authority Issue Deletion (Soft-Delete) with RLS for `issues` Table
+
+If your authority dashboard shows a "Failed to delete the issue" error, check for a missing UPDATE policy:
+
+**Apply this policy in Supabase SQL Editor:**
+```sql
+CREATE POLICY "Authorities can update all issues for soft-delete"
+  ON issues
+  FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles p
+      WHERE p.id = auth.uid() AND p.role = 'authority'
+    )
+  );
+```
+
+Then, verify with:
+```sql
+SELECT * FROM pg_policies WHERE tablename = 'issues';
+```
+**UPDATE** must be listed for authorities.
+
+If you still see errors, ensure:
+- Your logged-in authority user has a matching profile row (id = auth.uid(), role = 'authority')
+- The `issues` table has both `deleted` (boolean) and `deleted_at` (timestamp) columns. Otherwise, add them:
+  ```sql
+  ALTER TABLE issues ADD COLUMN IF NOT EXISTS deleted boolean DEFAULT false;
+  ALTER TABLE issues ADD COLUMN IF NOT EXISTS deleted_at timestamp;
+  ```
+
 ### ⚠️ Best Practices
 
 - DOUBLE-QUOTES for names with spaces: `"Users can insert or update their own profile"`

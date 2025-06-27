@@ -24,6 +24,17 @@ CREATE POLICY "Authorities can view all issues"
     )
   );
 
+-- Policy: Allow authority users to update (soft-delete) any issue
+CREATE POLICY "Authorities can update all issues for soft-delete"
+  ON issues
+  FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles p
+      WHERE p.id = auth.uid() AND p.role = 'authority'
+    )
+  );
+
 -- (Optional) Citizens can see their own issues only:
 -- CREATE POLICY "Citizens can view their own issues"
 --   ON issues
