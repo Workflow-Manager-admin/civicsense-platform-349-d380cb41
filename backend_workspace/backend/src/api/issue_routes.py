@@ -60,13 +60,31 @@ async def fetch_issues_from_supabase(
                 )
             issues_json = resp.json()
             # Diagnostics for parsing:
+            # Patch each record for missing optional fields for robust deserialization
+            patched_issues_json = []
+            for item in issues_json:
+                # Required: id, title, created_at, reported_by, isDeleted
+                missing = []
+                for req_field in ["id", "title", "created_at", "reported_by", "isDeleted"]:
+                    if req_field not in item:
+                        missing.append(req_field)
+                if missing:
+                    raise HTTPException(
+                        status_code=500,
+                        detail=f"Supabase record missing required fields {missing}: {item}"
+                    )
+                # Optional fields to patch: description, updated_at, location, deletedBy
+                for field in ["description", "updated_at", "location", "deletedBy"]:
+                    if field not in item:
+                        item[field] = None
+                patched_issues_json.append(item)
             try:
-                parsed = [Issue(**item) for item in issues_json]
+                parsed = [Issue(**item) for item in patched_issues_json]
             except Exception as parse_err:
                 raise HTTPException(
                     status_code=500,
                     detail=f"Error deserializing issues from Supabase. Parse error: {str(parse_err)}. "
-                           f"Raw JSON: {issues_json}"
+                           f"Patched JSON: {patched_issues_json}"
                 )
             return parsed
     except HTTPException as e:
