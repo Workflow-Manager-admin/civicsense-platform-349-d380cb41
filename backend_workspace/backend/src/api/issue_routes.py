@@ -149,22 +149,19 @@ async def authority_delete_issue(
     summary="[Authority] List deleted issues by authority",
 )
 async def list_deleted_issues(
-    authority: bool = Depends(authority_required),
-    deleted_by: Optional[str] = Query(
-        "authority",
-        description=(
-            "Filter deleted issues by deleter (e.g., 'authority' or 'citizen'). "
-            "Defaults to 'authority'."
-        ),
-    ),
+    authority: bool = Depends(authority_required)
 ):
     """
-    Lists all issues where isDeleted is true *and* deletedBy matches the filter
-    ('authority' by default). Only available to authorities.
+    Lists all issues where isDeleted is true AND deletedBy is 'authority'.
+    Only available to authorities.
+
+    Returns:
+        IssueListResponse: Issues deleted by authorities.
     """
     if not authority:
         raise HTTPException(
             status_code=403, detail="Not authorized to see deleted issues."
         )
-    issues = await fetch_issues_from_supabase(is_deleted=True, deleted_by=deleted_by)
+    # Always filter for isDeleted=True and deletedBy='authority' per new schema
+    issues = await fetch_issues_from_supabase(is_deleted=True, deleted_by="authority")
     return IssueListResponse(issues=issues)
