@@ -36,4 +36,11 @@ def insert_test_issue():
 
 
 if __name__ == "__main__":
+    # Help debugging: print API key info
+    if not SUPABASE_KEY:
+        print("ERROR: SUPABASE_KEY is not set in environment!")
+    else:
+        print("SUPABASE_KEY loaded, length:", len(SUPABASE_KEY))
+    if not SUPABASE_URL:
+        print("ERROR: SUPABASE_URL is not set in environment!")
     insert_test_issue()
