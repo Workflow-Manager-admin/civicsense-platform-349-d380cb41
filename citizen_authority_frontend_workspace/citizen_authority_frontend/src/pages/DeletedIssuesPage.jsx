@@ -22,16 +22,51 @@ const DeletedIssuesPage = () => {
     const fetchDeletedIssues = async () => {
       setLoading(true);
       setError("");
+      const fetchUrl = "/issues/deleted"; // You may need to change this to full URL if proxied or deployed elsewhere
+      let errorDetails = {
+        url: fetchUrl,
+        status: null,
+        statusText: null,
+        errorBody: null,
+        exception: null,
+      };
+
       try {
-        // Change URL to match backend endpoint: '/issues/deleted'
-        const response = await fetch("/issues/deleted", {
+        // Log the actual fetch URL for developer awareness
+        console.log(`[DeletedIssuesPage] Fetching deleted issues from: ${fetchUrl}`);
+
+        const response = await fetch(fetchUrl, {
           method: "GET",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
         });
+        
         if (!response.ok) {
-          throw new Error(`Failed to fetch deleted issues. Status ${response.status}`);
+          errorDetails.status = response.status;
+          errorDetails.statusText = response.statusText;
+
+          // Try to get detail from backend (text OR JSON)
+          let backendDetail;
+          try {
+            // Some backends return error text, not JSON, on 404/500
+            backendDetail = await response.text();
+            // Try to parse as JSON, but fallback to plain text
+            try {
+              const jsonMaybe = JSON.parse(backendDetail);
+              backendDetail = JSON.stringify(jsonMaybe, null, 2);
+            } catch (jsonErr) {
+              // It's plain text; just show as is
+            }
+          } catch (errText) {
+            backendDetail = `[Failed to read response text: ${String(errText)}]`;
+          }
+          errorDetails.errorBody = backendDetail;
+
+          throw new Error(
+            `Failed to fetch deleted issues.\nStatus ${response.status} ${response.statusText}\n${backendDetail}`
+          );
         }
+
         // Accept both array and object response (e.g. { issues: [...] } or [...])
         const data = await response.json();
         setRawPayload(data);
@@ -67,10 +102,22 @@ const DeletedIssuesPage = () => {
         }
       } catch (error) {
         setDeletedIssues([]);
+        // Try to show as much diagnostic as possible
+        errorDetails.exception = error && error.stack ? error.stack : String(error);
         setError(
-          "Error fetching deleted issues: " +
-            (error && error.message ? error.message : String(error))
+          "Error fetching deleted issues.\n" +
+            `Fetch URL: ${errorDetails.url}\n` +
+            (errorDetails.status !== null
+              ? `Status: ${errorDetails.status} ${errorDetails.statusText}\n`
+              : "") +
+            (errorDetails.errorBody
+              ? `Backend error/detail: ${errorDetails.errorBody}\n`
+              : "") +
+            `Exception details: ${errorDetails.exception}\n` +
+            "Please retry and provide this output to your developer or API backend maintainer."
         );
+        setRawPayload(null); // Hide previous payload on fetch error
+        console.error("DeletedIssuesPage debug diagnostic:", errorDetails);
       } finally {
         setLoading(false);
       }
@@ -93,9 +140,20 @@ const DeletedIssuesPage = () => {
         </div>
       ) : (
         <div>
-          <p style={{ color: "var(--error)", fontWeight: 600 }}>
+          <p style={{ color: "var(--error)", fontWeight: 600, whiteSpace: "pre-wrap" }}>
             {error || "No authority-deleted issues found."}
           </p>
+          <div style={{
+            margin: "12px 0 10px 0",
+            color: "#444",
+            background: "#F4F4FA",
+            border: "1px solid #EBE6EE",
+            borderRadius: 6,
+            padding: 8,
+            fontSize: "0.98rem"
+          }}>
+            <strong>🩺 If you see detailed info below, copy it and share with your backend/API maintainer!</strong>
+          </div>
           <details style={{
             marginTop: 8,
             fontFamily: "monospace",
@@ -105,14 +163,24 @@ const DeletedIssuesPage = () => {
             borderRadius: 6,
             padding: 10
           }}>
-            <summary>Show API backend response for debugging</summary>
+            <summary>Show API backend response & diagnostics</summary>
             <pre
               style={{ overflowX: "auto", fontSize: "0.97rem" }}
-              aria-label="Raw backend response"
+              aria-label="Raw backend response or diagnostic"
             >
-              {JSON.stringify(rawPayload, null, 2)}
+              {rawPayload
+                ? JSON.stringify(rawPayload, null, 2)
+                : "No backend payload. See error above for details.\n"}
             </pre>
           </details>
+          <div style={{ marginTop: 16, color: "#2947a1", fontSize: "0.98rem" }}>
+            <b>What to try:</b>
+            <ol style={{ margin: "6px 0 6px 21px" }}>
+              <li>Check the fetch URL and backend error shown above.</li>
+              <li>Ensure the backend is running, and that the endpoint matches exactly.</li>
+              <li>Retry or reload. If the issue persists, send the above diagnostics to your developer.</li>
+            </ol>
+          </div>
         </div>
       )}
     </div>
