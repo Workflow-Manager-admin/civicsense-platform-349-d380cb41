@@ -3,12 +3,15 @@ import { supabase } from "../supabase/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
 
 /**
- * Page for authorities to view all issues where isDeleted is true.
+ * Page for authorities to view all issues deleted by authority (not citizens).
  * Allows authorities to review deleted issues with clear visual distinction.
  *
  * PUBLIC_INTERFACE
+ *
+ * Props:
+ *   - userRole (string): e.g., "authority" or "citizen".
  */
-export default function DeletedIssuesPage() {
+export default function DeletedIssuesPage({ userRole }) {
   const [deletedIssues, setDeletedIssues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -16,17 +19,25 @@ export default function DeletedIssuesPage() {
 
   // PUBLIC_INTERFACE
   /**
-   * Fetches all deleted issues (isDeleted === true) from Supabase.
+   * Fetches deleted issues (isDeleted === true) from Supabase,
+   * filtered to only those deleted by an authority for authority users.
    */
   useEffect(() => {
     const fetchDeletedIssues = async () => {
       setLoading(true);
       setError("");
-      const { data, error } = await supabase
+
+      let query = supabase
         .from("issues")
         .select("*")
-        .eq("isDeleted", true)
-        .order("created_at", { ascending: false });
+        .eq("isDeleted", true);
+
+      if (userRole === "authority") {
+        // Only show issues deleted by authorities
+        query = query.eq("deletedBy", "authority");
+      }
+
+      const { data, error } = await query.order("created_at", { ascending: false });
 
       if (error) {
         setError("Could not fetch deleted issues.");
@@ -38,7 +49,7 @@ export default function DeletedIssuesPage() {
     };
 
     fetchDeletedIssues();
-  }, []);
+  }, [userRole]);
 
   return (
     <div
@@ -73,7 +84,9 @@ export default function DeletedIssuesPage() {
           className="mb-2"
           style={{ color: "var(--text-secondary)", fontSize: "1.05rem", fontWeight: 500 }}
         >
-          All issues marked as deleted are shown below. These are not visible to citizens and cannot be edited.
+          {userRole === "authority"
+            ? "Issues shown below were deleted by an authority. These are not visible to citizens and cannot be edited."
+            : "All issues marked as deleted are shown below. These are not visible to citizens and cannot be edited."}
         </p>
         <button
           className="btn"
