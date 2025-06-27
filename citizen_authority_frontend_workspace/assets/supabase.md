@@ -1,5 +1,22 @@
 # Supabase Integration & Diagnosis Log
 
+---
+
+## [2024-06-25] Attempted Programmatic Schema Update for Soft-Delete in 'issues' Table
+
+- **Context**: Per frontend/authority dashboard requirements and this file, schema migration was attempted to add:
+  - `deleted_by_authority BOOLEAN DEFAULT NULL`
+  - `deleted_at TIMESTAMPTZ DEFAULT NULL`
+- **Automated Attempt**: Automated schema tools could not run due to missing `public.run_sql` Postgres RPC in current Supabase project.
+- **ACTION REQUIRED**: If running initial deployment/migration, run the following in Supabase SQL Editor:
+  ```sql
+  ALTER TABLE issues ADD COLUMN IF NOT EXISTS deleted_by_authority boolean;
+  ALTER TABLE issues ADD COLUMN IF NOT EXISTS deleted_at timestamptz;
+  ```
+- Once complete, the frontend will be able to (soft-)delete issues and filter by these fields for the Authority Dashboard.
+
+---
+
 ## 🛡️ Fix for RLS Upsert Violation: Enabling Profile Upserts for Authenticated Users
 
 If you see:
