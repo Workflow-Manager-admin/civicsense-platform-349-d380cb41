@@ -50,9 +50,10 @@ export default function AuthorityDashboardPage() {
     setError("");
     setSuccess("");
 
+    // Soft delete: set deleted=true, deleted_at=now()
     const { error } = await supabase
       .from("issues")
-      .delete()
+      .update({ deleted: true, deleted_at: new Date().toISOString() })
       .eq("id", id);
 
     if (error) {
@@ -61,7 +62,7 @@ export default function AuthorityDashboardPage() {
       return;
     } else {
       // Instead of only local filter, always fetch current issues
-      setSnackbar({ open: true, msg: "Issue deleted successfully." });
+      setSnackbar({ open: true, msg: "Issue deleted successfully (moved to deleted)." });
       setSuccess("");
       setError("");
       setDeleting("");
@@ -86,17 +87,36 @@ export default function AuthorityDashboardPage() {
       aria-label="Authority Dashboard"
     >
       <div className="card-bg" role="region" aria-labelledby="dashboard-heading" tabIndex={0}>
-        <h2
-          id="dashboard-heading"
-          className="text-2xl font-bold mb-4"
-          style={{
-            color: "var(--primary)",
-            fontFamily: "Inter, Segoe UI, Arial, sans-serif",
-            letterSpacing: "0.01em"
-          }}
-        >
-          All Reported Issues
-        </h2>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 8 }}>
+          <h2
+            id="dashboard-heading"
+            className="text-2xl font-bold mb-4"
+            style={{
+              color: "var(--primary)",
+              fontFamily: "Inter, Segoe UI, Arial, sans-serif",
+              letterSpacing: "0.01em"
+            }}
+          >
+            All Reported Issues
+          </h2>
+          <Link
+            to="/deleted-issues"
+            className="btn"
+            style={{
+              background: "var(--error)",
+              color: "var(--background)",
+              fontWeight: 700,
+              border: "2px solid var(--border-color)",
+              fontSize: "1.02rem",
+              borderRadius: 10,
+              padding: "9px 18px",
+              textDecoration: "none"
+            }}
+            aria-label="View deleted issues"
+          >
+            View Deleted Issues
+          </Link>
+        </div>
         {error && (
           <p className="text-red-600" role="alert">
             {error}

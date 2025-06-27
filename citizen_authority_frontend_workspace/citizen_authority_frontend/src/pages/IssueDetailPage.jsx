@@ -14,6 +14,7 @@ export default function IssueDetailPage() {
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const [deleting, setDeleting] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   useEffect(() => {
     const fetchIssue = async () => {
@@ -29,6 +30,7 @@ export default function IssueDetailPage() {
       } else {
         setIssue(data);
         setPriority(data.priority || '');
+        setIsDeleted(data.deleted === true || !!data.deleted_at);
         generateSummaryAndReply(data.description);
       }
 
@@ -104,16 +106,17 @@ export default function IssueDetailPage() {
     setError('');
     setSuccess('');
 
+    // Soft delete: set deleted=true, deleted_at=now()
     const { error } = await supabase
       .from('issues')
-      .delete()
+      .update({ deleted: true, deleted_at: new Date().toISOString() })
       .eq('id', id);
 
     if (error) {
       setError("Failed to delete issue.");
       setDeleting(false);
     } else {
-      setSuccess("Issue deleted successfully.");
+      setSuccess("Issue deleted successfully (moved to deleted).");
       setTimeout(() => {
         navigate('/dashboard');
       }, 1200); // delay for user to read message
@@ -127,6 +130,20 @@ export default function IssueDetailPage() {
     <div className="container" style={{ maxWidth: "800px", margin: "40px auto", paddingTop: "24px" }}>
       <div className="card-bg" style={{ background: "#f8f5fc" }}>
         <h2 className="text-xl font-bold mb-2" style={{ color: "var(--primary)", marginBottom: "18px" }}>{issue.title}</h2>
+
+        {isDeleted && (
+          <div style={{
+            background: "var(--error)",
+            color: "var(--background)",
+            padding: "11px 14px",
+            borderRadius: 9,
+            fontWeight: 700,
+            fontSize: "1.1rem",
+            marginBottom: 14
+          }}>
+            <span role="img" aria-label="Deleted">🗑️</span> This issue is deleted (soft-deleted).
+          </div>
+        )}
 
         {error && (
           <p className="text-red-600 error-message" style={{ marginBottom: 10 }}>{error}</p>

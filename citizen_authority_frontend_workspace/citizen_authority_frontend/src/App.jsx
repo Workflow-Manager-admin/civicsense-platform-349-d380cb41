@@ -6,6 +6,7 @@ import SignupAuthorityPage from './pages/SignupAuthorityPage';
 import LoginAuthorityPage from './pages/LoginAuthorityPage';
 import IssueFormPage from './pages/IssueFormPage';
 import AuthorityDashboardPage from './pages/AuthorityDashboardPage';
+import DeletedIssuesPage from './pages/DeletedIssuesPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import IssueDetailPage from './pages/IssueDetailPage';
@@ -32,6 +33,7 @@ function AppContent() {
         <Route path="/login/authority" element={<LoginAuthorityPage />} />
         <Route path="/issue-form" element={<ProtectedRoute role="citizen"><IssueFormPage /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute role="authority"><AuthorityDashboardPage /></ProtectedRoute>} />
+        <Route path="/deleted-issues" element={<ProtectedRoute role="authority"><DeletedIssuesPage /></ProtectedRoute>} />
         <Route path="/issue/:id" element={<ProtectedRoute role="authority"><IssueDetailPage /></ProtectedRoute>} />
         {/* Catch-all for client-side 404: renders HomePage or a NotFound component */}
         <Route path="*" element={<HomePage />} />
