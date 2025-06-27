@@ -33,27 +33,50 @@ async def fetch_issues_from_supabase(
     is_deleted: Optional[bool] = None,
     deleted_by: Optional[str] = None
 ) -> List[Issue]:
-    """Fetch issues from Supabase table."""
-    url, key = get_supabase_params()
-    headers = {
-        "apikey": key,
-        "Authorization": f"Bearer {key}",
-        "Content-Type": "application/json"
-    }
-    params = {}
+    """Fetch issues from Supabase table (added robust diagnostics for error tracing)."""
+    try:
+        url, key = get_supabase_params()
+        headers = {
+            "apikey": key,
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json"
+        }
+        params = {}
 
-    # Always include all relevant query params (null disables filter), make explicit for clarity
-    if is_deleted is not None:
-        params["isDeleted"] = f"eq.{str(is_deleted).lower()}"
-    if deleted_by is not None:
-        params["deletedBy"] = f"eq.{deleted_by}"
+        # Always include all relevant query params (null disables filter), make explicit for clarity
+        if is_deleted is not None:
+            params["isDeleted"] = f"eq.{str(is_deleted).lower()}"
+        if deleted_by is not None:
+            params["deletedBy"] = f"eq.{deleted_by}"
 
-    full_url = f"{url}/rest/v1/{ISSUES_TABLE}"
-    async with httpx.AsyncClient() as client:
-        resp = await client.get(full_url, headers=headers, params=params)
-        if resp.status_code != 200:
-            raise HTTPException(status_code=500, detail=f"Failed to fetch issues: {resp.text}")
-        return [Issue(**item) for item in resp.json()]
+        full_url = f"{url}/rest/v1/{ISSUES_TABLE}"
+        async with httpx.AsyncClient() as client:
+            resp = await client.get(full_url, headers=headers, params=params)
+            if resp.status_code != 200:
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Failed to fetch issues: {resp.text}. "
+                           f"URL: {full_url}, Params: {params}, Headers: apikey shown? {'apikey' in headers}"
+                )
+            issues_json = resp.json()
+            # Diagnostics for parsing:
+            try:
+                parsed = [Issue(**item) for item in issues_json]
+            except Exception as parse_err:
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Error deserializing issues from Supabase. Parse error: {str(parse_err)}. "
+                           f"Raw JSON: {issues_json}"
+                )
+            return parsed
+    except HTTPException as e:
+        # Bubble up with extra context
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Unhandled backend error in fetch_issues_from_supabase: {str(e)}"
+        )
 
 
 async def update_issue_isdeleted(issue_id: str, deleted_by: str = "citizen") -> None:
@@ -191,10 +214,16 @@ async def list_deleted_issues(
         raise HTTPException(
             status_code=403, detail="Not authorized to see deleted issues."
         )
-    issues = await fetch_issues_from_supabase(is_deleted=True, deleted_by="authority")
-    strict_filtered = [
-        issue for issue in issues
-        if getattr(issue, "isDeleted", False)
-        and (getattr(issue, "deletedBy", None) == "authority")
-    ]
-    return IssueListResponse(issues=strict_filtered)
+    try:
+        issues = await fetch_issues_from_supabase(is_deleted=True, deleted_by="authority")
+        strict_filtered = [
+            issue for issue in issues
+            if getattr(issue, "isDeleted", False)
+            and (getattr(issue, "deletedBy", None) == "authority")
+        ]
+        return IssueListResponse(issues=strict_filtered)
+    except HTTPException as e:
+        # Pass through but add more trace context for frontend/devs
+        raise HTTPException(status_code=e.status_code, detail=f"/issues/deleted error: {e.detail}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in /issues/deleted: {str(e)}")
