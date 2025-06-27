@@ -144,7 +144,7 @@ export default function AuthorityDashboardPage() {
                 <th scope="col">Name</th>
                 <th scope="col">Address</th>
                 <th scope="col">Category</th>
-                <th scope="col">Action</th>
+                <th scope="col">View</th>
                 <th scope="col">Delete</th>
               </tr>
             </thead>
@@ -158,10 +158,11 @@ export default function AuthorityDashboardPage() {
                     <Link
                       to={`/issue/${issue.id}`}
                       className="btn btn-cta"
-                      aria-label={`View Details for issue titled ${issue.title}`}
+                      aria-label={`View details for issue titled ${issue.title}`}
+                      title="View this issue"
                       style={{
-                        padding: "7px 20px",
-                        fontSize: "1.08rem",
+                        padding: "7px 16px",
+                        fontSize: "1.06rem",
                         borderRadius: "12px",
                         background: "var(--success)",
                         color: "var(--background)",
@@ -170,12 +171,17 @@ export default function AuthorityDashboardPage() {
                         boxShadow: "0 2px 10px 0px #A3B18A55",
                         outline: "2px solid transparent",
                         outlineOffset: "2px",
-                        border: "2px solid var(--border-color)"
+                        border: "2px solid var(--border-color)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        justifyContent: "center",
+                        minWidth: "82px"
                       }}
                       onFocus={e => (e.target.style.outline = "2.5px solid var(--success)")}
                       onBlur={e => (e.target.style.outline = "2px solid transparent")}
                     >
-                      View Details
+                      <span role="img" aria-label="View" style={{fontSize:"1.15em"}}>👁️</span> View
                     </Link>
                   </td>
                   <td>
@@ -188,16 +194,25 @@ export default function AuthorityDashboardPage() {
                         outline: "2px solid transparent",
                         outlineOffset: "2px",
                         border: "2px solid var(--border-color)",
-                        padding: "7px 16px",
+                        padding: "7px 13px",
                         borderRadius: "12px",
                         marginLeft: "4px",
                         opacity: deleting === issue.id ? 0.65 : 1,
-                        cursor: deleting === issue.id ? "not-allowed" : "pointer"
+                        cursor: deleting === issue.id ? "not-allowed" : "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        minWidth: "80px",
+                        justifyContent: "center"
                       }}
                       aria-label={`Delete issue titled ${issue.title}`}
+                      title="Delete this issue"
                       onClick={() => handleDelete(issue.id)}
                       disabled={deleting === issue.id}
+                      onFocus={e => (e.target.style.outline = "2.5px solid var(--error)")}
+                      onBlur={e => (e.target.style.outline = "2px solid transparent")}
                     >
+                      <span role="img" aria-label="Delete" style={{fontSize:"1.18em"}}>🗑️</span>
                       {deleting === issue.id ? "Deleting..." : "Delete"}
                     </button>
                   </td>

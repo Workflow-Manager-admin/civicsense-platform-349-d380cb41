@@ -23,14 +23,34 @@ modules by path ./.ve/ 15.1 KiB
     ./.ve/EditorOverlay.css 2.25 KiB [built] [code generated]
     ./node_modules/css-loader/dist/cjs.js!./.ve/EditorOverlay.css 697 bytes [built] [code generated]
   ./.ve/EditorOverlay.jsx 1.58 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 2135 ms
+webpack 5.99.9 compiled successfully in 2055 ms
 assets by status 1.98 KiB [cached] 1 asset
 assets by path *.js 2.46 MiB
   asset bundle.js 2.45 MiB [emitted] (name: main)
-  asset main.6c2626044a45d6a43d0c.hot-update.js 13.2 KiB [emitted] [immutable] [hmr] (name: main)
-asset main.6c2626044a45d6a43d0c.hot-update.json 28 bytes [emitted] [immutable] [hmr]
-Entrypoint main 2.46 MiB = bundle.js 2.45 MiB main.6c2626044a45d6a43d0c.hot-update.js 13.2 KiB
+  asset main.a399bfbf568a0b082a54.hot-update.js 13.2 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.a399bfbf568a0b082a54.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.46 MiB = bundle.js 2.45 MiB main.a399bfbf568a0b082a54.hot-update.js 13.2 KiB
 cached modules 2.08 MiB [cached] 174 modules
 runtime modules 28.7 KiB 15 modules
 ./src/pages/AuthorityDashboardPage.jsx 9.05 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 205 ms
+webpack 5.99.9 compiled successfully in 204 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 2.46 MiB
+  asset bundle.js 2.45 MiB [emitted] (name: main)
+  asset main.a9e59376af502aa85c86.hot-update.js 13.8 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.a9e59376af502aa85c86.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.46 MiB = bundle.js 2.45 MiB main.a9e59376af502aa85c86.hot-update.js 13.8 KiB
+cached modules 2.08 MiB [cached] 174 modules
+runtime modules 28.7 KiB 15 modules
+./src/pages/AuthorityDashboardPage.jsx 9.6 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 99 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 2.47 MiB
+  asset bundle.js 2.45 MiB [emitted] (name: main)
+  asset main.8ba73d86f8952c799eda.hot-update.js 14.6 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.8ba73d86f8952c799eda.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.47 MiB = bundle.js 2.45 MiB main.8ba73d86f8952c799eda.hot-update.js 14.6 KiB
+cached modules 2.08 MiB [cached] 174 modules
+runtime modules 28.7 KiB 15 modules
+./src/pages/AuthorityDashboardPage.jsx 10.3 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 104 ms
