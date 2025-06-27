@@ -27,23 +27,42 @@ export default function DeletedIssuesPage({ userRole }) {
       setLoading(true);
       setError("");
 
-      let query = supabase
-        .from("issues")
-        .select("*")
-        .eq("isDeleted", true);
+      let issuesData = [];
+      let fetchError = null;
 
       if (userRole === "authority") {
-        // Only show issues deleted by authorities
-        query = query.eq("deletedBy", "authority");
+        // Fetch from backend REST API to ensure filter, RLS and authority-only access
+        try {
+          const resp = await fetch("/api/issues/deleted");
+          if (!resp.ok) {
+            throw new Error("Backend responded with error");
+          }
+          const out = await resp.json();
+          issuesData = out.issues || [];
+        } catch (err) {
+          fetchError = "Could not fetch deleted issues.";
+        }
+      } else {
+        // Citizens: fallback to Supabase direct query
+        let query = supabase
+          .from("issues")
+          .select("*")
+          .eq("isDeleted", true);
+
+        const { data, error } = await query.order("created_at", { ascending: false });
+        if (error) {
+          fetchError = "Could not fetch deleted issues.";
+          issuesData = [];
+        } else {
+          issuesData = data || [];
+        }
       }
 
-      const { data, error } = await query.order("created_at", { ascending: false });
-
-      if (error) {
-        setError("Could not fetch deleted issues.");
+      if (fetchError) {
+        setError(fetchError);
         setDeletedIssues([]);
       } else {
-        setDeletedIssues(data || []);
+        setDeletedIssues(issuesData);
       }
       setLoading(false);
     };
