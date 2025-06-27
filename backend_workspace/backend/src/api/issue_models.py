@@ -14,6 +14,13 @@ class Issue(BaseModel):
     location: Optional[str] = Field(None, description="Geo-location string or coordinates")
     reported_by: str = Field(..., description="User id of citizen who reported")
     isDeleted: bool = Field(False, description="Whether this issue has been deleted (soft deleted)")
+    deletedBy: Optional[str] = Field(
+        None,
+        description=(
+            "Indicates who deleted the issue (e.g. 'authority', "
+            "'citizen') if deleted"
+        ),
+    )
     # Add more fields as per the overall schema (category, priority, etc.), if needed.
 
 

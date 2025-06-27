@@ -19,7 +19,10 @@ def get_supabase_params():
     return url, key
 
 
-async def fetch_issues_from_supabase(is_deleted: Optional[bool] = None) -> List[Issue]:
+async def fetch_issues_from_supabase(
+    is_deleted: Optional[bool] = None,
+    deleted_by: Optional[str] = None
+) -> List[Issue]:
     """Fetch issues from Supabase table."""
     url, key = get_supabase_params()
     headers = {
@@ -32,6 +35,8 @@ async def fetch_issues_from_supabase(is_deleted: Optional[bool] = None) -> List[
         params["isDeleted"] = "eq.true"
     elif is_deleted is False:
         params["isDeleted"] = "eq.false"
+    if deleted_by is not None:
+        params["deletedBy"] = f"eq.{deleted_by}"
     full_url = f"{url}/rest/v1/{ISSUES_TABLE}"
     async with httpx.AsyncClient() as client:
         resp = await client.get(full_url, headers=headers, params=params)
@@ -40,8 +45,8 @@ async def fetch_issues_from_supabase(is_deleted: Optional[bool] = None) -> List[
         return [Issue(**item) for item in resp.json()]
 
 
-async def update_issue_isdeleted(issue_id: str) -> None:
-    """Soft-delete an issue: sets isDeleted = true in Supabase."""
+async def update_issue_isdeleted(issue_id: str, deleted_by: str = "citizen") -> None:
+    """Soft-delete an issue: sets isDeleted = true in Supabase, records who deleted it."""
     url, key = get_supabase_params()
     full_url = f"{url}/rest/v1/{ISSUES_TABLE}?id=eq.{issue_id}"
     headers = {
@@ -50,7 +55,11 @@ async def update_issue_isdeleted(issue_id: str) -> None:
         "Content-Type": "application/json",
         "Prefer": "return=minimal"
     }
-    data = {"isDeleted": True, "updated_at": datetime.utcnow().isoformat()}
+    data = {
+        "isDeleted": True,
+        "deletedBy": deleted_by,
+        "updated_at": datetime.utcnow().isoformat()
+    }
     async with httpx.AsyncClient() as client:
         resp = await client.patch(full_url, headers=headers, json=data)
         if resp.status_code not in (200, 204):
@@ -84,7 +93,9 @@ async def list_issues(
     """
     if include_deleted:
         if not authority:
-            raise HTTPException(status_code=403, detail="Not authorized to see deleted issues.")
+            raise HTTPException(
+                status_code=403, detail="Not authorized to see deleted issues."
+            )
         issues = await fetch_issues_from_supabase(is_deleted=True)
     else:
         issues = await fetch_issues_from_supabase(is_deleted=False)
@@ -92,14 +103,33 @@ async def list_issues(
 
 
 # PUBLIC_INTERFACE
-@router.patch("/{issue_id}/delete", status_code=204, summary="Soft-delete an issue")
+@router.patch("/{issue_id}/delete", status_code=204, summary="Soft-delete an issue (citizen)")
 async def soft_delete_issue(issue_id: str, user: str = "citizen"):
     """
     Sets 'isDeleted' to true for the specified issue (soft delete).
-    Only allowed by the user who reported this issue or admin.
+    Used when deletion is by the user who reported this issue or admin.
     """
     # TODO: Add user authorization logic, replace 'user'
-    await update_issue_isdeleted(issue_id)
+    await update_issue_isdeleted(issue_id, deleted_by="citizen")
+    return
+
+
+# PUBLIC_INTERFACE
+@router.patch(
+    "/{issue_id}/delete_by_authority",
+    status_code=204,
+    summary="Soft-delete an issue (authority)"
+)
+async def authority_delete_issue(
+    issue_id: str, authority: bool = Depends(authority_required)
+):
+    """
+    Sets 'isDeleted' to true and deletedBy='authority' for the specified issue.
+    Only for authorized authority users.
+    """
+    if not authority:
+        raise HTTPException(status_code=403, detail="Not authorized.")
+    await update_issue_isdeleted(issue_id, deleted_by="authority")
     return
 
 
@@ -107,14 +137,26 @@ async def soft_delete_issue(issue_id: str, user: str = "citizen"):
 @router.get(
     "/deleted",
     response_model=IssueListResponse,
-    summary="[Authority] List all deleted issues"
+    summary="[Authority] List deleted issues by authority",
 )
-async def list_deleted_issues(authority: bool = Depends(authority_required)):
+async def list_deleted_issues(
+    authority: bool = Depends(authority_required),
+    deleted_by: Optional[str] = Query(
+        "authority",
+        description=(
+            "Filter deleted issues by deleter (e.g., 'authority' or 'citizen'). "
+            "Defaults to 'authority'."
+        ),
+    ),
+):
     """
-    Lists all issues where isDeleted is true (deleted issues).
-    Only available to authorities.
+    Lists all issues where isDeleted is true *and* deletedBy matches the filter
+    ('authority' by default). Only available to authorities.
     """
     if not authority:
-        raise HTTPException(status_code=403, detail="Not authorized to see deleted issues.")
-    issues = await fetch_issues_from_supabase(is_deleted=True)
+        raise HTTPException(
+            status_code=403, detail="Not authorized to see deleted issues."
+        )
+    issues = await fetch_issues_from_supabase(is_deleted=True, deleted_by=deleted_by)
     return IssueListResponse(issues=issues)
+
