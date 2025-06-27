@@ -162,6 +162,12 @@ async def list_deleted_issues(
         raise HTTPException(
             status_code=403, detail="Not authorized to see deleted issues."
         )
-    # Always filter for isDeleted=True and deletedBy='authority' per new schema
+    # Defensive extra: filter client-side as well to catch DB logic mismatch
     issues = await fetch_issues_from_supabase(is_deleted=True, deleted_by="authority")
-    return IssueListResponse(issues=issues)
+    # In case the DB or query doesn't filter strictly enough, filter here
+    strict_filtered = [
+        issue for issue in issues
+        if getattr(issue, "isDeleted", False)
+        and getattr(issue, "deletedBy", None) == "authority"
+    ]
+    return IssueListResponse(issues=strict_filtered)
