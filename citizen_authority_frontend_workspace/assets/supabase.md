@@ -40,10 +40,39 @@ There should be only one INSERT/UPDATE policy present for 'profiles':
 
 ##  🗑️ Enabling Authority Issue Deletion (Soft-Delete) with RLS for `issues` Table
 
-If your authority dashboard shows a "Failed to delete the issue" error, check for a missing UPDATE policy:
+**[MANUAL STEP REQUIRED]**
 
-**Apply this policy in Supabase SQL Editor:**
+Due to current Supabase permissions, apply the following SQL manually using the Supabase SQL Editor as an admin. This enables soft-delete for authority users by granting the UPDATE RLS policy:
+
+**Step 1: Enable RLS and Remove Conflicting Policies**
+
 ```sql
+ALTER TABLE issues ENABLE ROW LEVEL SECURITY;
+
+DO $$
+DECLARE 
+    pol RECORD;
+BEGIN
+    FOR pol IN SELECT policyname FROM pg_policies WHERE tablename = 'issues' AND cmd = 'select'
+    LOOP
+        EXECUTE 'DROP POLICY IF EXISTS \"' || pol.policyname || '\" ON issues;';
+    END LOOP;
+END$$;
+```
+
+**Step 2: Add/Replace Policy for Authorities**
+
+```sql
+CREATE POLICY "Authorities can view all issues"
+  ON issues
+  FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM profiles p
+      WHERE p.id = auth.uid() AND p.role = 'authority'
+    )
+  );
+
 CREATE POLICY "Authorities can update all issues for soft-delete"
   ON issues
   FOR UPDATE
@@ -56,10 +85,11 @@ CREATE POLICY "Authorities can update all issues for soft-delete"
 ```
 
 Then, verify with:
+
 ```sql
 SELECT * FROM pg_policies WHERE tablename = 'issues';
 ```
-**UPDATE** must be listed for authorities.
+UPDATE must be listed for authorities.
 
 If you still see errors, ensure:
 - Your logged-in authority user has a matching profile row (id = auth.uid(), role = 'authority')
