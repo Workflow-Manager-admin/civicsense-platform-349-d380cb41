@@ -13,7 +13,7 @@ runtime modules 28.7 KiB 15 modules
 orphan modules 1.06 KiB [orphan] 4 modules
 modules by path ./node_modules/ 1.96 MiB 147 modules
 modules by path ./src/ 122 KiB
-  modules by path ./src/pages/*.jsx 87 KiB 8 modules
+  modules by path ./src/pages/*.jsx 87.2 KiB 8 modules
   modules by path ./src/*.css 18 KiB 4 modules
   modules by path ./src/components/*.jsx 11.4 KiB 4 modules
   + 3 modules
@@ -23,14 +23,4 @@ modules by path ./.ve/ 15.1 KiB
     ./.ve/EditorOverlay.css 2.25 KiB [built] [code generated]
     ./node_modules/css-loader/dist/cjs.js!./.ve/EditorOverlay.css 697 bytes [built] [code generated]
   ./.ve/EditorOverlay.jsx 1.58 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 1923 ms
-assets by status 1.98 KiB [cached] 1 asset
-assets by path *.js 2.47 MiB
-  asset bundle.js 2.45 MiB [emitted] (name: main)
-  asset main.1869a0b5d13ee5d92809.hot-update.js 17.9 KiB [emitted] [immutable] [hmr] (name: main)
-asset main.1869a0b5d13ee5d92809.hot-update.json 28 bytes [emitted] [immutable] [hmr]
-Entrypoint main 2.47 MiB = bundle.js 2.45 MiB main.1869a0b5d13ee5d92809.hot-update.js 17.9 KiB
-cached modules 2.08 MiB [cached] 174 modules
-runtime modules 28.7 KiB 15 modules
-./src/pages/IssueDetailPage.jsx 12.5 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 211 ms
+webpack 5.99.9 compiled successfully in 1846 ms
