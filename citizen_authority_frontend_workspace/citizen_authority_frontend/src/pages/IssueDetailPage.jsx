@@ -97,16 +97,23 @@ export default function IssueDetailPage() {
   };
 
   // PUBLIC_INTERFACE
-  /** Delete this issue, show confirmation, feedback, and redirect. */
+  /** 
+   * Soft-delete this issue for authorities: sets deleted_by_authority=true and deleted_at (NO hard delete).
+   * Show confirmation, feedback, and redirect.
+   */
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this issue? This action cannot be undone.")) return;
     setDeleting(true);
     setError('');
     setSuccess('');
 
+    // SOFT DELETE: Update instead of delete
     const { error } = await supabase
       .from('issues')
-      .delete()
+      .update({
+        deleted_by_authority: true,
+        deleted_at: new Date().toISOString()
+      })
       .eq('id', id);
 
     if (error) {
