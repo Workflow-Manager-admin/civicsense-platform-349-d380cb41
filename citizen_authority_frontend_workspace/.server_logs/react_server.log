@@ -7,13 +7,13 @@
 <i> [webpack-dev-server] On Your Network (IPv4): http://172.17.0.2:3000/
 <i> [webpack-dev-server] Content not from webpack is served from './public' directory
 Injecting EditorRootWrapper import: ../.ve/EditorRootWrapper
-asset bundle.js 2.45 MiB [emitted] (name: main)
+asset bundle.js 2.47 MiB [emitted] (name: main)
 asset index.html 1.98 KiB [emitted]
 runtime modules 28.7 KiB 15 modules
 orphan modules 1.06 KiB [orphan] 4 modules
 modules by path ./node_modules/ 1.96 MiB 147 modules
-modules by path ./src/ 121 KiB
-  modules by path ./src/pages/*.jsx 86.3 KiB 8 modules
+modules by path ./src/ 131 KiB
+  modules by path ./src/pages/*.jsx 96.1 KiB 9 modules
   modules by path ./src/*.css 18 KiB 4 modules
   modules by path ./src/components/*.jsx 11.4 KiB 4 modules
   + 3 modules
@@ -23,179 +23,24 @@ modules by path ./.ve/ 15.1 KiB
     ./.ve/EditorOverlay.css 2.25 KiB [built] [code generated]
     ./node_modules/css-loader/dist/cjs.js!./.ve/EditorOverlay.css 697 bytes [built] [code generated]
   ./.ve/EditorOverlay.jsx 1.58 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 2078 ms
+webpack 5.99.9 compiled successfully in 1969 ms
 assets by status 1.98 KiB [cached] 1 asset
-assets by path *.js 2.47 MiB
-  asset bundle.js 2.45 MiB [emitted] (name: main)
-  asset main.1ad93884b1927dae13e2.hot-update.js 15.7 KiB [emitted] [immutable] [hmr] (name: main)
-asset main.1ad93884b1927dae13e2.hot-update.json 28 bytes [emitted] [immutable] [hmr]
-Entrypoint main 2.47 MiB = bundle.js 2.45 MiB main.1ad93884b1927dae13e2.hot-update.js 15.7 KiB
-cached modules 2.08 MiB [cached] 174 modules
-runtime modules 28.7 KiB 15 modules
-./src/pages/AuthorityDashboardPage.jsx 11.2 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 197 ms
-assets by status 1.98 KiB [cached] 1 asset
-assets by path *.js 1.4 MiB
-  asset bundle.js 1.39 MiB [emitted] (name: main)
-  asset main.a7c79cb19c6c80489620.hot-update.js 13.1 KiB [emitted] [immutable] [hmr] (name: main)
-asset main.a7c79cb19c6c80489620.hot-update.json 7.04 KiB [emitted] [immutable] [hmr]
-Entrypoint main 1.4 MiB = bundle.js 1.39 MiB main.a7c79cb19c6c80489620.hot-update.js 13.1 KiB
-cached modules 1.26 MiB [cached] 38 modules
-runtime modules 27.5 KiB 14 modules
-javascript modules 569 bytes
-  ./src/index.js 530 bytes [code generated]
-  ./src/App.jsx 39 bytes [built] [code generated] [1 error]
-
-ERROR in ./src/App.jsx
-Module build failed (from ./node_modules/babel-loader/lib/index.js):
-SyntaxError: /home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/src/App.jsx: Unexpected token (35:81)
-
-  33 |         <Route path="/issue-form" element={<ProtectedRoute role="citizen"><IssueFormPage /></ProtectedRoute>} />
-  34 |         <Route path="/dashboard" element={<ProtectedRoute role="authority"><AuthorityDashboardPage /></ProtectedRoute>} />
-> 35 |         <Route path="/deleted-issues" element={<ProtectedRoute role="authority"><(require('./pages/DeletedIssuesPage.jsx').default) />} />
-     |                                                                                  ^
-  36 |         <Route path="/issue/:id" element={<ProtectedRoute role="authority"><IssueDetailPage /></ProtectedRoute>} />
-  37 |         {/* Catch-all for client-side 404: renders HomePage or a NotFound component */}
-  38 |         <Route path="*" element={<HomePage />} />
-    at constructor (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:363:19)
-    at JSXParserMixin.raise (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:6609:19)
-    at JSXParserMixin.unexpected (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:6629:16)
-    at JSXParserMixin.jsxParseIdentifier (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4581:12)
-    at JSXParserMixin.jsxParseNamespacedName (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4588:23)
-    at JSXParserMixin.jsxParseElementName (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4597:21)
-    at JSXParserMixin.jsxParseOpeningElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4673:22)
-    at JSXParserMixin.jsxParseElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4698:33)
-    at JSXParserMixin.jsxParseElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4710:32)
-    at JSXParserMixin.jsxParseElement (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4761:17)
-    at JSXParserMixin.parseExprAtom (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4771:19)
-    at JSXParserMixin.parseExprSubscripts (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:11012:23)
-    at JSXParserMixin.parseUpdate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10997:21)
-    at JSXParserMixin.parseMaybeUnary (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10977:23)
-    at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10830:61)
-    at JSXParserMixin.parseExprOps (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10835:23)
-    at JSXParserMixin.parseMaybeConditional (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10812:23)
-    at JSXParserMixin.parseMaybeAssign (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10765:21)
-    at JSXParserMixin.parseExpressionBase (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10718:23)
-    at /home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10714:39
-    at JSXParserMixin.allowInAnd (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:12361:12)
-    at JSXParserMixin.parseExpression (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10714:17)
-    at JSXParserMixin.jsxParseExpressionContainer (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4644:31)
-    at JSXParserMixin.jsxParseAttributeValue (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4616:21)
-    at JSXParserMixin.jsxParseAttribute (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4665:38)
-    at JSXParserMixin.jsxParseOpeningElementAfterName (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4679:28)
-    at JSXParserMixin.jsxParseOpeningElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4674:17)
-    at JSXParserMixin.jsxParseElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4698:33)
-    at JSXParserMixin.jsxParseElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4710:32)
-    at JSXParserMixin.jsxParseElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4710:32)
-    at JSXParserMixin.jsxParseElement (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4761:17)
-    at JSXParserMixin.parseExprAtom (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4771:19)
-    at JSXParserMixin.parseExprSubscripts (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:11012:23)
-    at JSXParserMixin.parseUpdate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10997:21)
-    at JSXParserMixin.parseMaybeUnary (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10977:23)
-    at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10830:61)
-    at JSXParserMixin.parseExprOps (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10835:23)
-    at JSXParserMixin.parseMaybeConditional (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10812:23)
-    at JSXParserMixin.parseMaybeAssign (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10765:21)
-    at /home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10734:39
-    at JSXParserMixin.allowInAnd (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:12361:12)
-    at JSXParserMixin.parseMaybeAssignAllowIn (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10734:17)
-    at JSXParserMixin.parseParenAndDistinguishExpression (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:11608:28)
-    at JSXParserMixin.parseExprAtom (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:11262:23)
-    at JSXParserMixin.parseExprAtom (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4776:20)
-    at JSXParserMixin.parseExprSubscripts (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:11012:23)
-    at JSXParserMixin.parseUpdate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10997:21)
-    at JSXParserMixin.parseMaybeUnary (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10977:23)
-    at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10830:61)
-    at JSXParserMixin.parseExprOps (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10835:23)
- @ ./src/index.js 5:0-24 11:32-35
-
-webpack 5.99.9 compiled with 1 error in 36 ms
-assets by status 1.98 KiB [cached] 1 asset
-assets by path *.js 1.39 MiB
-  asset bundle.js 1.39 MiB [emitted] (name: main)
-  asset main.a7ad90dd6613c356d293.hot-update.js 854 bytes [emitted] [immutable] [hmr] (name: main)
-asset main.a7ad90dd6613c356d293.hot-update.json 28 bytes [emitted] [immutable] [hmr]
-Entrypoint main 1.39 MiB = bundle.js 1.39 MiB main.a7ad90dd6613c356d293.hot-update.js 854 bytes
-cached modules 1.26 MiB [cached] 39 modules
-runtime modules 27.5 KiB 14 modules
-./src/App.jsx 39 bytes [built] [1 error]
-
-ERROR in ./src/App.jsx
-Module build failed (from ./node_modules/babel-loader/lib/index.js):
-SyntaxError: /home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/src/App.jsx: Unexpected token (36:81)
-
-  34 |         <Route path="/issue-form" element={<ProtectedRoute role="citizen"><IssueFormPage /></ProtectedRoute>} />
-  35 |         <Route path="/dashboard" element={<ProtectedRoute role="authority"><AuthorityDashboardPage /></ProtectedRoute>} />
-> 36 |         <Route path="/deleted-issues" element={<ProtectedRoute role="authority"><(require('./pages/DeletedIssuesPage.jsx').default) />} />
-     |                                                                                  ^
-  37 |         <Route path="/issue/:id" element={<ProtectedRoute role="authority"><IssueDetailPage /></ProtectedRoute>} />
-  38 |         {/* Catch-all for client-side 404: renders HomePage or a NotFound component */}
-  39 |         <Route path="*" element={<HomePage />} />
-    at constructor (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:363:19)
-    at JSXParserMixin.raise (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:6609:19)
-    at JSXParserMixin.unexpected (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:6629:16)
-    at JSXParserMixin.jsxParseIdentifier (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4581:12)
-    at JSXParserMixin.jsxParseNamespacedName (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4588:23)
-    at JSXParserMixin.jsxParseElementName (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4597:21)
-    at JSXParserMixin.jsxParseOpeningElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4673:22)
-    at JSXParserMixin.jsxParseElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4698:33)
-    at JSXParserMixin.jsxParseElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4710:32)
-    at JSXParserMixin.jsxParseElement (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4761:17)
-    at JSXParserMixin.parseExprAtom (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4771:19)
-    at JSXParserMixin.parseExprSubscripts (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:11012:23)
-    at JSXParserMixin.parseUpdate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10997:21)
-    at JSXParserMixin.parseMaybeUnary (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10977:23)
-    at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10830:61)
-    at JSXParserMixin.parseExprOps (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10835:23)
-    at JSXParserMixin.parseMaybeConditional (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10812:23)
-    at JSXParserMixin.parseMaybeAssign (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10765:21)
-    at JSXParserMixin.parseExpressionBase (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10718:23)
-    at /home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10714:39
-    at JSXParserMixin.allowInAnd (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:12361:12)
-    at JSXParserMixin.parseExpression (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10714:17)
-    at JSXParserMixin.jsxParseExpressionContainer (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4644:31)
-    at JSXParserMixin.jsxParseAttributeValue (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4616:21)
-    at JSXParserMixin.jsxParseAttribute (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4665:38)
-    at JSXParserMixin.jsxParseOpeningElementAfterName (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4679:28)
-    at JSXParserMixin.jsxParseOpeningElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4674:17)
-    at JSXParserMixin.jsxParseElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4698:33)
-    at JSXParserMixin.jsxParseElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4710:32)
-    at JSXParserMixin.jsxParseElementAt (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4710:32)
-    at JSXParserMixin.jsxParseElement (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4761:17)
-    at JSXParserMixin.parseExprAtom (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4771:19)
-    at JSXParserMixin.parseExprSubscripts (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:11012:23)
-    at JSXParserMixin.parseUpdate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10997:21)
-    at JSXParserMixin.parseMaybeUnary (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10977:23)
-    at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10830:61)
-    at JSXParserMixin.parseExprOps (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10835:23)
-    at JSXParserMixin.parseMaybeConditional (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10812:23)
-    at JSXParserMixin.parseMaybeAssign (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10765:21)
-    at /home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10734:39
-    at JSXParserMixin.allowInAnd (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:12361:12)
-    at JSXParserMixin.parseMaybeAssignAllowIn (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10734:17)
-    at JSXParserMixin.parseParenAndDistinguishExpression (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:11608:28)
-    at JSXParserMixin.parseExprAtom (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:11262:23)
-    at JSXParserMixin.parseExprAtom (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:4776:20)
-    at JSXParserMixin.parseExprSubscripts (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:11012:23)
-    at JSXParserMixin.parseUpdate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10997:21)
-    at JSXParserMixin.parseMaybeUnary (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10977:23)
-    at JSXParserMixin.parseMaybeUnaryOrPrivate (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10830:61)
-    at JSXParserMixin.parseExprOps (/home/kavia/workspace/code-generation/civicsense-platform-349-d380cb41/citizen_authority_frontend_workspace/citizen_authority_frontend/node_modules/@babel/parser/lib/index.js:10835:23)
- @ ./src/index.js 5:0-24 11:32-35
-
-webpack 5.99.9 compiled with 1 error in 33 ms
-assets by status 1.98 KiB [cached] 1 asset
-assets by path *.js 3.55 MiB
+assets by path *.js 2.48 MiB
   asset bundle.js 2.47 MiB [emitted] (name: main)
-  asset main.c097ddf570db3fd229f2.hot-update.js 1.09 MiB [emitted] [immutable] [hmr] (name: main)
-asset main.c097ddf570db3fd229f2.hot-update.json 28 bytes [emitted] [immutable] [hmr]
-Entrypoint main 3.55 MiB = bundle.js 2.47 MiB main.c097ddf570db3fd229f2.hot-update.js 1.09 MiB
-cached modules 2.08 MiB [cached] 172 modules
+  asset main.ce275b094cd8d3bd06d2.hot-update.js 16 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.ce275b094cd8d3bd06d2.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.48 MiB = bundle.js 2.47 MiB main.ce275b094cd8d3bd06d2.hot-update.js 16 KiB
+cached modules 2.09 MiB [cached] 175 modules
 runtime modules 28.7 KiB 15 modules
-javascript modules 26 KiB
-  modules by path ./src/pages/*.jsx 21.1 KiB
-    ./src/pages/DeletedIssuesPage.jsx 7.89 KiB [built] [code generated]
-    ./src/pages/IssueDetailPage.jsx 13.2 KiB [built] [code generated]
-  ./src/index.js 530 bytes [code generated]
-  ./src/App.jsx 4.4 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 177 ms
+./src/pages/AuthorityDashboardPage.jsx 11.5 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 80 ms
+assets by status 1.98 KiB [cached] 1 asset
+assets by path *.js 2.48 MiB
+  asset bundle.js 2.47 MiB [emitted] (name: main)
+  asset main.e7ad4ff8a1a6efbef864.hot-update.js 12.2 KiB [emitted] [immutable] [hmr] (name: main)
+asset main.e7ad4ff8a1a6efbef864.hot-update.json 28 bytes [emitted] [immutable] [hmr]
+Entrypoint main 2.48 MiB = bundle.js 2.47 MiB main.e7ad4ff8a1a6efbef864.hot-update.js 12.2 KiB
+cached modules 2.09 MiB [cached] 175 modules
+runtime modules 28.7 KiB 15 modules
+./src/pages/DeletedIssuesPage.jsx 8.24 KiB [built] [code generated]
+webpack 5.99.9 compiled successfully in 82 ms

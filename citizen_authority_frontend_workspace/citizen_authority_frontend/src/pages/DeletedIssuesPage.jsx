@@ -49,6 +49,15 @@ export default function DeletedIssuesPage() {
 
   useEffect(() => {
     fetchDeletedIssues();
+
+    // Listen for events dispatched from elsewhere indicating deleted issues should refresh
+    function handleIssuesUpdated() {
+      fetchDeletedIssues();
+    }
+    window.addEventListener('civicsoft_issues_updated', handleIssuesUpdated);
+    return () => {
+      window.removeEventListener('civicsoft_issues_updated', handleIssuesUpdated);
+    };
     // eslint-disable-next-line
   }, []);
 

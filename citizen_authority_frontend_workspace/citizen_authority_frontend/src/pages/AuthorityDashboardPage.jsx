@@ -67,6 +67,8 @@ export default function AuthorityDashboardPage() {
       setError("");
       setDeleting("");
       await fetchIssues();
+      // Dispatch a custom event to signal deleted-issues list to refresh
+      window.dispatchEvent(new Event('civicsoft_issues_updated'));
     }
   };
 
