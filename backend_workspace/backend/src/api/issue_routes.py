@@ -55,8 +55,11 @@ async def fetch_issues_from_supabase(
             if resp.status_code != 200:
                 raise HTTPException(
                     status_code=500,
-                    detail=f"Failed to fetch issues: {resp.text}. "
-                           f"URL: {full_url}, Params: {params}, Headers: apikey shown? {'apikey' in headers}"
+                    detail=(
+                        f"Failed to fetch issues: {resp.text}. "
+                        f"URL: {full_url}, Params: {params}, "
+                        f"Headers: apikey shown? {'apikey' in headers}"
+                    )
                 )
             issues_json = resp.json()
             # Diagnostics for parsing:
@@ -83,11 +86,13 @@ async def fetch_issues_from_supabase(
             except Exception as parse_err:
                 raise HTTPException(
                     status_code=500,
-                    detail=f"Error deserializing issues from Supabase. Parse error: {str(parse_err)}. "
-                           f"Patched JSON: {patched_issues_json}"
+                    detail=(
+                        f"Error deserializing issues from Supabase. Parse error: {str(parse_err)}. "
+                        f"Patched JSON: {patched_issues_json}"
+                    )
                 )
             return parsed
-    except HTTPException as e:
+    except HTTPException:
         # Bubble up with extra context
         raise
     except Exception as e:
