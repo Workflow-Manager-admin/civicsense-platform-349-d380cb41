@@ -18,10 +18,12 @@ def get_deleted_issues():
         issues = resp.json().get("issues", [])
         print("Response:")
         print(issues)
-        # Check for our test issue in the response
+        # Check for our exact test issue in the response
         found = any(
             issue.get("id") == "test-issue-001"
             and issue.get("deletedBy") == "authority"
+            and issue.get("title") == "Authority test deleted issue"
+            and issue.get("reported_by") == "citizen1"
             for issue in issues
         )
         if found:
