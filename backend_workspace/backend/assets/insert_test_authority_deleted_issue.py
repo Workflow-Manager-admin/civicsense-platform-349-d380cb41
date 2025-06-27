@@ -7,8 +7,14 @@ ISSUES_TABLE = "issues"
 
 
 def insert_test_issue():
-    """Insert a test issue with isDeleted: true, deletedBy: 'authority' using specified test_issue_details."""
-    url = f"{SUPABASE_URL}/rest/v1/{ISSUES_TABLE}"
+    """
+    Insert a test issue with isDeleted: true, deletedBy: 'authority' using specified
+    test_issue_details.
+    """
+    url = (
+        f"{SUPABASE_URL}/rest/v1/"
+        f"{ISSUES_TABLE}"
+    )
     headers = {
         "apikey": SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}",
@@ -20,10 +26,8 @@ def insert_test_issue():
     test_issue = {
         "id": "test-issue-001",
         "title": "Authority test deleted issue",
-        "created_at":
-            "2024-06-12T12:00:00.000Z",
-        "updated_at":
-            "2024-06-12T12:00:00.000Z",
+        "created_at": "2024-06-12T12:00:00.000Z",
+        "updated_at": "2024-06-12T12:00:00.000Z",
         "reported_by": "citizen1",
         "description": "Issue deleted by authority",
         "isDeleted": True,
