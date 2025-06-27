@@ -2,15 +2,23 @@ import { useEffect, useState } from "react";
 import { supabase } from "../supabase/supabaseClient";
 import { Link } from "react-router-dom";
 
+/**
+ * Authority dashboard: lists civic issues, allows viewing details and deleting issues.
+ * Deletion gives visual feedback and removes the issue from the list on success.
+ * Connects to Supabase backend. UI updates reflect real-time changes after deletion.
+ */
 // PUBLIC_INTERFACE
-/** Delete an issue from Supabase issues table. */
 export default function AuthorityDashboardPage() {
   const [issues, setIssues] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [deleting, setDeleting] = useState(""); // id of deleting issue (to show spinner if wanted)
+  const [deleting, setDeleting] = useState(""); // id of deleting issue
+  const [snackbar, setSnackbar] = useState({ open: false, msg: "" });
 
+  // PUBLIC_INTERFACE
+  /** Fetch all issues for display; used after successful delete as well. */
   const fetchIssues = async () => {
+    setError("");
     const { data, error } = await supabase
       .from("issues")
       .select("*")
@@ -18,8 +26,10 @@ export default function AuthorityDashboardPage() {
 
     if (error) {
       setError("Failed to load issues.");
+      setIssues([]);
     } else {
       setIssues(data);
+      setSuccess("");
     }
   };
 
@@ -29,7 +39,7 @@ export default function AuthorityDashboardPage() {
   }, []);
 
   // PUBLIC_INTERFACE
-  /** Handle deleting an issue */
+  /** Handle deleting an issue and update table with confirmation. */
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this issue? This action cannot be undone."
@@ -47,12 +57,26 @@ export default function AuthorityDashboardPage() {
 
     if (error) {
       setError("Failed to delete the issue.");
+      setDeleting("");
+      return;
     } else {
-      setSuccess("Issue deleted successfully.");
-      await fetchIssues();
+      setIssues((curr) => curr.filter(x => x.id !== id)); // Immediate update
+      setSnackbar({ open: true, msg: "Issue deleted successfully." });
+      setSuccess("");
+      setError("");
+      setDeleting("");
     }
-    setDeleting("");
   };
+
+  // Auto-hide the snackbar/toast after 2s
+  useEffect(() => {
+    if (snackbar.open) {
+      const timer = setTimeout(() => {
+        setSnackbar({ open: false, msg: "" });
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [snackbar.open]);
 
   return (
     <div
@@ -81,6 +105,29 @@ export default function AuthorityDashboardPage() {
           <p className="text-green-600 success-message" role="status">
             {success}
           </p>
+        )}
+        {snackbar.open && (
+          <div
+            style={{
+              position: "fixed",
+              bottom: 22,
+              left: "50%",
+              transform: "translateX(-50%)",
+              background: "var(--success)",
+              color: "var(--primary-dark)",
+              borderRadius: 12,
+              fontWeight: 700,
+              fontSize: "1.04rem",
+              zIndex: 2000,
+              padding: "12px 34px",
+              boxShadow: "0 3px 12px 0 rgba(80,200,120,0.19)",
+              border: "2px solid var(--accent-green)" 
+            }}
+            aria-live="polite"
+            role="status"
+          >
+            {snackbar.msg}
+          </div>
         )}
         {issues.length === 0 ? (
           <p>No issues found.</p>
