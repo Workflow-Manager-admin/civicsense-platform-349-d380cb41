@@ -7,6 +7,31 @@ If you see:
 
 ---
 
+## 🗑️ Authority "Soft Delete" for Issues — Required Table Fields
+
+To enable the "Deleted Issues" view and retain deleted issues for authorities:
+- **Add the following fields to `issues` table**:
+    - `deleted_by_authority` BOOLEAN DEFAULT NULL
+    - `deleted_at` TIMESTAMPTZ DEFAULT NULL
+
+**How it works:**
+- When an authority deletes an issue, mark `deleted_by_authority=true` and set `deleted_at` to `now()` (not physical deletion).
+- "Reported Issues" tab only shows records where `deleted_by_authority` is NULL.
+- "Deleted Issues" tab lists all with `deleted_by_authority = true`.
+
+**SQL to add these columns (if not present):**
+```sql
+ALTER TABLE issues ADD COLUMN IF NOT EXISTS deleted_by_authority boolean;
+ALTER TABLE issues ADD COLUMN IF NOT EXISTS deleted_at timestamptz;
+```
+
+- Update RLS as needed: authorities should be able to SELECT * from both sets.
+
+---
+
+
+---
+
 ## 🛠️ STEP BY STEP SQL: RLS ENABLE/RESET FOR profiles
 
 **Run this SQL in Supabase SQL Editor:**
