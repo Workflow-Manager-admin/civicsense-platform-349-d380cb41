@@ -26,12 +26,12 @@ def main():
         print(f"Found {len(results)} authority-deleted issues.")
         for issue in results:
             print(
-            "ID: {}, Title: {}, DeletedBy: {}".format(
-                issue.get('id'),
-                issue.get('title'),
-                issue.get('deletedBy'),
+                "ID: {}, Title: {}, DeletedBy: {}".format(
+                    issue.get('id'),
+                    issue.get('title'),
+                    issue.get('deletedBy'),
+                )
             )
-        )
     except Exception as e:
         print("Failed to decode response: {} | {}".format(e, resp.text))
     if resp.status_code != 200 or not results:
