@@ -23,22 +23,4 @@ modules by path ./.ve/ 15.1 KiB
     ./.ve/EditorOverlay.css 2.25 KiB [built] [code generated]
     ./node_modules/css-loader/dist/cjs.js!./.ve/EditorOverlay.css 697 bytes [built] [code generated]
   ./.ve/EditorOverlay.jsx 1.58 KiB [built] [code generated]
-webpack 5.99.9 compiled successfully in 1876 ms
-Injecting EditorRootWrapper import: ../.ve/EditorRootWrapper
-assets by status 2.46 MiB [cached] 1 asset
-asset index.html 1.98 KiB [emitted]
-cached modules 1.98 MiB (javascript) 28.7 KiB (runtime) [cached] 172 modules
-javascript modules 124 KiB
-  modules by path ./src/ 112 KiB
-    modules by path ./src/pages/*.jsx 92.8 KiB 9 modules
-    modules by path ./src/components/*.jsx 13.7 KiB
-      ./src/components/ProtectedRoute.jsx 1.49 KiB [built]
-      + 4 modules
-    ./src/index.js 530 bytes [built]
-    ./src/App.jsx 4.4 KiB [built]
-    ./src/supabase/supabaseClient.js 662 bytes [built]
-  modules by path ./.ve/ 12.2 KiB
-    ./.ve/EditorRootWrapper.js 2.68 KiB [built]
-    ./.ve/EditorOverlay.jsx 1.58 KiB [built]
-    ./.ve/SidePanel.js 7.93 KiB [built]
-webpack 5.99.9 compiled successfully in 524 ms
+webpack 5.99.9 compiled successfully in 1826 ms
