@@ -55,3 +55,25 @@ There should be only one INSERT/UPDATE policy present for 'profiles':
 ---
 
 _Last update: policy SQL and best practices to resolve all profile upsert RLS and API key permission issues in Supabase. See also supabase_applied_rls.sql for deployment._
+
+---
+
+## [2024-06-28] Schema Change: Add soft deletion columns to `issues` table
+
+To enable soft deletion and tracking of deleted issues (for authority/role management):
+
+```sql
+-- Add soft deletion to 'issues' table
+ALTER TABLE issues
+ADD COLUMN IF NOT EXISTS "isDeleted" boolean NOT NULL DEFAULT false;
+
+ALTER TABLE issues
+ADD COLUMN IF NOT EXISTS "deletedBy" text NULL;
+```
+
+- `isDeleted` (boolean, default false): Set to `true` when the issue is soft-deleted, hidden for normal views.
+- `deletedBy` (text, nullable): Stores the user identifier (e.g., authority id or email) who performed the deletion. Useful for auditing and permissions.
+
+> When querying issues for authority oversight, be sure to filter using `isDeleted = true` to retrieve deleted issues.
+
+Remember: These SQL commands must be run in the Supabase SQL editor or through your preferred migration system.  
