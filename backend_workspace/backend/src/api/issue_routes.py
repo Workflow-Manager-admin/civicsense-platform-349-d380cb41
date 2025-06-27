@@ -147,24 +147,24 @@ async def authority_delete_issue(
     "/deleted",
     response_model=IssueListResponse,
     summary="[Authority] List deleted issues by authority",
+    response_description="Issues deleted by authorities (JSON)",
 )
 async def list_deleted_issues(
     authority: bool = Depends(authority_required)
 ):
     """
-    Lists all issues where isDeleted is true AND deletedBy is 'authority'.
+    Returns a JSON response of all issues where isDeleted is true AND deletedBy is 'authority'.
     Only available to authorities.
+    This endpoint is commonly used by the frontend to query deleted issues for authority dashboards.
 
     Returns:
-        IssueListResponse: Issues deleted by authorities.
+        IssueListResponse: Issues deleted by authorities as JSON.
     """
     if not authority:
         raise HTTPException(
             status_code=403, detail="Not authorized to see deleted issues."
         )
-    # Defensive extra: filter client-side as well to catch DB logic mismatch
     issues = await fetch_issues_from_supabase(is_deleted=True, deleted_by="authority")
-    # In case the DB or query doesn't filter strictly enough, filter here
     strict_filtered = [
         issue for issue in issues
         if getattr(issue, "isDeleted", False)
