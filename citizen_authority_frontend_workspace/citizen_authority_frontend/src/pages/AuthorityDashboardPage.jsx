@@ -72,6 +72,24 @@ export default function AuthorityDashboardPage() {
         >
           All Reported Issues
         </h2>
+        <div style={{ marginBottom: "1.1rem" }}>
+          <Link
+            to="/deleted-issues"
+            className="btn"
+            style={{
+              background: "var(--error)",
+              color: "var(--background)",
+              fontWeight: 700,
+              border: "2px solid var(--border-color)",
+              fontSize: "1.04rem",
+              borderRadius: "10px",
+              marginRight: "14px"
+            }}
+            aria-label="View deleted civic issues"
+          >
+            View Deleted Issues
+          </Link>
+        </div>
         {error && (
           <p className="text-red-600" role="alert">
             {error}
